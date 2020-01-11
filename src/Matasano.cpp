@@ -39,8 +39,8 @@ char* base64Encode(const char* input, int size) {
     char* output = new char[output_length];
 
     // Treat the 3-tuples.
-    int output_position = -1; // track the position in the output array.
-    for (int i = 0; i <= (size / 3); i+=3)
+    int output_position = 0; // track the position in the output array.
+    for (int i = 0; i < (size - size%3); i+=3)
     {
         a = (input[i] & 0xFC) >> 2;
         b = (input[i] & 0x03) << 4 ^ (input[i + 1] & 0xF0) >> 4;
@@ -96,17 +96,33 @@ int main() {
     // Sources of the inputs:
     // https://en.wikipedia.org/wiki/Base64
 
+    char* res1,res2,res3,res4,res5;
     int size;
     const char* sebastien = "Sebastien";
     const char* input_1 = "any carnal pleasure.";
+    const char* input_2 = "any carnal pleasure";
+    const char* input_3 = "any carnal pleasur";
+    const char* input_4 = "any carnal pleasu";
+    const char* input_5 = "any carnal pleas";
+
     const char hexString[] = {0x49,0x27,0x6d,0x20,0x6b,0x69,0x6c,0x6c,0x69,0x6e,0x67,0x20,0x79,0x6f,0x75,0x72,0x20,0x62,0x72,0x61,0x69,0x6e,0x20,0x6c,0x69,0x6b,0x65,0x20,0x61,0x20,0x70,0x6f,0x69,0x73,0x6f,0x6e,0x6f,0x75,0x73,0x20,0x6d,0x75,0x73,0x68,0x72,0x6f,0x6f,0x6d};
 
     const char* expected_output_1 = "YW55IGNhcm5hbCBwbGVhc3VyZS4=";
+    const char* expected_output_2 = "YW55IGNhcm5hbCBwbGVhc3VyZQ==";
+    const char* expected_output_3 = "YW55IGNhcm5hbCBwbGVhc3Vy";
+    const char* expected_output_4 = "YW55IGNhcm5hbCBwbGVhc3U=";
+    const char* expected_output_5 = "YW55IGNhcm5hbCBwbGVhcw==";
 
     size = getLength(input_1);
-    char* res = base64Encode(input_1,size);
+    res1 = base64Encode(input_1,size);
 
-    cout << res ;
+    assert(strcmp(res1,expected_output_1) == 0);
+    //assert(strcmp(res2,expected_output_1) == 0);
+    //assert(strcmp(res3,expected_output_1) == 0);
+    //assert(strcmp(res4,expected_output_1) == 0);
+    //assert(strcmp(res5,expected_output_1) == 0);
+
+//    cout << res ;
 
     return 0;
 }
