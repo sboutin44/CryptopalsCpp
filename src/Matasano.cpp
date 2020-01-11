@@ -90,6 +90,10 @@ int getLength(const char* s)
 
 
 int main() {
+
+    // Sources of the inputs:
+    // https://en.wikipedia.org/wiki/Base64
+
     const char* sebastien = "Sebastien";
     const char* test_string = "any carnal pleasure.";
 
