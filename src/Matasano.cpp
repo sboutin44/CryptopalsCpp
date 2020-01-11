@@ -39,18 +39,18 @@ char* base64Encode(const char* input, int size) {
     char* output = new char[output_length];
 
     // Treat the 3-tuples.
-    int output_position = 0; // track the position in the output array.
-    for (int i = 0; i < (size / 3); i+=3)
+    int output_position = -1; // track the position in the output array.
+    for (int i = 0; i <= (size / 3); i+=3)
     {
         a = (input[i] & 0xFC) >> 2;
         b = (input[i] & 0x03) << 4 ^ (input[i + 1] & 0xF0) >> 4;
         c = (input[i + 1] & 0x0F) << 2 ^ (input[i + 2] & 0xC0) >> 6;
         d = (input[i + 2] & 0x3F);
 
-        output[output_position] = Base64_table[a];
-        output[++output_position] = Base64_table[b];
-        output[++output_position] = Base64_table[c];
-        output[++output_position] = Base64_table[d];
+        output[output_position++] = Base64_table[a];
+        output[output_position++] = Base64_table[b];
+        output[output_position++] = Base64_table[c];
+        output[output_position++] = Base64_table[d];
     }
 
     // Treat the end of the string when 2 characters remain.
@@ -59,10 +59,10 @@ char* base64Encode(const char* input, int size) {
         f = (input[size - 2] & 0x03) << 4 ^ (input[size - 1] & 0xF0) >> 4;
         g = (input[size - 1] & 0x0F) << 2;
 
-        output[output_position] = Base64_table[e];
-        output[++output_position] = Base64_table[f];
-        output[++output_position] = Base64_table[g];
-        output[++output_position] = '=';
+        output[output_position++] = Base64_table[e];
+        output[output_position++] = Base64_table[f];
+        output[output_position++] = Base64_table[g];
+        output[output_position++] = '=';
     }
 
     // Treat the end when 1 character remain.
@@ -70,10 +70,10 @@ char* base64Encode(const char* input, int size) {
         e = (input[size - 2] & 0xFC) >> 2;
         f = (input[size - 2] & 0x03) << 4;
 
-        output[output_position] = Base64_table[e];
-        output[++output_position] = Base64_table[f];
-        output[++output_position] = '=';
-        output[++output_position] = '=';
+        output[output_position++] = Base64_table[e];
+        output[output_position++] = Base64_table[f];
+        output[output_position++] = '=';
+        output[output_position++] = '=';
     }
 
     return output;
@@ -96,18 +96,15 @@ int main() {
     // Sources of the inputs:
     // https://en.wikipedia.org/wiki/Base64
 
+    int size;
     const char* sebastien = "Sebastien";
-    const char* test_string = "any carnal pleasure.";
-
-//    const char* hexString = 49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d;
+    const char* input_1 = "any carnal pleasure.";
     const char hexString[] = {0x49,0x27,0x6d,0x20,0x6b,0x69,0x6c,0x6c,0x69,0x6e,0x67,0x20,0x79,0x6f,0x75,0x72,0x20,0x62,0x72,0x61,0x69,0x6e,0x20,0x6c,0x69,0x6b,0x65,0x20,0x61,0x20,0x70,0x6f,0x69,0x73,0x6f,0x6e,0x6f,0x75,0x73,0x20,0x6d,0x75,0x73,0x68,0x72,0x6f,0x6f,0x6d};
 
-    int size = getLength(sebastien);
-    assert(size == 9);
+    const char* expected_output_1 = "YW55IGNhcm5hbCBwbGVhc3VyZS4=";
 
-    size = getLength(test_string);
-    cout << size << endl;
-    char* res = base64Encode(hexString,96);
+    size = getLength(input_1);
+    char* res = base64Encode(input_1,size);
 
     cout << res ;
 
