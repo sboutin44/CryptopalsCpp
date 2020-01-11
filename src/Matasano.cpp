@@ -67,8 +67,8 @@ char* base64Encode(const char* input, int size) {
 
     // Treat the end when 1 character remain.
     if (size % 3 == 1) {
-        e = (input[size - 2] & 0xFC) >> 2;
-        f = (input[size - 2] & 0x03) << 4;
+        e = (input[size - 1] & 0xFC) >> 2;
+        f = (input[size - 1] & 0x03) << 4;
 
         output[output_position++] = Base64_table[e];
         output[output_position++] = Base64_table[f];
@@ -96,7 +96,11 @@ int main() {
     // Sources of the inputs:
     // https://en.wikipedia.org/wiki/Base64
 
-    char* res1,res2,res3,res4,res5;
+    char* res1;
+    char* res2;
+    char* res3;
+    char* res4;
+    char* res5;
     int size;
     const char* sebastien = "Sebastien";
     const char* input_1 = "any carnal pleasure.";
@@ -115,14 +119,21 @@ int main() {
 
     size = getLength(input_1);
     res1 = base64Encode(input_1,size);
+    size = getLength(input_2);
+    res2 = base64Encode(input_2,size);
+    res3 = base64Encode(input_3,size);
+    res4 = base64Encode(input_4,size);
+    res5 = base64Encode(input_5,size);
 
+    cout << res2 ;
+    
     assert(strcmp(res1,expected_output_1) == 0);
-    //assert(strcmp(res2,expected_output_1) == 0);
+    assert(strcmp(res2,expected_output_2) == 0);
     //assert(strcmp(res3,expected_output_1) == 0);
     //assert(strcmp(res4,expected_output_1) == 0);
     //assert(strcmp(res5,expected_output_1) == 0);
 
-//    cout << res ;
+    
 
     return 0;
 }
