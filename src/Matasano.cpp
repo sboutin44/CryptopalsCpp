@@ -87,6 +87,57 @@ char* base64Encode(const char* input, int size) {
     return output;
 }
 
+uint8_t* base64Decode(const char* input, int size)
+{
+    int padding = 0;
+    uint8_t a, b, c, d;
+    // Padding ?
+    if (input[size-1] == '=') {
+        padding=1;
+        if (input[size-2] == '=')
+            padding=2;
+    }
+
+    // Set the output size
+    int output_length = (size / 4) * 3 + padding;
+    int output_position = 0; // track the position in the output array.
+
+    uint8_t* output = new uint8_t[output_length];
+
+    for (int i = 0; i < (size - (size-padding)%4); i+=4)
+    {
+        a = base64.find(input[i]);
+        b = base64.find(input[i+1]);
+        c = base64.find(input[i+2]);
+        d = base64.find(input[i+3]);
+
+        output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+        output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+        output[output_position++] = (c & 0x03) << 6 ^ (d & 0x3F);
+    }
+
+    // Treat the end of the string when 2 characters remain.
+    if (padding == 2) {
+        a = base64.find(input[size-4]);
+        b = base64.find(input[size-3]);
+        c = base64.find(input[size-2]);
+
+        output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+        output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+    }
+
+    // Treat the end when 1 character remain.
+    if (padding == 1) {
+        a = base64.find(input[size-4]);
+        b = base64.find(input[size-3]);
+
+        output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+    }
+
+
+    return output;
+}
+
 int getLength(const char* s)
 {
     char c = s[0];
@@ -154,7 +205,7 @@ int main() {
     res9 = base64Encode(input_9,getLength(input_9));
     res10 = base64Encode(input_10,getLength(input_10));
 
-    // Checks
+    // Encoding tests
     assert(strcmp(res1,expected_output_1) == 0);
     assert(strcmp(res2,expected_output_2) == 0);
     assert(strcmp(res3,expected_output_3) == 0);
@@ -166,6 +217,10 @@ int main() {
     assert(strcmp(res8,expected_output_8) == 0);
     assert(strcmp(res9,expected_output_9) == 0);
     assert(strcmp(res10,expected_output_10) == 0);
+
+    // Decoding tests
+    uint8_t* decoded = base64Decode(expected_output_1,strlen(expected_output_1));
+    cout << "decoded:" << decoded << endl;
 
     char* result = base64Encode(challenge,size_challenge);
     assert(strcmp(result,expected) == 0);
