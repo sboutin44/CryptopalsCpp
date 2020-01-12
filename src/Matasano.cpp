@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <assert.h>
+#include <string.h>
 
 using namespace std;
 
@@ -38,7 +39,7 @@ char* base64Encode(const char* input, int size) {
     int output_length;
     int padding = size%3;
 
-    // Set the output size 
+    // Set the output size
     if (padding == 0) {
         output_length = (size / 3) * 4; // Every 3 letters, 4 letters are created, plus the 4 last ones.
     } else {
@@ -105,7 +106,7 @@ int main() {
     // Sources of the inputs:
     // https://en.wikipedia.org/wiki/Base64
 
-    // Declarations like 
+    // Declarations like
     char* res1;
     char* res2;
     char* res3;
@@ -138,12 +139,12 @@ int main() {
     const char* expected_output_8 = "ZWFzdXJlLg==";
     const char* expected_output_9 = "YXN1cmUu";
     const char* expected_output_10 = "c3VyZS4=";
-    
+
     const char challenge[] = {0x49,0x27,0x6d,0x20,0x6b,0x69,0x6c,0x6c,0x69,0x6e,0x67,0x20,0x79,0x6f,0x75,0x72,0x20,0x62,0x72,0x61,0x69,0x6e,0x20,0x6c,0x69,0x6b,0x65,0x20,0x61,0x20,0x70,0x6f,0x69,0x73,0x6f,0x6e,0x6f,0x75,0x73,0x20,0x6d,0x75,0x73,0x68,0x72,0x6f,0x6f,0x6d};
     const char* expected = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
     int size_challenge = sizeof(challenge);
 
-    // Tests 
+    // Tests
     res1 = base64Encode(input_1,getLength(input_1));
     res2 = base64Encode(input_2,getLength(input_2));
     res3 = base64Encode(input_3,getLength(input_3));
@@ -154,10 +155,12 @@ int main() {
     res8 = base64Encode(input_8,getLength(input_8));
     res9 = base64Encode(input_9,getLength(input_9));
     res10 = base64Encode(input_10,getLength(input_10));
-    
+
     // Checks
     assert(strcmp(res1,expected_output_1) == 0);
     assert(strcmp(res2,expected_output_2) == 0);
+    cout << res3 << endl;
+    cout << expected_output_3 << endl;
     assert(strcmp(res3,expected_output_3) == 0);
     assert(strcmp(res4,expected_output_4) == 0);
     assert(strcmp(res5,expected_output_5) == 0);
