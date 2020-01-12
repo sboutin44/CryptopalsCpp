@@ -8,17 +8,13 @@
 
 #include <iostream>
 #include <string>
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 
 using namespace std;
 
-char Base64_table[] =
-{
-    'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-    'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-    '0','1','2','3','4','5','6','7','8','9','+','/'
-};
+string base64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
 
 char* base64Encode(const char* input, int size) {
     /** Encode an input made of raw bytes in base64.
@@ -58,10 +54,10 @@ char* base64Encode(const char* input, int size) {
         c = (input[i + 1] & 0x0F) << 2 ^ (input[i + 2] & 0xC0) >> 6;
         d = (input[i + 2] & 0x3F);
 
-        output[output_position++] = Base64_table[a];
-        output[output_position++] = Base64_table[b];
-        output[output_position++] = Base64_table[c];
-        output[output_position++] = Base64_table[d];
+        output[output_position++] = base64[a];
+        output[output_position++] = base64[b];
+        output[output_position++] = base64[c];
+        output[output_position++] = base64[d];
     }
 
     // Treat the end of the string when 2 characters remain.
@@ -70,9 +66,9 @@ char* base64Encode(const char* input, int size) {
         f = (input[size - 2] & 0x03) << 4 ^ (input[size - 1] & 0xF0) >> 4;
         g = (input[size - 1] & 0x0F) << 2;
 
-        output[output_position++] = Base64_table[e];
-        output[output_position++] = Base64_table[f];
-        output[output_position++] = Base64_table[g];
+        output[output_position++] = base64[e];
+        output[output_position++] = base64[f];
+        output[output_position++] = base64[g];
         output[output_position++] = '=';
     }
 
@@ -81,8 +77,8 @@ char* base64Encode(const char* input, int size) {
         e = (input[size - 1] & 0xFC) >> 2;
         f = (input[size - 1] & 0x03) << 4;
 
-        output[output_position++] = Base64_table[e];
-        output[output_position++] = Base64_table[f];
+        output[output_position++] = base64[e];
+        output[output_position++] = base64[f];
         output[output_position++] = '=';
         output[output_position++] = '=';
     }
