@@ -16,7 +16,7 @@ char Base64_table[] =
 {
     'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
     'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-    '0','1','2','3','4','5','6','7','8','+','/'
+    '0','1','2','3','4','5','6','7','8','9','+','/'
 };
 
 char* base64Encode(const char* input, int size) {
@@ -140,8 +140,9 @@ int main() {
     const char* expected_output_10 = "c3VyZS4=";
     
     const char challenge[] = {0x49,0x27,0x6d,0x20,0x6b,0x69,0x6c,0x6c,0x69,0x6e,0x67,0x20,0x79,0x6f,0x75,0x72,0x20,0x62,0x72,0x61,0x69,0x6e,0x20,0x6c,0x69,0x6b,0x65,0x20,0x61,0x20,0x70,0x6f,0x69,0x73,0x6f,0x6e,0x6f,0x75,0x73,0x20,0x6d,0x75,0x73,0x68,0x72,0x6f,0x6f,0x6d};
+    const char* expected = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
     int size_challenge = sizeof(challenge);
-    
+
     // Tests 
     res1 = base64Encode(input_1,getLength(input_1));
     res2 = base64Encode(input_2,getLength(input_2));
@@ -166,11 +167,11 @@ int main() {
     assert(strcmp(res8,expected_output_8) == 0);
     assert(strcmp(res9,expected_output_9) == 0);
     assert(strcmp(res10,expected_output_10) == 0);
-    
 
-    res1 = base64Encode(challenge,size_challenge);
+    char* result = base64Encode(challenge,size_challenge);
+    assert(strcmp(result,expected) == 0);
 
-    cout << res1 << endl;
+    cout << result << endl;
 
     return 0;
 }
