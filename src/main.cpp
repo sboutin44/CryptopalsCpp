@@ -6,8 +6,6 @@
 
 using namespace std;
 
-class xTaille{};
-
 void XORCombination(char input1[], char input2[], char output[])
 /** \brief combinaisonXOR
  *
@@ -18,34 +16,22 @@ void XORCombination(char input1[], char input2[], char output[])
  *
  */
 {
-    size_t taille1= strlen(input1);
     size_t taille2= strlen(input2);
-    size_t taille3= strlen(output);
-    if (!(taille1==taille2 && taille2==taille3))
+    for (unsigned int i=0; i<taille2; i++)
     {
-        throw xTaille();
-    }
-    for (unsigned int i=0; i<taille1; i++)
-    {
-        output[i]= input1[i] ^ input2[i];
+        output[i]= (input1[i] & 0xff) ^ (input2[i] & 0xff);
     }
 }
 
 int main()
 {
-    char entree1[37]= "1c0111001f010100061a024b53535009181c";
-    char entree2[37]= "686974207468652062756c6c277320657965";
-    char resultat[37]= "une chaine de caracteres pour strlen";
+    char entree1[19]= {0x1c, 0x01, 0x11, 0x00, 0x1f, 0x01, 0x01, 0x00, 0x06, 0x1a, 0x02, 0x4b, 0x53, 0x53, 0x50, 0x09, 0x18, 0x1c, *"\0"};
+    char entree2[19]= {0x68, 0x69, 0x74, 0x20, 0x74, 0x68, 0x65, 0x20, 0x62, 0x75, 0x6c, 0x6c, 0x27, 0x73, 0x20, 0x65, 0x79, 0x65, *"\0"};
+    char resultat[19];
 
-    try
-    {
-        XORCombination(entree1, entree2, resultat);
-    }catch (xTaille)
-    {
-        cout << "les tableaux ne sont pas equivalents" << endl;
-    }
+    XORCombination(entree1, entree2, resultat);
 
-    for (unsigned int i=0; i<37; i++)
+    for (unsigned int i=0; i<18; i++)
     {
         cout << resultat[i];
     }
