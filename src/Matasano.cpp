@@ -35,12 +35,21 @@ char* base64Encode(const char* input, int size) {
      * 0x3F
      */
     uint8_t a, b, c, d, e, f,g;
-    int output_length = (size / 3) * 4 + 4; // Every 3 letters, 4 letters are created, plus the 4 last ones.
+    int output_length;
+    int padding = size%3;
+
+    // Set the output size 
+    if (padding == 0) {
+        output_length = (size / 3) * 4; // Every 3 letters, 4 letters are created, plus the 4 last ones.
+    } else {
+        output_length = (size / 3) * 4 + 4; // Every 3 letters, 4 letters are created, plus the 4 last ones.
+    }
+
     char* output = new char[output_length];
 
     // Treat the 3-tuples.
     int output_position = 0; // track the position in the output array.
-    for (int i = 0; i < (size - size%3); i+=3)
+    for (int i = 0; i < (size - padding); i+=3)
     {
         a = (input[i] & 0xFC) >> 2;
         b = (input[i] & 0x03) << 4 ^ (input[i + 1] & 0xF0) >> 4;
@@ -54,7 +63,7 @@ char* base64Encode(const char* input, int size) {
     }
 
     // Treat the end of the string when 2 characters remain.
-    if (size % 3 == 2) {
+    if (padding == 2) {
         e = (input[size - 2] & 0xFC) >> 2;
         f = (input[size - 2] & 0x03) << 4 ^ (input[size - 1] & 0xF0) >> 4;
         g = (input[size - 1] & 0x0F) << 2;
@@ -66,7 +75,7 @@ char* base64Encode(const char* input, int size) {
     }
 
     // Treat the end when 1 character remain.
-    if (size % 3 == 1) {
+    if (padding == 1) {
         e = (input[size - 1] & 0xFC) >> 2;
         f = (input[size - 1] & 0x03) << 4;
 
@@ -119,19 +128,18 @@ int main() {
 
     size = getLength(input_1);
     res1 = base64Encode(input_1,size);
-    size = getLength(input_2);
-    res2 = base64Encode(input_2,size);
-    res3 = base64Encode(input_3,size);
-    res4 = base64Encode(input_4,size);
-    res5 = base64Encode(input_5,size);
+    res2 = base64Encode(input_2,getLength(input_2));
+    res3 = base64Encode(input_3,getLength(input_3));
+    res4 = base64Encode(input_4,getLength(input_4));
+    res5 = base64Encode(input_5,getLength(input_5));
 
-    cout << res2 ;
+    cout << res3 ;
     
     assert(strcmp(res1,expected_output_1) == 0);
     assert(strcmp(res2,expected_output_2) == 0);
-    //assert(strcmp(res3,expected_output_1) == 0);
-    //assert(strcmp(res4,expected_output_1) == 0);
-    //assert(strcmp(res5,expected_output_1) == 0);
+    assert(strcmp(res3,expected_output_3) == 0);
+    assert(strcmp(res4,expected_output_4) == 0);
+    assert(strcmp(res5,expected_output_5) == 0);
 
     
 
