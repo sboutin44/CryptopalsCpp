@@ -46,6 +46,7 @@ char* base64Encode(const char* input, int size) {
         output_length = (size / 3) * 4 + 4; // Every 3 letters, 4 letters are created, plus the 4 last ones.
     }
 
+    output_length += 1; // Terminate the string with the null character.
     char* output = new char[output_length];
 
     // Treat the 3-tuples.
@@ -86,6 +87,7 @@ char* base64Encode(const char* input, int size) {
         output[output_position++] = '=';
     }
 
+    output[output_position++] = '\0';
     return output;
 }
 
@@ -159,8 +161,6 @@ int main() {
     // Checks
     assert(strcmp(res1,expected_output_1) == 0);
     assert(strcmp(res2,expected_output_2) == 0);
-    cout << res3 << endl;
-    cout << expected_output_3 << endl;
     assert(strcmp(res3,expected_output_3) == 0);
     assert(strcmp(res4,expected_output_4) == 0);
     assert(strcmp(res5,expected_output_5) == 0);
