@@ -45,7 +45,7 @@ int main()
         cout << "les tableaux ne sont pas equivalents" << endl;
     }
 
-    for (unsigned int i=0; i<5; i++)
+    for (unsigned int i=0; i<37; i++)
     {
         cout << resultat[i];
     }
