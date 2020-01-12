@@ -99,7 +99,13 @@ uint8_t* base64Decode(const char* input, int size)
     }
 
     // Set the output size
-    int output_length = (size / 4) * 3 + padding;
+    int output_length;
+    if (padding == 1)
+        output_length = (size / 4) * 3 + 2;
+    if (padding == 2)
+        output_length = (size / 4) * 3 + 1;
+
+
     int output_position = 0; // track the position in the output array.
 
     uint8_t* output = new uint8_t[output_length];
@@ -118,22 +124,25 @@ uint8_t* base64Decode(const char* input, int size)
 
     // Treat the end of the string when 2 characters remain.
     if (padding == 2) {
-        a = base64.find(input[size-4]);
-        b = base64.find(input[size-3]);
-        c = base64.find(input[size-2]);
+        output[output_position-2] = '\0';
+        // a = base64.find(input[size-4]);
+        // b = base64.find(input[size-3]);
+        // c = base64.find(input[size-2]);
 
-        output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
-        output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+        // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+        // output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
     }
 
     // Treat the end when 1 character remain.
     if (padding == 1) {
-        a = base64.find(input[size-4]);
-        b = base64.find(input[size-3]);
+        output[output_position-1] = '\0';
+        // a = base64.find(input[size-4]);
+        // b = base64.find(input[size-3]);
 
-        output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+        // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
     }
 
+    output[output_position++] = '\0';
 
     return output;
 }
