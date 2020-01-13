@@ -11,6 +11,8 @@
 #include <cassert>
 #include <cstring>
 
+#include "base64.hpp"
+
 using namespace std;
 
 string base64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -159,7 +161,17 @@ int getLength(const char* s)
 }
 
 
-int main() {
+uint8_t* myXOR(uint8_t* a, uint8_t* b, int size)
+{
+    uint8_t* c = new uint8_t[size];
+
+    for (int i=0;i<size;i++)
+        c[i] = a[i]^b[i];
+
+    return c;
+}
+
+int test() {
 
     // Sources of the inputs:
     // https://en.wikipedia.org/wiki/Base64
