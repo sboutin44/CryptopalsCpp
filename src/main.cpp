@@ -19,7 +19,7 @@ void XORCombination(char input1[], char input2[], char output[])
     size_t taille2= strlen(input2);
     for (unsigned int i=0; i<taille2; i++)
     {
-        output[i]= (input1[i] & 0xff) ^ (input2[i] & 0xff);
+        output[i]= input1[i] ^ input2[i];
     }
 }
 
