@@ -24,6 +24,8 @@ void quickEnglishChecker(uint8_t* sentence)
     string sentence_string((char*) sentence); // pour utiliser la fonction find
 
     int score = 0;
+
+    // {}
     int j=0;
     while (j< 118)
     {
@@ -43,6 +45,10 @@ void quickEnglishChecker(uint8_t* sentence)
 
 int main()
 {
+    cout << "============================" << endl;
+    cout << "Base64 encoding:" << endl;
+    test_base64();
+
     cout << "============================" << endl;
     cout << "Fixed XOR" << endl;
     uint8_t a[] = {0x1c,0x01,0x11,0x00,0x1f,0x01,0x01,0x00,0x06,0x1a,0x02,0x4b,0x53,0x53,0x50,0x09,0x18,0x1c};

@@ -149,17 +149,6 @@ uint8_t* base64Decode(const char* input, int size)
     return output;
 }
 
-int getLength(const char* s)
-{
-    char c = s[0];
-    int count = 0;
-    while (c != '\0') {
-        count++;
-        c = s[count];
-    }
-    return count;
-}
-
 
 uint8_t* myXOR(uint8_t* a, uint8_t* b, int size)
 {
@@ -171,7 +160,7 @@ uint8_t* myXOR(uint8_t* a, uint8_t* b, int size)
     return c;
 }
 
-int test() {
+int test_base64() {
 
     // Sources of the inputs:
     // https://en.wikipedia.org/wiki/Base64
@@ -215,16 +204,16 @@ int test() {
     int size_challenge = sizeof(challenge);
 
     // Tests
-    res1 = base64Encode(input_1,getLength(input_1));
-    res2 = base64Encode(input_2,getLength(input_2));
-    res3 = base64Encode(input_3,getLength(input_3));
-    res4 = base64Encode(input_4,getLength(input_4));
-    res5 = base64Encode(input_5,getLength(input_5));
-    res6 = base64Encode(input_6,getLength(input_6));
-    res7 = base64Encode(input_7,getLength(input_7));
-    res8 = base64Encode(input_8,getLength(input_8));
-    res9 = base64Encode(input_9,getLength(input_9));
-    res10 = base64Encode(input_10,getLength(input_10));
+    res1 = base64Encode(input_1,strlen(input_1));
+    res2 = base64Encode(input_2,strlen(input_2));
+    res3 = base64Encode(input_3,strlen(input_3));
+    res4 = base64Encode(input_4,strlen(input_4));
+    res5 = base64Encode(input_5,strlen(input_5));
+    res6 = base64Encode(input_6,strlen(input_6));
+    res7 = base64Encode(input_7,strlen(input_7));
+    res8 = base64Encode(input_8,strlen(input_8));
+    res9 = base64Encode(input_9,strlen(input_9));
+    res10 = base64Encode(input_10,strlen(input_10));
 
     // Encoding tests
     assert(strcmp(res1,expected_output_1) == 0);
