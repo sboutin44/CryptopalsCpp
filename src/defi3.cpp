@@ -35,7 +35,6 @@ int main()
 
     XOREncrypting(entree1, cle, resultat1);
     XOREncrypting(entree2, cle, resultat2);
-    ostringstream oss;
 
     for (unsigned int i=0; i<43; i++)
     {
