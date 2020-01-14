@@ -27,25 +27,21 @@ void XOREncrypting(char input[], char cle[], char output[])
 
 int main()
 {
-    char entree1[43]= "Burning 'em, if you ain't quick and nimble";
-    char entree2[32]= "I go crazy when I hear a cymbal";
+    char entree[75]= "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal";
     char cle[4]= "ICE";
-    char resultat1[43];
-    char resultat2[32];
+    char resultat[74];
 
-    XOREncrypting(entree1, cle, resultat1);
-    XOREncrypting(entree2, cle, resultat2);
+    XOREncrypting(entree, cle, resultat);
 
-    for (unsigned int i=0; i<43; i++)
+    cout << hex; /// on passe en affichage hexa
+
+    for (unsigned int i=0; i<74; i++)
     {
-        cout << resultat1[i];
+        short nb = (resultat[i] & 0xF0) >> 4;
+        short nb2 = resultat[i] & 0x0F;
+        cout << nb << nb2;
     }
     cout << endl; ///on purge le flux
-    for (unsigned int i=0; i<23; i++)
-    {
-        cout << resultat1[i];
-    }
-    cout << endl;
 
     return 0;
 }
