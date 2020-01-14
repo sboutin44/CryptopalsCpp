@@ -30,14 +30,16 @@ void quickEnglishChecker(uint8_t* sentence)
     while (j< 118)
     {
         word = dictionnary[j];
-        if (sentence_string.find(word) != string::npos)
+        if (sentence_string.find(word) != string::npos){
             score++;
+        }
         j++;
     }
 
     if (score > 2) // si le score est égal à 0 ça sert à rien d'afficher.
     {
-        cout << score << endl;
+        cout << endl;
+        cout << "Text trouvé:  " << endl;
         cout << sentence << endl;
     }
 }
@@ -68,12 +70,24 @@ int main()
     uint8_t* key_array = new uint8_t[sizeof(toDecrypt)];
 
     // Brut force attack
-    for (uint8_t key=0;key<=0xFF;key++) {
+    for (uint8_t key=0;key<=0xFE;key++)
+    /*
+        Si on va jusqu'au cas où key=0xFF, en incrémentant on va se
+        retrouver avec key=0 car key est codé sur 1 octet,
+        et on va boucler à l'infini, donc on
+        traite le cas 0xFF à part.
+     */
+    {
         memset(key_array, key, sizeof(toDecrypt));
         c = myXOR(toDecrypt,key_array,sizeof(toDecrypt));
         quickEnglishChecker(c);
-        //cout << c << endl;
     }
+
+    // Cas de key = 0xFF
+    memset(key_array, 0xFF, sizeof(toDecrypt));
+    c = myXOR(toDecrypt,key_array,sizeof(toDecrypt));
+    quickEnglishChecker(c);
+
     cout << "============================" << endl;
 
     return 0;
