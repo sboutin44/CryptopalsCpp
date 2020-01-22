@@ -78,6 +78,7 @@ int findEditDistance(char input1[], char input2[])
 
 int main()
 {
-    size_t KEYSIZE(0);
-
+    char input1[15]="this is a test";
+    char input2[15]="wokka wokka!!!";
+    cout << findEditDistance(input1, input2) << endl;
 }
