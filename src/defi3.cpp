@@ -1,14 +1,9 @@
 #include <iostream>
-#include <string.h>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <sstream>
-
+#include "englishCheck.h"
 using namespace std;
 
-void XOREncrypting(char input[], char cle[], char output[])
-/** \brief cryptageXOR
+void XORCombination(char input[], char cle[], char output[])
+/** \brief combinaison XOR
  *
  * \param tableau char (input1)
  * \param tableau char (clé)
@@ -25,23 +20,61 @@ void XOREncrypting(char input[], char cle[], char output[])
     }
 }
 
+
+
+char singleCharXORBreacker(char input[], char output[])
+/** \brief craque un cryptage XOR a cle unique
+ *
+ * \param chaine crypte
+ * \param chaine decrypte
+ * \return cle
+ *
+ */
+{
+    size_t taille= strlen(input);
+    int bestScore(0);
+    char bestScoreKey;
+    for (char test=0x01; test!='\0'; test++) ///brut force attack
+    {
+        char combinaison[taille];
+        char cle[2]= {test, '\0'};
+        XORCombination(input, cle , combinaison);
+        int score= englishScore(combinaison);
+        if (score>=bestScore)
+        {
+            bestScore=score;
+            bestScoreKey=test;
+            for (unsigned int i=0; i<taille; i++)
+            {
+                output[i]=combinaison[i];
+            }
+        }
+    }
+    return bestScoreKey;
+}
+
+
 int main()
 {
-    char entree[75]= "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal";
-    char cle[4]= "ICE";
-    char resultat[74];
-
-    XOREncrypting(entree, cle, resultat);
-
-    cout << hex; /// on passe en affichage hexa
-
-    for (unsigned int i=0; i<74; i++)
+    char cryptedString[35]= {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15, 0x1b, 0x7f, 0x2b, 0x78, 0x34, 0x31, 0x33, 0x3d, 0x78, 0x39, 0x78, 0x28, 0x37, 0x2d, 0x36, 0x3c, 0x78, 0x37, 0x3e, 0x78, 0x3a, 0x39, 0x3b, 0x37, 0x36, 0x00};
+    char decryptedString[35];
+    /**for (char test=0x01; test!='\0'; test++) ///brut force attack
     {
-        short nb = (resultat[i] & 0xF0) >> 4;
-        short nb2 = resultat[i] & 0x0F;
-        cout << nb << nb2;
+        char combinaison[35];
+        char cle[2]= {test, '\0'};
+        XORCombination(cryptedString, cle , combinaison);
+        for (unsigned int i=0; i<34; i++)
+        {
+            cout << combinaison[i];
+        }
+        cout << "          " << test;
+        cout << endl;
+    }**/
+    char key= singleCharXORBreacker(cryptedString, decryptedString);
+    for (int i=0; i<35; i++)
+    {
+        cout << decryptedString[i];
     }
-    cout << endl; ///on purge le flux
-
+    cout << endl << "the key was: " << key;
     return 0;
 }
