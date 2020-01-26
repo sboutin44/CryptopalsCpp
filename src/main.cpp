@@ -157,6 +157,22 @@ void singlebyteXORattack2(uint8_t* ciphertext, int size )
     quickEnglishChecker(deciphered);
 }
 
+void repeatedKeyXor (
+    const char* input,
+    const char* key,
+    int         inputSize,
+    int         keySize,
+    const       char* output)
+{
+    // Expand the key to the size of the input.
+    char* expandedKey = new char[inputSize];
+    for (int i=0; i<=(inputSize%keySize);i+=keySize)
+        strcpy(expandedKey+i,key);
+
+    cout << expandedKey << endl;
+}
+
+
 int main()
 {
     cout << "\n============================" << endl;
@@ -226,6 +242,13 @@ int main()
         singlebyteXORattack(hexline,60);
     }
 
+    cout << "\n============================" << endl;
+    cout << "Set 1   Challenge 5" << endl;
+    cout << "Implement repeating-key XOR" << endl;
+
+    const char a = "Burning 'em, if you ain't quick and nimble";
+    const char b = "I go crazy when I hear a cymbal";
+    const char* key = "ICE";
 
 
     return 0;
