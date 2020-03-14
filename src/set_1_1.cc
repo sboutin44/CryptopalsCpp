@@ -3,29 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 #include <iostream>
 #include <string>
 #include <cassert>
 #include <cstring>
-
-#include <base64.hpp>
-
-
-uint8_t* myXOR(uint8_t* a, uint8_t* b, int size)
-{
-    uint8_t* c = new uint8_t[size];
-
-    for (int i=0;i<size;i++)
-        c[i] = a[i]^b[i];
-
-    return c;
-}
+#include "lib.h"
+using namespace std;
 
 int main() {
 
     // Sources of the inputs:
     // https://en.wikipedia.org/wiki/Base64
-
+    
     char* res1;
     char* res2;
     char* res3;

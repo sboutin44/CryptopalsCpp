@@ -11,8 +11,7 @@
 #include <cassert>
 #include <cstring>
 
-#include "base64.hpp"
-
+#include "lib.h"
 using namespace std;
 
 string base64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
