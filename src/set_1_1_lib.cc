@@ -16,6 +16,15 @@ using namespace std;
 
 string base64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
+void hexDecode(const char* input, uint8_t* out )
+{
+    std::string myString(input);
+
+    for (int i=0;i<strlen(input);i+=2) {
+        std::string substr = myString.substr(i,2);
+        out[i] = strtoul(substr.c_str(), 0, 16);
+    }
+}
 
 char* base64Encode(const char* input, int size) {
     /** Encode an input made of raw bytes in base64.

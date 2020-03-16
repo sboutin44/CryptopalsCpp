@@ -12,16 +12,6 @@
 #include "lib.h"
 using namespace std;
 
-void hexDecode(const char* input, uint8_t* out )
-{
-    std::string myString(input);
-
-    for (int i=0;i<strlen(input);i+=2) {
-        std::string substr = myString.substr(i,2);
-        out[i] = strtoul(substr.c_str(), 0, 16);
-    }
-}
-
 int main()
 {
     cout << "\n============================" << endl;

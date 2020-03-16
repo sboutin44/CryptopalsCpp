@@ -5,10 +5,8 @@
 #include <cstring>
 #include <cstdlib>
 #include <cassert>
-
+#include "lib.h"
 using namespace std;
-
-
 
 
 void repeatedKeyXor (
