@@ -1,41 +1,70 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 #include <iostream>
 #include <string>
 #include <cassert>
 #include <cstring>
+#include <fstream>
 #include "lib.h"
 using namespace std;
 
-#include "dictionnary.cc"
+int dict_size;
+vector<string> dictionary; // Vector used to allow the use of different dictionaries.
+
+void load_dictionary(const char* filename)
+{
+    string resourcesdir = "./resources/";
+    ifstream file;
+    
+    ios::iostate filestate;
+    file.open(filename);
+    
+    try {
+        file.open((resourcesdir+string(filename)).c_str());
+
+    //    if ( (file.rdstate() & std::ifstream::failbit ) != 0 ) {
+        if ( file.fail() )
+            throw file.rdstate();
+       
+        int position = 0;
+        for (std::string line; std::getline(file, line) ; )
+            dictionary.push_back(line);
+        
+        dict_size = dictionary.size();
+    }
+    catch (ios::iostate filestate)
+    {
+        if (filestate == ios::failbit) {
+            cout << "failbit" << endl;
+        }
+            
+        if (filestate == ios::badbit) {
+            cout << "badbit" << endl;  
+        }        
+    }   
+}
 
 void quickEnglishChecker(uint8_t* sentence)
 {
     string word;
-    string sentence_string((char*) sentence); // pour utiliser la fonction find
-
+    string sentence_string((char*) sentence); // Allow the use of string::find    
     int score = 0;
-
-    // {}
+    
     int j=0;
-    while (j< 118)
+    while (j<dictionary.size())
     {
-        word = dictionnary[j];
-        if (sentence_string.find(word) != string::npos){
+        word = dictionary[j];
+        if (sentence_string.find(" " + word + " ") != string::npos)
             score++;
-        }
+
         j++;
     }
 
-    if (score > 3) // si le score est égal à 0 ça sert à rien d'afficher.
+    if (score > 2) // si le score est égal à 0 ça sert à rien d'afficher.
     {
         cout << endl;
         cout << "Deciphered text:  " << endl;
         cout << sentence << endl;
+        cout << "score: " << score << endl;
     }
 }
 
@@ -44,6 +73,9 @@ void singlebyteXORattack(uint8_t* ciphertext, int size )
     uint8_t* key_array = new uint8_t[size];
     uint8_t* deciphered;
 
+    //assert(dictionary != NULL); // Check is a dictionary is loaded.
+    assert(dictionary.empty() == false);
+            
     // Brut force attack
     for (uint8_t key=0;key<=0xFE;key++)
     /*
