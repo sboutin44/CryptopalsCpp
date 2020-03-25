@@ -1,11 +1,6 @@
 
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <cstring>
-#include <fstream>
-#include <map>
 #include "lib.h"
+
 using namespace std;
 
 int dict_size;
@@ -42,11 +37,18 @@ void load_dictionary(const char* filename)
     }   
 }
 
-void quickEnglishChecker(uint8_t* sentence)
+void englishScore(uint8_t* sentence)
 {
     string word;
     string sentence_string((char*) sentence); // Allow the use of string::find    
     int score = 0;
+    size_t not_found = string::npos ;
+
+    /* Filter some sentences with strange characters to speed up the process */
+//    for (char ascii = 33 ; ascii < 47 ; ascii++) {
+//        if (sentence_string.find(ascii) != not_found )
+//            return;
+//    }
     
     int j=0;
     while (j<dictionary.size())
@@ -78,7 +80,7 @@ void singlebyteXORattack(uint8_t* ciphertext, int size )
     {
         memset(key_array, (uint8_t) key, size); // Cast to a byte to prevent an infinite loop. 
         deciphered = myXOR(ciphertext,key_array,size);
-        quickEnglishChecker(deciphered);
+        englishScore(deciphered);
     }
 }
 
@@ -98,12 +100,12 @@ void singlebyteXORattack2(uint8_t* ciphertext, int size )
     {
         memset(key_array, key, size);
         deciphered = myXOR(ciphertext,key_array,size);
-        quickEnglishChecker(deciphered);
+        englishScore(deciphered);
 
     }
 
     // Cas de key = 0xFF
     memset(key_array, 0xFF, size);
     deciphered = myXOR(ciphertext,key_array,size);
-    quickEnglishChecker(deciphered);
+    englishScore(deciphered);
 }

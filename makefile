@@ -4,7 +4,7 @@ INC_DIR =   inc
 OUT_DIR	=   OUTPUT
 MKDIR	=   mkdir
 
-all: directories lib.o set_1_1 set_1_2 set_1_3 set_1_4 set_1_5
+all: directories lib.o set_1_1 set_1_2 set_1_3 set_1_4 set_1_5 set_1_6
 	
 directories: ${OUT_DIR}
 
@@ -28,6 +28,9 @@ set_1_4: $(SRC_DIR)/set_1_4_main.cc $(INC_DIR)/lib.h
 
 set_1_5: $(SRC_DIR)/set_1_5_lib.cc $(SRC_DIR)/set_1_5_main.cc $(INC_DIR)/lib.h
 	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_5 $(SRC_DIR)/set_1_5_main.cc ${OUT_DIR}/lib.o
+
+set_1_6: $(SRC_DIR)/set_1_6_lib.cc $(SRC_DIR)/set_1_6_main.cc $(INC_DIR)/lib.h
+	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_6 $(SRC_DIR)/set_1_6_main.cc ${OUT_DIR}/lib.o
 
 
 .PHONY : clean

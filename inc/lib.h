@@ -2,6 +2,13 @@
 #ifndef CRYPTOPALS_INC_LIB_H_
 #define CRYPTOPALS_INC_LIB_H_
 
+#include <iostream>
+#include <string>
+#include <cassert>
+#include <cstring>
+#include <fstream>
+#include <map>
+#include <cstdint>
 #include <vector>
 
 char* base64Encode(const char* input, int size);
