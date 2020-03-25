@@ -4,6 +4,7 @@
 #include <cassert>
 #include <cstring>
 #include <fstream>
+#include <map>
 #include "lib.h"
 using namespace std;
 
@@ -20,15 +21,13 @@ void load_dictionary(const char* filename)
     
     try {
         file.open((resourcesdir+string(filename)).c_str());
-
-    //    if ( (file.rdstate() & std::ifstream::failbit ) != 0 ) {
         if ( file.fail() )
             throw file.rdstate();
        
         int position = 0;
-        for (std::string line; std::getline(file, line) ; )
+        for (std::string line; std::getline(file, line) ; ) {
             dictionary.push_back(line);
-        
+        }        
         dict_size = dictionary.size();
     }
     catch (ios::iostate filestate)
@@ -72,28 +71,15 @@ void singlebyteXORattack(uint8_t* ciphertext, int size )
 {
     uint8_t* key_array = new uint8_t[size];
     uint8_t* deciphered;
-
-    //assert(dictionary != NULL); // Check is a dictionary is loaded.
     assert(dictionary.empty() == false);
             
-    // Brut force attack
-    for (uint8_t key=0;key<=0xFE;key++)
-    /*
-        Si on va jusqu'au cas où key=0xFF, en incrémentant on va se
-        retrouver avec key=0 car key est codé sur 1 octet,
-        et on va boucler à l'infini, donc on
-        traite le cas 0xFF à part.
-     */
+    // Brut force
+    for (int key=0;key<=0xFF;key++)
     {
-        memset(key_array, key, size);
+        memset(key_array, (uint8_t) key, size); // Cast to a byte to prevent an infinite loop. 
         deciphered = myXOR(ciphertext,key_array,size);
         quickEnglishChecker(deciphered);
     }
-
-    // Cas de key = 0xFF
-    memset(key_array, 0xFF, size);
-    deciphered = myXOR(ciphertext,key_array,size);
-    quickEnglishChecker(deciphered);
 }
 
 void singlebyteXORattack2(uint8_t* ciphertext, int size )

@@ -22,7 +22,7 @@ int main()
 
     load_dictionary("google_10000_english.txt");
 
-    
+
     ios::iostate filestate;
     ifstream fileToDecrypt;
 
