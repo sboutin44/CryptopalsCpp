@@ -1,14 +1,14 @@
 // Copyright © 2020 Sebastien BOUTIN
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of
-// this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to
-// use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-// of the Software, and to permit persons to whom the Software is furnished to do
-// so, subject to the following conditions:
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
 //
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -18,32 +18,27 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 //
-// Except as contained in this notice, the name(s) of the above copyright holders
-// shall not be used in advertising or otherwise to promote the sale, use or other
-// dealings in this Software without prior written authorization.
+// Except as contained in this notice, the name(s) of the above copyright
+// holders shall not be used in advertising or otherwise to promote the sale,
+// use or other dealings in this Software without prior written authorization.
 
 #include "lib.h"
 using namespace std;
 
-int hammingDistance(const char* a, const char* b)
-{
-    assert(strlen(a) == strlen(b));
-    uint8_t byte;
-    int distance = 0;
+int hammingDistance(const char* a, const char* b) {
+  assert(strlen(a) == strlen(b));
+  uint8_t byte;
+  int distance = 0;
 
-    for (int i=0; i = strlen(a) ; i++)
-    {
-        byte = a[i] ^ b[i];
+  for (int i = 0; i = strlen(a); i++) {
+    byte = a[i] ^ b[i];
 
-        int j=0;
-        while (j<8)
-        {
-            distance += (byte >> j) & 1;
-        }
+    int j = 0;
+    while (j < 8) {
+      distance += (byte >> j) & 1;
     }
-    return distance;
+  }
+  return distance;
 }
 
-void challenge_6()
-{
-}
+void challenge_6() {}
