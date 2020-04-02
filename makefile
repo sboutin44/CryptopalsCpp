@@ -16,13 +16,13 @@ HEADERS         := $(HEADERS_LIST)
 
 # Creates object files in $(BUILD_DIR)
 $(BUILD_DIR)/%.o : src/%.cc $(HEADERS_LIST)
-    mkdir -p $(@D)
-    $(CXX) -c -o $@ $<  $(CXXFLAGS)
+	mkdir -p $(@D)
+	$(CXX) -c -o $@ $<  $(CXXFLAGS)
 
 # Creates the executable
 $(BUILD_DIR)/cryptopals : $(OBJS)
-    $(CXX) -o $@ $^ $(CXXFLAGS)
+	$(CXX) -o $@ $^ $(CXXFLAGS)
 
 .PHONY : clean
 clean:
-    -rm -r ${BUILD_DIR}
+	-rm -r ${BUILD_DIR}
