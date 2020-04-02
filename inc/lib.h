@@ -29,7 +29,9 @@
 #include <string>
 #include <cassert>
 #include <cstring>
+#include <cstdlib>
 #include <fstream>
+#include <sstream>
 #include <map>
 #include <cstdint>
 #include <vector>

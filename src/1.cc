@@ -22,11 +22,6 @@
 // shall not be used in advertising or otherwise to promote the sale, use or other
 // dealings in this Software without prior written authorization.
 
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <cstring>
-
 #include "lib.h"
 using namespace std;
 

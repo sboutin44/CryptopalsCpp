@@ -23,6 +23,7 @@
 // dealings in this Software without prior written authorization.
 
 #include "lib.h"
+using namespace std;
 
 int hammingDistance(const char* a, const char* b)
 {

@@ -22,15 +22,8 @@
 // shall not be used in advertising or otherwise to promote the sale, use or other
 // dealings in this Software without prior written authorization.
 
- #include <iostream>
- #include <string>
- #include <sstream>
- #include <cstring>
- #include <cstdlib>
- #include <cassert>
  #include "lib.h"
  using namespace std;
-
 
  void repeatedKeyXor (const char* input, const char* key, char* output)
  {
