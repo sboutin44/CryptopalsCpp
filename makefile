@@ -1,7 +1,7 @@
 BUILD_DIR   = build
 INC         = inc
 CXX         = g++-9
-CXXFLAGS    = -I$(INC)
+CXXFLAGS    = -g -I$(INC)
 
 #VPATH = src inc # VPATH: Search Path for All Dependencies
 
@@ -17,11 +17,11 @@ HEADERS         := $(HEADERS_LIST)
 # Creates object files in $(BUILD_DIR)
 $(BUILD_DIR)/%.o : src/%.cc $(HEADERS_LIST)
 	mkdir -p $(@D)
-	$(CXX) -c -o $@ $<  $(CXXFLAGS)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 # Creates the executable
 $(BUILD_DIR)/cryptopals : $(OBJS)
-	$(CXX) -o $@ $^ $(CXXFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
 .PHONY : clean
 clean:
