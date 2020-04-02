@@ -1,38 +1,28 @@
-CXX	=   /usr/local/bin/g++-9
-SRC_DIR =   src
-INC_DIR =   inc
-OUT_DIR	=   OUTPUT
-MKDIR	=   mkdir
+BUILD_DIR   = build
+INC         = inc
+CXX         = g++-9
+CXXFLAGS    = -I$(INC)
 
-all: directories lib.o set_1_1 set_1_2 set_1_3 set_1_4 set_1_5 set_1_6
-	
-directories: ${OUT_DIR}
+#VPATH = src inc # VPATH: Search Path for All Dependencies
 
-${OUT_DIR}:
-	${MKDIR} ${OUT_DIR}
-	
-lib.o: $(SRC_DIR)/lib.cc
-	$(CXX) -g -Iinc -o ${OUT_DIR}/lib.o -c $(SRC_DIR)/lib.cc
-	
-set_1_1: $(SRC_DIR)/set_1_1_lib.cc $(SRC_DIR)/set_1_1_main.cc $(INC_DIR)/lib.h
-	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_1 $(SRC_DIR)/set_1_1_main.cc ${OUT_DIR}/lib.o
+# We create a list of all object files to make from the source files
+# found in src/.
+SOURCES_LIST    = $(wildcard src/*.cc)
+OBJS            = $(subst src/,$(BUILD_DIR)/, $(subst .cc,.o, $(SOURCES_LIST)) )
 
-set_1_2: $(SRC_DIR)/set_1_2_lib.cc $(SRC_DIR)/set_1_2_main.cc $(INC_DIR)/lib.h
-	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_2 $(SRC_DIR)/set_1_2_main.cc ${OUT_DIR}/lib.o
+# List of headers
+HEADERS_LIST    := $(wildcard inc/*.h)
+HEADERS         := $(HEADERS_LIST)
 
-set_1_3: $(SRC_DIR)/set_1_3_lib.cc $(SRC_DIR)/set_1_3_main.cc $(INC_DIR)/lib.h
-	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_3 $(SRC_DIR)/set_1_3_main.cc ${OUT_DIR}/lib.o
+# Creates object files in $(BUILD_DIR)
+$(BUILD_DIR)/%.o : src/%.cc $(HEADERS_LIST)
+    mkdir -p $(@D)
+    $(CXX) -c -o $@ $<  $(CXXFLAGS)
 
-set_1_4: $(SRC_DIR)/set_1_4_main.cc $(INC_DIR)/lib.h
-	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_4 $(SRC_DIR)/set_1_4_main.cc ${OUT_DIR}/lib.o
-
-set_1_5: $(SRC_DIR)/set_1_5_lib.cc $(SRC_DIR)/set_1_5_main.cc $(INC_DIR)/lib.h
-	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_5 $(SRC_DIR)/set_1_5_main.cc ${OUT_DIR}/lib.o
-
-set_1_6: $(SRC_DIR)/set_1_6_lib.cc $(SRC_DIR)/set_1_6_main.cc $(INC_DIR)/lib.h
-	$(CXX) -g -Iinc -o ${OUT_DIR}/set_1_6 $(SRC_DIR)/set_1_6_main.cc ${OUT_DIR}/lib.o
-
+# Creates the executable
+$(BUILD_DIR)/cryptopals : $(OBJS)
+    $(CXX) -o $@ $^ $(CXXFLAGS)
 
 .PHONY : clean
 clean:
-	-rm -r ${OUT_DIR}
+    -rm -r ${BUILD_DIR}

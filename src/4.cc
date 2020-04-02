@@ -12,7 +12,7 @@
 #include "lib.h"
 using namespace std;
 
-int main()
+void challenge_4()
 {
     cout << "\n============================" << endl;
     cout << "Set 1   Challenge 4" << endl;
@@ -32,7 +32,7 @@ int main()
     //    if ( (fileToDecrypt.rdstate() & std::ifstream::failbit ) != 0 ) {
         if ( fileToDecrypt.fail() )
             throw fileToDecrypt.rdstate();
-        
+
         uint8_t* hexline = new uint8_t[60];
         for (std::string line; std::getline(fileToDecrypt, line) ; )
         {
@@ -45,9 +45,9 @@ int main()
         if (filestate == ios::failbit) {
             cout << "failbit" << endl;
         }
-            
+
         if (filestate == ios::badbit) {
-            cout << "badbit" << endl;  
-        }        
+            cout << "badbit" << endl;
+        }
     }
 }

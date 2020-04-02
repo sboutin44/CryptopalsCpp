@@ -10,19 +10,19 @@ void load_dictionary(const char* filename)
 {
     string resourcesdir = "./resources/";
     ifstream file;
-    
+
     ios::iostate filestate;
     file.open(filename);
-    
+
     try {
         file.open((resourcesdir+string(filename)).c_str());
         if ( file.fail() )
             throw file.rdstate();
-       
+
         int position = 0;
         for (std::string line; std::getline(file, line) ; ) {
             dictionary.push_back(line);
-        }        
+        }
         dict_size = dictionary.size();
     }
     catch (ios::iostate filestate)
@@ -30,17 +30,17 @@ void load_dictionary(const char* filename)
         if (filestate == ios::failbit) {
             cout << "failbit" << endl;
         }
-            
+
         if (filestate == ios::badbit) {
-            cout << "badbit" << endl;  
-        }        
-    }   
+            cout << "badbit" << endl;
+        }
+    }
 }
 
 void englishScore(uint8_t* sentence)
 {
     string word;
-    string sentence_string((char*) sentence); // Allow the use of string::find    
+    string sentence_string((char*) sentence); // Allow the use of string::find
     int score = 0;
     size_t not_found = string::npos ;
 
@@ -49,7 +49,7 @@ void englishScore(uint8_t* sentence)
 //        if (sentence_string.find(ascii) != not_found )
 //            return;
 //    }
-    
+
     int j=0;
     while (j<dictionary.size())
     {
@@ -74,11 +74,11 @@ void singlebyteXORattack(uint8_t* ciphertext, int size )
     uint8_t* key_array = new uint8_t[size];
     uint8_t* deciphered;
     assert(dictionary.empty() == false);
-            
+
     // Brut force
     for (int key=0;key<=0xFF;key++)
     {
-        memset(key_array, (uint8_t) key, size); // Cast to a byte to prevent an infinite loop. 
+        memset(key_array, (uint8_t) key, size); // Cast to a byte to prevent an infinite loop.
         deciphered = myXOR(ciphertext,key_array,size);
         englishScore(deciphered);
     }
@@ -108,4 +108,18 @@ void singlebyteXORattack2(uint8_t* ciphertext, int size )
     memset(key_array, 0xFF, size);
     deciphered = myXOR(ciphertext,key_array,size);
     englishScore(deciphered);
+}
+
+
+void challenge_3()
+{
+    cout << "\n============================" << endl;
+    cout << "Set 1   Challenge 3" << endl;
+    cout << "Detect single-character XOR" << endl;
+
+    uint8_t* c;
+    uint8_t toDecrypt[] = {0x1b,0x37,0x37,0x33,0x31,0x36,0x3f,0x78,0x15,0x1b,0x7f,0x2b,0x78,0x34,0x31,0x33,0x3d,0x78,0x39,0x78,0x28,0x37,0x2d,0x36,0x3c,0x78,0x37,0x3e,0x78,0x3a,0x39,0x3b,0x37,0x36};
+
+    load_dictionary("google_10000_english.txt");
+    singlebyteXORattack(toDecrypt, sizeof(toDecrypt) );
 }

@@ -11,11 +11,11 @@ int hammingDistance(const char* a, const char* b)
     assert(strlen(a) == strlen(b));
     uint8_t byte;
     int distance = 0;
-    
+
     for (int i=0; i = strlen(a) ; i++)
     {
         byte = a[i] ^ b[i];
-        
+
         int j=0;
         while (j<8)
         {
@@ -23,4 +23,8 @@ int hammingDistance(const char* a, const char* b)
         }
     }
     return distance;
+}
+
+void challenge_6()
+{
 }

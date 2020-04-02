@@ -26,4 +26,13 @@ void singlebyteXORattack2(uint8_t* ciphertext, int size );
 void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size );
 
+// The challenges
+void challenge_1();
+void challenge_2();
+void challenge_3();
+void challenge_4();
+void challenge_5();
+void challenge_6();
+//int challenge_7();
+
 #endif //CRYPTOPALS_INC_LIB_H_
