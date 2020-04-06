@@ -30,15 +30,31 @@ int hammingDistance(const char* a, const char* b) {
   uint8_t byte;
   int distance = 0;
 
-  for (int i = 0; i = strlen(a); i++) {
+  for (int i = 0; i < strlen(a); i++) {
     byte = a[i] ^ b[i];
 
     int j = 0;
     while (j < 8) {
       distance += (byte >> j) & 1;
+      j++;
     }
   }
   return distance;
 }
 
-void challenge_6() {}
+void TestHammingDistance()
+{
+  string a = "this is a test";
+  string b = "wokka wokka!!!";
+  cout << hammingDistance(a.c_str() , b.c_str()) << endl;
+}
+
+void challenge_6() {
+  cout << "\n------------------------------------" << endl;
+  cout << "Challenges Set 1" << endl;
+  cout << "6. Break repeating-key XOR" << endl;
+  cout << "------------------------------------\n" << endl;
+
+  TestHammingDistance();
+
+}

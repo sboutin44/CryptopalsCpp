@@ -26,8 +26,10 @@
 using namespace std;
 
 void challenge_4() {
-  cout << "\n============================" << endl;
-  cout << "Set 1   Challenge 4" << endl;
+  cout << "\n------------------------------------" << endl;
+  cout << "Challenges Set 1" << endl;
+  cout << "4. Detect single-character XOR" << endl;
+  cout << "------------------------------------\n" << endl;
 
   string resourcesdir = "./resources/";
   string filename = "ciphertext_set1_chall4.txt";
@@ -40,7 +42,6 @@ void challenge_4() {
   try {
     fileToDecrypt.open((resourcesdir + filename).c_str());
 
-    //    if ( (fileToDecrypt.rdstate() & std::ifstream::failbit ) != 0 ) {
     if (fileToDecrypt.fail()) throw fileToDecrypt.rdstate();
 
     uint8_t* hexline = new uint8_t[60];

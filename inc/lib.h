@@ -45,7 +45,6 @@ int test_base64();
 void load_dictionary(const char* filename);
 void quickEnglishChecker(uint8_t* sentence);
 void singlebyteXORattack(uint8_t* ciphertext, int size);
-void singlebyteXORattack2(uint8_t* ciphertext, int size);
 
 // Set_1_3 Set_1_4 Set_1_5
 void hexDecode(const char* input, uint8_t* out);

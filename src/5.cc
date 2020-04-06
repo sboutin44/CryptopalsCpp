@@ -35,6 +35,12 @@ void repeatedKeyXor(const char* input, const char* key, char* output) {
 }
 
 void challenge_5() {
+  cout << "\n------------------------------------" << endl;
+  cout << "Challenges Set 1" << endl;
+  cout << "5. Implement repeating-key XOR" << endl;
+  cout << "------------------------------------\n" << endl;
+
+
   const char* a =
       "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a "
       "cymbal";

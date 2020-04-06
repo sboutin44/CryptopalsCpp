@@ -28,18 +28,8 @@ using namespace std;
 string base64 =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-// void hexDecode(const char* input, uint8_t* out )
-//{
-//    std::string myString(input);
-//
-//    for (int i=0;i<strlen(input);i+=2) {
-//        std::string substr = myString.substr(i,2);
-//        out[i] = strtoul(substr.c_str(), 0, 16);
-//    }
-//}
-
 void hexDecode(const char* input, uint8_t* out) {
-  // uint8_t* out = new uint8_t[strlen(input)/2];
+  /** Parse an hex string to an array of intergers. */
 
   std::string myString(input);
 
@@ -47,7 +37,6 @@ void hexDecode(const char* input, uint8_t* out) {
     std::string subStr = myString.substr(i * 2, 2);
     out[i] = strtoul(subStr.c_str(), 0, 16);
   }
-  //    return out;
 }
 
 char* base64Encode(const char* input, int size) {
@@ -55,16 +44,8 @@ char* base64Encode(const char* input, int size) {
    *
    * @param input String input treated as raw bytes.
    * @param size String size.
-   *
-   * Note on the masks used:
-   *
-   * 0xFC
-   * 0x03
-   * 0xF0
-   * 0x0F
-   * 0xC0
-   * 0x3F
    */
+
   uint8_t a, b, c, d, e, f, g;
   int output_length;
   int padding = size % 3;
@@ -156,21 +137,11 @@ uint8_t* base64Decode(const char* input, int size) {
   // Treat the end of the string when 2 characters remain.
   if (padding == 2) {
     output[output_position - 2] = '\0';
-    // a = base64.find(input[size-4]);
-    // b = base64.find(input[size-3]);
-    // c = base64.find(input[size-2]);
-
-    // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
-    // output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
   }
 
   // Treat the end when 1 character remain.
   if (padding == 1) {
     output[output_position - 1] = '\0';
-    // a = base64.find(input[size-4]);
-    // b = base64.find(input[size-3]);
-
-    // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
   }
 
   output[output_position++] = '\0';
@@ -181,6 +152,11 @@ uint8_t* base64Decode(const char* input, int size) {
 void challenge_1() {
   // Sources of the inputs:
   // https://en.wikipedia.org/wiki/Base64
+
+  cout << "\n------------------------------------" << endl;
+  cout << "Challenges Set 1" << endl;
+  cout << "1. Convert hex to base64" << endl;
+  cout << "------------------------------------\n" << endl;
 
   char* res1;
   char* res2;

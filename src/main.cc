@@ -54,26 +54,22 @@ void run_challenge(int selection) {
 int main(int argc, char* argv[]) {
   int selection = 0;
 
-  if (argc == 1) {
-    // Display the list of sets.
-    cout << "the cryptopals crypto challenges" << endl;
-    cout << "Enter the number of the challenge you want to run:" << endl;
-    cout << "Set 1 Basics." << endl;
-    cout << "        1.Convert hex to base64" << endl;
-
-    cin >> selection;
-    run_challenge(selection);
-    return 0;
-  }
-
-  else if (argc == 2) {
+  if (argc == 2) {
     selection = std::stoi(argv[1]);
     run_challenge(selection);
     return 0;
   }
 
   else {
-    std::cerr << "Usage: " << argv[0] << " NAME" << std::endl;
+    std::cerr << "\nUsage: \n\t" << "cryptopals" << " #challenge" << std::endl;
+    //std::cerr << "To launch the challenge Set 1 - 1.Convert hex to base64:" << std::endl;
+    std::cerr << "\nExample:";
+    std::cerr << "\n\tcryptopals" << " 1" << std::endl;
+    std::cerr << "\t=> launch Set 1 - 1.Convert hex to base64" << std::endl;
+
+    std::cerr << "\n\tcryptopals" << " 9" << std::endl;
+    std::cerr << "\t=> launch Set 2 - 9.Implement PKCS#7 padding" << std::endl;
+    std::cerr << std::endl;
     return 1;
   }
 }

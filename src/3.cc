@@ -28,7 +28,7 @@ using namespace std;
 
 int dict_size;
 vector<string>
-    dictionary;  // Vector used to allow the use of different dictionaries.
+    dictionary;
 
 void load_dictionary(const char* filename) {
   string resourcesdir = "./resources/";
@@ -59,15 +59,9 @@ void load_dictionary(const char* filename) {
 
 void englishScore(uint8_t* sentence) {
   string word;
-  string sentence_string((char*)sentence);  // Allow the use of string::find
+  string sentence_string((char*)sentence);  // To use string::find
   int score = 0;
   size_t not_found = string::npos;
-
-  /* Filter some sentences with strange characters to speed up the process */
-  //    for (char ascii = 33 ; ascii < 47 ; ascii++) {
-  //        if (sentence_string.find(ascii) != not_found )
-  //            return;
-  //    }
 
   int j = 0;
   while (j < dictionary.size()) {
@@ -77,7 +71,7 @@ void englishScore(uint8_t* sentence) {
     j++;
   }
 
-  if (score > 2)  // si le score est égal à 0 ça sert à rien d'afficher.
+  if (score > 2)  // If the scoce is 0 we don't display anything.
   {
     cout << endl;
     cout << "Deciphered text:  " << endl;
@@ -94,40 +88,17 @@ void singlebyteXORattack(uint8_t* ciphertext, int size) {
   // Brut force
   for (int key = 0; key <= 0xFF; key++) {
     memset(key_array, (uint8_t)key,
-           size);  // Cast to a byte to prevent an infinite loop.
+           size);  // Cast to uint8_t to prevent an infinite loop.
     deciphered = myXOR(ciphertext, key_array, size);
     englishScore(deciphered);
   }
-}
-
-void singlebyteXORattack2(uint8_t* ciphertext, int size) {
-  uint8_t* key_array = new uint8_t[size];
-  uint8_t* deciphered;
-
-  // Brut force attack
-  for (uint8_t key = 0; key <= 0xFE; key++)
-  /*
-      Si on va jusqu'au cas où key=0xFF, en incrémentant on va se
-      retrouver avec key=0 car key est codé sur 1 octet,
-      et on va boucler à l'infini, donc on
-      traite le cas 0xFF à part.
-   */
-  {
-    memset(key_array, key, size);
-    deciphered = myXOR(ciphertext, key_array, size);
-    englishScore(deciphered);
-  }
-
-  // Cas de key = 0xFF
-  memset(key_array, 0xFF, size);
-  deciphered = myXOR(ciphertext, key_array, size);
-  englishScore(deciphered);
 }
 
 void challenge_3() {
-  cout << "\n============================" << endl;
-  cout << "Set 1   Challenge 3" << endl;
-  cout << "Detect single-character XOR" << endl;
+  cout << "\n------------------------------------" << endl;
+  cout << "Challenges Set 1" << endl;
+  cout << "3. Single-byte XOR cipher" << endl;
+  cout << "------------------------------------\n" << endl;
 
   uint8_t* c;
   uint8_t toDecrypt[] = {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15,
