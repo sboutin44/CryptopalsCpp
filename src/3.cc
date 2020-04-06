@@ -27,8 +27,7 @@
 using namespace std;
 
 int dict_size;
-vector<string>
-    dictionary;
+vector<string> dictionary;
 
 void load_dictionary(const char* filename) {
   string resourcesdir = "./resources/";

@@ -61,13 +61,18 @@ int main(int argc, char* argv[]) {
   }
 
   else {
-    std::cerr << "\nUsage: \n\t" << "cryptopals" << " #challenge" << std::endl;
-    //std::cerr << "To launch the challenge Set 1 - 1.Convert hex to base64:" << std::endl;
+    std::cerr << "\nUsage: \n\t"
+              << "cryptopals"
+              << " #challenge" << std::endl;
+    // std::cerr << "To launch the challenge Set 1 - 1.Convert hex to base64:"
+    // << std::endl;
     std::cerr << "\nExample:";
-    std::cerr << "\n\tcryptopals" << " 1" << std::endl;
+    std::cerr << "\n\tcryptopals"
+              << " 1" << std::endl;
     std::cerr << "\t=> launch Set 1 - 1.Convert hex to base64" << std::endl;
 
-    std::cerr << "\n\tcryptopals" << " 9" << std::endl;
+    std::cerr << "\n\tcryptopals"
+              << " 9" << std::endl;
     std::cerr << "\t=> launch Set 2 - 9.Implement PKCS#7 padding" << std::endl;
     std::cerr << std::endl;
     return 1;

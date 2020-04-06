@@ -40,7 +40,6 @@ void challenge_5() {
   cout << "5. Implement repeating-key XOR" << endl;
   cout << "------------------------------------\n" << endl;
 
-
   const char* a =
       "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a "
       "cymbal";
