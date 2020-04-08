@@ -56,7 +56,6 @@ char* read_text_file(const char* filename, int* length) {
    * @return length   The length of the read text.
    */
 
-  ios::iostate filestate;
   ifstream file;
   char* out;
 
@@ -272,8 +271,6 @@ void challenge_6() {
   int limit = 40;
   int pos = 0;  // To browse norm_distances
   float* norm_distances = (float*)malloc(sizeof(float) * limit);
-  int nb_blocks;
-  // uint8_t** blocks;
   int KEYSIZE;
 
   for (KEYSIZE = 2; KEYSIZE <= limit; KEYSIZE++) {
@@ -313,8 +310,6 @@ void challenge_6() {
   // }
 
   int p = l / KEYSIZE;  // p blocks
-  int r = l % KEYSIZE;  // r = 0 so we won't use it.
-
   uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
   assert(blocks != NULL);
 

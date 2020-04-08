@@ -33,14 +33,12 @@ void load_dictionary(const char* filename) {
   string resourcesdir = "./resources/";
   ifstream file;
 
-  ios::iostate filestate;
   file.open(filename);
 
   try {
     file.open((resourcesdir + string(filename)).c_str());
     if (file.fail()) throw file.rdstate();
 
-    int position = 0;
     for (std::string line; std::getline(file, line);) {
       dictionary.push_back(line);
     }
@@ -60,10 +58,9 @@ int englishScore(uint8_t* sentence) {
   string word;
   string sentence_string((char*)sentence);  // To use string::find
   int score = 0;
-  size_t not_found = string::npos;
 
   int j = 0;
-  while (j < dictionary.size()) {
+  while (j < (int)dictionary.size()) {
     word = dictionary[j];
     if (sentence_string.find(" " + word + " ") != string::npos) score++;
 
@@ -132,7 +129,6 @@ void challenge_3() {
   cout << "3. Single-byte XOR cipher" << endl;
   cout << "------------------------------------\n" << endl;
 
-  uint8_t* c;
   uint8_t toDecrypt[] = {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15,
                          0x1b, 0x7f, 0x2b, 0x78, 0x34, 0x31, 0x33, 0x3d, 0x78,
                          0x39, 0x78, 0x28, 0x37, 0x2d, 0x36, 0x3c, 0x78, 0x37,

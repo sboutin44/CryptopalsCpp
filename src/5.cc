@@ -48,6 +48,6 @@ void challenge_5() {
 
   output = new char[strlen(a)];
   repeatedKeyXor(a, key, output);
-  for (int i = 0; i < strlen(a); i++) printf("%02x", output[i]);
+  for (int i = 0; i < (int)strlen(a); i++) printf("%02x", output[i]);
   delete[] output;
 }
