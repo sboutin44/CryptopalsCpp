@@ -44,11 +44,23 @@ int test_base64();
 // Defined in set_1_3_lib
 void load_dictionary(const char* filename);
 void quickEnglishChecker(uint8_t* sentence);
-void singlebyteXORattack(uint8_t* ciphertext, int size);
+int englishScore(uint8_t* sentence);
+void singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
+void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size);
 
 // Set_1_3 Set_1_4 Set_1_5
 void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size);
+void insertion_sort(float arr[], float n);
+char* read_text_file(const char* filename, int* length);
+int hammingDistance(uint8_t* a, uint8_t* b, int n);
+int occurence(const char* s, char myChar);
+int occurence(uint8_t* s, char myChar, int length);
+float frequency(const char* s, char c);
+float frequency(uint8_t* s, char c, int length);
+float frequencyCheck(const char* s) ;
+void plot_frequencies(const char* text);
+void plot_frequencies(uint8_t* candidate, int length);
 
 // The challenges
 void challenge_1();

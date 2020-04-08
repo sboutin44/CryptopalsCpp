@@ -1,10 +1,10 @@
 // Copyright © 2020 Sebastien BOUTIN
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in
@@ -14,9 +14,9 @@
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
 //
 // Except as contained in this notice, the name(s) of the above copyright
 // holders shall not be used in advertising or otherwise to promote the sale,
@@ -52,13 +52,11 @@ char* base64Encode(const char* input, int size) {
 
   // Set the output size
   if (padding == 0) {
-    output_length =
-        (size / 3) *
-        4;  // Every 3 letters, 4 letters are created, plus the 4 last ones.
+    output_length = (size / 3) * 4;  // Every 3 letters, 4 letters are
+                                     // created, plus the 4 last ones.
   } else {
-    output_length =
-        (size / 3) * 4 +
-        4;  // Every 3 letters, 4 letters are created, plus the 4 last ones.
+    output_length = (size / 3) * 4 + 4;  // Every 3 letters, 4 letters are
+                                         // created, plus the 4 last ones.
   }
 
   output_length += 1;  // Terminate the string with the null character.
@@ -115,7 +113,7 @@ uint8_t* base64Decode(const char* input, int size) {
   }
 
   // Set the output size
-  int output_length;
+  int output_length = 0;
   if (padding == 1) output_length = (size / 4) * 3 + 2;
   if (padding == 2) output_length = (size / 4) * 3 + 1;
 
