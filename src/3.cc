@@ -28,6 +28,7 @@ using namespace std;
 
 int dict_size;
 vector<string> dictionary;
+map<string,int> map_dico;
 
 void load_dictionary(const char* filename) {
   string resourcesdir = "./resources/";
@@ -41,6 +42,7 @@ void load_dictionary(const char* filename) {
 
     for (std::string line; std::getline(file, line);) {
       dictionary.push_back(line);
+      map_dico[line] = 1; // Just add the line in the keys for quick access.
     }
     dict_size = dictionary.size();
   } catch (ios::iostate filestate) {
@@ -52,6 +54,83 @@ void load_dictionary(const char* filename) {
       cout << "badbit" << endl;
     }
   }
+}
+
+int englishScore2(const char* sentence, int length) {
+  int score = 0;
+  uint8_t* word_candidate;
+
+  // Locate a possible word in the sentence:
+  int pos1=0;
+  char c2 ;
+
+  int i=1;
+  while (i<length){
+    c2 = sentence[i];
+
+    if (c2 == ' ') {
+
+      int len_word = i - pos1;
+      char* word = (char*)malloc(sizeof(char)*(len_word+1));
+      strncpy(word,sentence+pos1,len_word);
+      pos1 = i+1;
+      i = pos1;
+
+      if (map_dico.count(word) == 1) {
+        score++;
+        cout << word << endl;
+      }
+    }
+    i++;
+  }
+
+  return score;
+}
+
+int englishScore2(uint8_t* sentence, int length) {
+  int score = 0;
+  uint8_t* word_candidate;
+
+  // Locate a possible word in the sentence:
+  int l;
+  int pos1=0;
+  int pos2=0;
+  char c1 = sentence[pos1];
+  char c2 ;
+
+  int i=1;
+  while (i<length){
+    c2 = (char)sentence[i];
+
+    if (c2 == ' ') {
+      l = (i-pos1);
+//      word_candidate = (uint8_t*) malloc (sizeof(uint8_t) * (l) );
+      word_candidate = (uint8_t*) realloc (word_candidate,l+1 );
+      assert(word_candidate != NULL);
+      //word_candidate[l+1] = NULL;
+
+      memcpy(word_candidate,sentence,l);
+      //memset(word_candidate+l,'\0',);
+      printf("candidate: %s",word_candidate);
+      string w((char*) word_candidate);
+      //free(word_candidate);
+
+      cout << w << endl;
+      // Check if in the dictionary
+      if (map_dico.count(w) == 1) {
+        score++;
+        cout << w << endl;
+      }
+
+      i++;
+      pos1 = i+1;
+
+//      break;
+    }
+
+  }
+
+  return score;
 }
 
 int englishScore(uint8_t* sentence) {
@@ -69,10 +148,10 @@ int englishScore(uint8_t* sentence) {
 
   if (score > 2)  // If the scoce is 0 we don't display anything.
   {
-    cout << endl;
-    cout << "Deciphered text:  " << endl;
-    cout << sentence << endl;
-    cout << "score: " << score << endl;
+    // cout << endl;
+    // cout << "Deciphered text:  " << endl;
+    // cout << sentence << endl;
+    // cout << "score: " << score << endl;
   }
   return score;
 }
@@ -91,7 +170,10 @@ void singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
 
     deciphered = myXOR(ciphertext, key_array, size);
     int score = englishScore(deciphered);
-    if (score > thresold) cout << "Key:" << key << endl;
+    if (score >= thresold) {
+      cout << "Key:" << key << endl;
+      printf("%s\n", deciphered );
+    }
   }
 
   delete[] key_array;
@@ -136,4 +218,5 @@ void challenge_3() {
 
   singlebyteXORattack(toDecrypt, sizeof(toDecrypt),3);
   //singlebyteXORattackWithFrequencyScore(toDecrypt, sizeof(toDecrypt));
+
 }

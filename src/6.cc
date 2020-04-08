@@ -301,13 +301,7 @@ void challenge_6() {
 
   // for (KEYSIZE = 2; KEYSIZE <= limit; KEYSIZE++) {
   //KEYSIZE = m[norm_distances[0]];
-
-  cout << "KEYSIZE: " << KEYSIZE << endl;
-  // Display norm_distances and KEYSIZEs
-  // for (int i = 0; i < limit; i++) {
-  //   cout << "norm_distances[" << 3 << "]: " << norm_distances[i] << endl;
-  //   cout << "KEYSIZE: " << m[norm_distances[i]] << endl;
-  // }
+  KEYSIZE = 2;
 
   int p = l / KEYSIZE;  // p blocks
   uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
@@ -323,7 +317,7 @@ void challenge_6() {
       blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
   }
 
-  singlebyteXORattack(blocks[1], p,4);
+  singlebyteXORattack(blocks[0], p,3);
  //singlebyteXORattackWithFrequencyScore(blocks[0], p);
 
   // Memory cleaning
@@ -337,9 +331,12 @@ void challenge_6() {
   //   singlebyteXORattack(blocks[block_num], p);
 
   // test zone
-  // int length;
+  int length;
   // const char* text = read_text_file("resources/dummy_text.txt",&length);
-  //
+  const char* text = "This is a test and no it does nothing particular.";
+  length = strlen(text);
+
+  englishScore2(text,length);
   // cout << frequency(text,'e')  << endl;
   // cout << frequency((uint8_t*) text,'e',length)  << endl;
   // plot_frequencies(text);
