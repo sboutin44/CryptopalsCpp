@@ -221,6 +221,7 @@ void challenge_3() {
   memset(expandedKey, (uint8_t)key, size);
   //cout << myXOR(toDecrypt, expandedKey, size) << endl;
 
+  delete[] expandedKey;
   //singlebyteXORattackWithFrequencyScore(toDecrypt, sizeof(toDecrypt));
 
 }
