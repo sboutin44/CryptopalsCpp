@@ -64,21 +64,23 @@ int englishScore2(const char* sentence, int length) {
   int pos1=0;
   char c2 ;
 
+  char* w;
   int i=1;
   while (i<length){
     c2 = sentence[i];
 
     if (c2 == ' ') {
-
       int len_word = i - pos1;
-      char* word = (char*)malloc(sizeof(char)*(len_word+1));
-      strncpy(word,sentence+pos1,len_word);
+      w = (char*)malloc(sizeof(char)*(len_word+1));
+      strncpy(w,&sentence[pos1],len_word);
+      string word(w);
+
       pos1 = i+1;
       i = pos1;
 
       if (map_dico.count(word) == 1) {
         score++;
-        cout << word << endl;
+        //cout << word << endl;
       }
     }
     i++;
@@ -87,7 +89,7 @@ int englishScore2(const char* sentence, int length) {
   return score;
 }
 
-int englishScore2(uint8_t* sentence, int length) {
+int englishScore22(uint8_t* sentence, int length) {
   int score = 0;
   uint8_t* word_candidate;
 
@@ -169,8 +171,10 @@ void singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
            size);  // Cast to uint8_t to prevent an infinite loop.
 
     deciphered = myXOR(ciphertext, key_array, size);
-    int score = englishScore(deciphered);
+    //int score = englishScore(deciphered);
+    int score = englishScore2((char*)deciphered,size);
     if (score >= thresold) {
+      cout << "Score: " << score << endl;
       cout << "Key:" << key << endl;
       printf("%s\n", deciphered );
     }

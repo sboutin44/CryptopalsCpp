@@ -336,7 +336,7 @@ void challenge_6() {
   const char* text = "This is a test and no it does nothing particular.";
   length = strlen(text);
 
-  englishScore2(text,length);
+//cout <<  englishScore2(text,length) << endl;
   // cout << frequency(text,'e')  << endl;
   // cout << frequency((uint8_t*) text,'e',length)  << endl;
   // plot_frequencies(text);

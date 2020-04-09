@@ -47,6 +47,7 @@ void quickEnglishChecker(uint8_t* sentence);
 int englishScore(uint8_t* sentence);
 int englishScore2(uint8_t* sentence, int length);
 int englishScore2(const char* sentence, int length);
+int englishScore22(const char* sentence, int length);
 void singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
 void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size);
 
