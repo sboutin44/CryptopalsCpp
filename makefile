@@ -24,8 +24,8 @@
 
 BUILD_DIR   = build
 INC         = inc
-CXX         = g++-9
-CXXFLAGS    = -Wall -g -ggdb -I$(INC)
+CXX         = g++
+CXXFLAGS    = -Wall -g -I$(INC)
 
 #VPATH = src inc # VPATH: Search Path for All Dependencies
 

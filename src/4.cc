@@ -47,10 +47,14 @@ void challenge_4() {
 
     int size = 60;
     uint8_t* hexline = new uint8_t[size];
+
     for (std::string line; std::getline(fileToDecrypt, line);) {
       hexDecode(line.c_str(), hexline);
       singlebyteXORattack(hexline, size,thresold);
     }
+
+    delete[] hexline;
+
   } catch (ios::iostate filestate) {
     if (filestate == ios::failbit) {
       cout << "failbit" << endl;

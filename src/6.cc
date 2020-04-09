@@ -156,28 +156,6 @@ float frequency(uint8_t* s, char c, int length) {
   }
 }
 
-float frequencyCheck(const char* s) {
-  string sentence(s);  // to use string::find.
-
-  int nbLetters=6;
-
-  // Store deltas of the 8th most frequent letters in english.
-  int* deltas = (int*) malloc(sizeof(int) * nbLetters);
-
-  if (strchr(s,'e') != NULL) deltas[0] = frequency(s, 'e') - 12.02;
-  if (strchr(s,'t') != NULL) deltas[1] = frequency(s, 't') - 9.10;
-  if (strchr(s,'a') != NULL) deltas[2] = frequency(s, 'a') - 8.12;
-  if (strchr(s,'o') != NULL) deltas[3] = frequency(s, 'o') - 7.68;
-  if (strchr(s,'i') != NULL) deltas[4] = frequency(s, 'i') - 7.31;
-  if (strchr(s,'n') != NULL) deltas[5] = frequency(s, 'n') - 6.95;
-  if (strchr(s,'s') != NULL) deltas[6] = frequency(s, 's') - 6.28;
-  if (strchr(s,'r') != NULL) deltas[7] = frequency(s, 'r') - 6.02;
-
-  float sum = 0.;
-  for (int i = 0; i < nbLetters; i++) sum += deltas[i];
-
-  return sum;
-}
 
 void plot_frequencies(uint8_t* candidate, int length) {
   /** Plot frequencies for the first 5 letters. */
