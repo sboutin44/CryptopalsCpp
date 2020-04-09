@@ -301,23 +301,28 @@ void challenge_6() {
 
   // for (KEYSIZE = 2; KEYSIZE <= limit; KEYSIZE++) {
   //KEYSIZE = m[norm_distances[0]];
-  KEYSIZE = 2;
 
-  int p = l / KEYSIZE;  // p blocks
-  uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
-  assert(blocks != NULL);
 
-  // Create the blocks of length KEYSIZE each.
-  for (int block_num = 0; block_num < p; block_num++) {
-    blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * KEYSIZE);
-    assert(blocks[block_num] != NULL);
+//remettre
+  // KEYSIZE = 2;
+  //
+  // int p = l / KEYSIZE;  // p blocks
+  // uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
+  // assert(blocks != NULL);
+  //
+  // // Create the blocks of length KEYSIZE each.
+  // for (int block_num = 0; block_num < p; block_num++) {
+  //   blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * KEYSIZE);
+  //   assert(blocks[block_num] != NULL);
+  //
+  //   // Fill the block with bytes.
+  //   for (int i = 0; i < p; i++)
+  //     blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
+  // }
+  //
+  // singlebyteXORattack(blocks[0], p,3);
+//remettre
 
-    // Fill the block with bytes.
-    for (int i = 0; i < p; i++)
-      blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
-  }
-
-  singlebyteXORattack(blocks[0], p,3);
  //singlebyteXORattackWithFrequencyScore(blocks[0], p);
 
   // Memory cleaning
@@ -336,7 +341,8 @@ void challenge_6() {
   const char* text = "This is a test and no it does nothing particular.";
   length = strlen(text);
 
-//cout <<  englishScore2(text,length) << endl;
+  //englishScore2(text,length);
+ cout <<  englishScore2(text,length) << endl;
   // cout << frequency(text,'e')  << endl;
   // cout << frequency((uint8_t*) text,'e',length)  << endl;
   // plot_frequencies(text);
