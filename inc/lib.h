@@ -48,7 +48,8 @@ int englishScore(uint8_t* sentence);
 int englishScore2(uint8_t* sentence, int length);
 int englishScore2(const char* sentence, int length);
 int englishScore22(const char* sentence, int length);
-void singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
+//void singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
+uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
 void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size);
 
 // Set_1_3 Set_1_4 Set_1_5

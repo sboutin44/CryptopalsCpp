@@ -38,15 +38,18 @@ void challenge_4() {
 
   ifstream fileToDecrypt;
 
+  int thresold = 3;
+
   try {
     fileToDecrypt.open((resourcesdir + filename).c_str());
 
     if (fileToDecrypt.fail()) throw fileToDecrypt.rdstate();
 
-    uint8_t* hexline = new uint8_t[60];
+    int size = 60;
+    uint8_t* hexline = new uint8_t[size];
     for (std::string line; std::getline(fileToDecrypt, line);) {
       hexDecode(line.c_str(), hexline);
-      singlebyteXORattack(hexline, 60,3);
+      singlebyteXORattack(hexline, size,thresold);
     }
   } catch (ios::iostate filestate) {
     if (filestate == ios::failbit) {
