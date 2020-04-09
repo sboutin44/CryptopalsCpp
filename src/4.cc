@@ -50,7 +50,7 @@ void challenge_4() {
 
     for (std::string line; std::getline(fileToDecrypt, line);) {
       hexDecode(line.c_str(), hexline);
-      singlebyteXORattack(hexline, size,thresold);
+      singlebyteXORattack(hexline, size, thresold);
     }
 
     delete[] hexline;

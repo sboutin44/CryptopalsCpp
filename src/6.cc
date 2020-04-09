@@ -147,24 +147,23 @@ float frequency(const char* s, char c) {
 }
 
 float frequency(uint8_t* s, char c, int length) {
- /** Frequency (0<f<100) of a character in a random byte string */
+  /** Frequency (0<f<100) of a character in a random byte string */
 
-  if (occurence(s, c,length) == 0) {
+  if (occurence(s, c, length) == 0) {
     return 0;
   } else {
-    return ((float)occurence(s, c,length) / (float)length);
+    return ((float)occurence(s, c, length) / (float)length);
   }
 }
 
-
 void plot_frequencies(uint8_t* candidate, int length) {
   /** Plot frequencies for the first 5 letters. */
-  int f1 = 2 * 100 * frequency(candidate, 'e',length);
-  int f2 = 2 * 100 * frequency(candidate, 't',length);
-  int f3 = 2 * 100 * frequency(candidate, 'a',length);
-  int f4 = 2 * 100 * frequency(candidate, 'o',length);
-  int f5 = 2 * 100 * frequency(candidate, 'i',length);
-  int f6 = 2 * 100 * frequency(candidate, 'n',length);
+  int f1 = 2 * 100 * frequency(candidate, 'e', length);
+  int f2 = 2 * 100 * frequency(candidate, 't', length);
+  int f3 = 2 * 100 * frequency(candidate, 'a', length);
+  int f4 = 2 * 100 * frequency(candidate, 'o', length);
+  int f5 = 2 * 100 * frequency(candidate, 'i', length);
+  int f6 = 2 * 100 * frequency(candidate, 'n', length);
 
   cout << "e ";
   for (int i = 0; i < f1; i++) cout << "-";
@@ -189,7 +188,6 @@ void plot_frequencies(uint8_t* candidate, int length) {
   cout << "n ";
   for (int i = 0; i < f6; i++) cout << "-";
   cout << endl;
-
 }
 
 void plot_frequencies(const char* text) {
@@ -278,10 +276,9 @@ void challenge_6() {
   // We have p blocks of length KEYSIZE and 1 block or length r.
 
   // for (KEYSIZE = 2; KEYSIZE <= limit; KEYSIZE++) {
-  //KEYSIZE = m[norm_distances[0]];
+  // KEYSIZE = m[norm_distances[0]];
 
-
-//remettre
+  // remettre
   // KEYSIZE = 2;
   //
   // int p = l / KEYSIZE;  // p blocks
@@ -299,9 +296,9 @@ void challenge_6() {
   // }
   //
   // singlebyteXORattack(blocks[0], p,3);
-//remettre
+  // remettre
 
- //singlebyteXORattackWithFrequencyScore(blocks[0], p);
+  // singlebyteXORattackWithFrequencyScore(blocks[0], p);
 
   // Memory cleaning
   // for (int block_num = 0; block_num < p; block_num++) {
@@ -319,11 +316,10 @@ void challenge_6() {
   const char* text = "This is a test and no it does nothing particular.";
   length = strlen(text);
 
-  //englishScore2(text,length);
- cout <<  englishScore2(text,length) << endl;
+  // englishScore2(text,length);
+  cout << englishScore2(text, length) << endl;
   // cout << frequency(text,'e')  << endl;
   // cout << frequency((uint8_t*) text,'e',length)  << endl;
   // plot_frequencies(text);
   // plot_frequencies((uint8_t*)text,length);
-
 }

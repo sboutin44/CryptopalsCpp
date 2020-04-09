@@ -28,7 +28,7 @@ using namespace std;
 
 int dict_size;
 vector<string> dictionary;
-map<string,int> map_dico;
+map<string, int> map_dico;
 
 void load_dictionary(const char* filename) {
   string resourcesdir = "./resources/";
@@ -41,11 +41,10 @@ void load_dictionary(const char* filename) {
     if (file.fail()) throw file.rdstate();
 
     for (std::string line; std::getline(file, line);) {
-
       // Get rid of the single letters in the file.
       if (line.length() != 1) {
         dictionary.push_back(line);
-        map_dico[line] = 1; // Just add the line in the keys for quick access.
+        map_dico[line] = 1;  // Just add the line in the keys for quick access.
       }
     }
     dict_size = dictionary.size();
@@ -64,29 +63,29 @@ int englishScore2(const char* sentence, int length) {
   int score = 0;
 
   // Locate a possible word in the sentence:
-  int pos1=0;
-  char c2 ;
+  int pos1 = 0;
+  char c2;
 
   char* w;
-  int i=1;
-  while (i<length){
+  int i = 1;
+  while (i < length) {
     c2 = sentence[i];
 
-    if (c2 == ' ' ) { //|| i== (length-1)
+    if (c2 == ' ') {  //|| i== (length-1)
       int len_word = i - pos1;
-      w = new char[len_word+1];
-      //w = (char*)malloc(sizeof(char)*(len_word+1));
-      assert(w!=NULL);
-      strncpy(w,&sentence[pos1],len_word);
-      w[len_word] = '\0'; // I don't like that...
+      w = new char[len_word + 1];
+      // w = (char*)malloc(sizeof(char)*(len_word+1));
+      assert(w != NULL);
+      strncpy(w, &sentence[pos1], len_word);
+      w[len_word] = '\0';  // I don't like that...
       string word(w);
 
-      pos1 = i+1;
+      pos1 = i + 1;
       i = pos1;
 
       if (map_dico.count(word) == 1) {
         score++;
-        //cout << "word: " << word << endl;
+        // cout << "word: " << word << endl;
       }
     }
     i++;
@@ -127,17 +126,15 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   int key = 0;
   int score = 0;
   int maxScore = 0;
-  //char* plaintext;
+  // char* plaintext;
 
   // Brut force attack of single-byte XOR
   for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
-
     // Expand the key, cast the key to uint8_t to prevent infinite loop.
-    memset(expandedKey, (uint8_t)candidate_key,
-           size);
+    memset(expandedKey, (uint8_t)candidate_key, size);
 
     deciphered = myXOR(ciphertext, expandedKey, size);
-    score = englishScore2((char*)deciphered,size);
+    score = englishScore2((char*)deciphered, size);
 
     // if (score > maxScore) {
     //   maxScore = score;
@@ -151,7 +148,7 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
       cout << "score: " << score << endl;
       cout << "maxScore: " << maxScore << endl;
       cout << "Key:" << candidate_key << endl;
-      printf("%s\n", deciphered );
+      printf("%s\n", deciphered);
 
       key = candidate_key;
     }
@@ -161,8 +158,8 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   // Display the plaintext
   // cout << "maxScore: " << maxScore << endl;
   // cout << "Key:" << key << endl;
-//  cout << plaintext << endl;
-  //printf("%s\n", deciphered );
+  //  cout << plaintext << endl;
+  // printf("%s\n", deciphered );
 
   delete[] expandedKey;
 
@@ -185,13 +182,12 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
            size);  // Cast to uint8_t to prevent an infinite loop.
 
     deciphered = myXOR(ciphertext, key_array, size);
-    //plot_frequencies(deciphered,size);
-    //plot_frequencies((char*)deciphered);
-//    printf("%s\n", deciphered );
+    // plot_frequencies(deciphered,size);
+    // plot_frequencies((char*)deciphered);
+    //    printf("%s\n", deciphered );
 
-    score = frequencyCheck((char*)deciphered);
-    if (score > maxScore)
-      maxScore = score;
+    score = englishScore2((char*)deciphered, size);
+    if (score > maxScore) maxScore = score;
 
     // if (score > 2) {
     //   cout << "Score: " << score << endl;
@@ -215,13 +211,12 @@ void challenge_3() {
   int thresold = 3;
   int size = sizeof(toDecrypt);
 
-  int key = singlebyteXORattack(toDecrypt, size,thresold);
+  int key = singlebyteXORattack(toDecrypt, size, thresold);
 
   uint8_t* expandedKey = new uint8_t[size];
   memset(expandedKey, (uint8_t)key, size);
-  //cout << myXOR(toDecrypt, expandedKey, size) << endl;
+  // cout << myXOR(toDecrypt, expandedKey, size) << endl;
 
   delete[] expandedKey;
-  //singlebyteXORattackWithFrequencyScore(toDecrypt, sizeof(toDecrypt));
-
+  // singlebyteXORattackWithFrequencyScore(toDecrypt, sizeof(toDecrypt));
 }
