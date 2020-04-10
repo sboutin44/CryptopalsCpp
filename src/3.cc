@@ -144,7 +144,10 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
       cout << "score: " << score << endl;
       cout << "maxScore: " << maxScore << endl;
       cout << "Key:" << candidate_key << endl;
-      printf("%s\n", deciphered);
+
+      putchar('\n');
+      for (int j = 0; j < size; j++) printf("%c", deciphered[j]);
+      // printf("%s\n", deciphered);
 
       key = candidate_key;
     }

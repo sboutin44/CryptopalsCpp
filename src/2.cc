@@ -47,7 +47,7 @@ void challenge_2() {
   int size = sizeof(a) / sizeof(uint8_t);
 
   // Since we work on raw bytes, we don't use functions relying on the
-  // nul character. 
+  // nul character.
   cout << "\na: " << endl;
   for (int i = 0; i < size; i++) printf("%c", a[i]);
 
