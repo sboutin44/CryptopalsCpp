@@ -59,11 +59,12 @@ char* base64Encode(const char* input, int size) {
   }
 
   output_length += 1;  // Terminate the string with the null character.
-  static char* output = new char[output_length];
+  char* output = new char[output_length];
 
   // Treat the 3-tuples.
   int output_position = 0;  // track the position in the output array.
   for (int i = 0; i < (size - padding); i += 3) {
+    assert(i < size);
     a = (input[i] & 0xFC) >> 2;
     b = (input[i] & 0x03) << 4 ^ (input[i + 1] & 0xF0) >> 4;
     c = (input[i + 1] & 0x0F) << 2 ^ (input[i + 2] & 0xC0) >> 6;
@@ -122,9 +123,10 @@ uint8_t* base64Decode(const char* input, int size) {
 
   int output_position = 0;  // track the position in the output array.
 
-  static uint8_t* output = new uint8_t[output_length];
+  uint8_t* output = new uint8_t[output_length];
 
   for (int i = 0; i < (size - (size - padding) % 4); i += 4) {
+    assert(i < size);
     a = base64.find(input[i]);
     b = base64.find(input[i + 1]);
     c = base64.find(input[i + 2]);
@@ -259,4 +261,15 @@ void challenge_1() {
   assert(strcmp(result, expected) == 0);
 
   cout << result << endl;
+
+    delete[] res1;
+  delete[] res2;
+  delete[] res3;
+  delete[] res4;
+  delete[] res5;
+  delete[] res6;
+  delete[] res7;
+  delete[] res8;
+  delete[] res9;
+  delete[] res10;
 }
