@@ -62,30 +62,26 @@ void load_dictionary(const char* filename) {
 int englishScore2(const char* sentence, int length) {
   int score = 0;
 
+  // Check dictionary is loaded.
+  if (dictionary.empty() == true) load_dictionary("google_10000_english.txt");
+
   // Locate a possible word in the sentence:
   int pos1 = 0;
   char c2;
-
-  char* w;
   int i = 1;
+
   while (i < length) {
     c2 = sentence[i];
 
     if (c2 == ' ') {  //|| i== (length-1)
       int len_word = i - pos1;
-      w = new char[len_word + 1];
-      // w = (char*)malloc(sizeof(char)*(len_word+1));
-      assert(w != NULL);
-      strncpy(w, &sentence[pos1], len_word);
-      w[len_word] = '\0';  // I don't like that...
-      string word(w);
+      string word(&sentence[pos1], len_word);
 
       pos1 = i + 1;
       i = pos1;
 
       if (map_dico.count(word) == 1) {
         score++;
-        // cout << "word: " << word << endl;
       }
     }
     i++;
@@ -166,36 +162,36 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   return key;
 }
 
-void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
-  uint8_t* key_array = new uint8_t[size];
-  uint8_t* deciphered;
-  load_dictionary("google_10000_english.txt");
-  assert(dictionary.empty() == false);
-
-  int score = 0;
-  int maxScore = 0;
-
-  // Brut force attack of single-byte XOR
-  for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
-    // Expand the key
-    memset(key_array, (uint8_t)candidate_key,
-           size);  // Cast to uint8_t to prevent an infinite loop.
-
-    deciphered = myXOR(ciphertext, key_array, size);
-    // plot_frequencies(deciphered,size);
-    // plot_frequencies((char*)deciphered);
-    //    printf("%s\n", deciphered );
-
-    score = englishScore2((char*)deciphered, size);
-    if (score > maxScore) maxScore = score;
-
-    // if (score > 2) {
-    //   cout << "Score: " << score << endl;
-    //   cout << "Key:" << key << endl;
-    //   printf("%s\n", deciphered );
-    //}
-  }
-}
+// void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
+//   uint8_t* key_array = new uint8_t[size];
+//   uint8_t* deciphered;
+//   load_dictionary("google_10000_english.txt");
+//   assert(dictionary.empty() == false);
+//
+//   int score = 0;
+//   int maxScore = 0;
+//
+//   // Brut force attack of single-byte XOR
+//   for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
+//     // Expand the key
+//     memset(key_array, (uint8_t)candidate_key,
+//            size);  // Cast to uint8_t to prevent an infinite loop.
+//
+//     deciphered = myXOR(ciphertext, key_array, size);
+//     // plot_frequencies(deciphered,size);
+//     // plot_frequencies((char*)deciphered);
+//     //    printf("%s\n", deciphered );
+//
+//     score = englishScore2((char*)deciphered, size);
+//     if (score > maxScore) maxScore = score;
+//
+//     // if (score > 2) {
+//     //   cout << "Score: " << score << endl;
+//     //   cout << "Key:" << key << endl;
+//     //   printf("%s\n", deciphered );
+//     //}
+//   }
+// }
 
 void challenge_3() {
   cout << "\n------------------------------------" << endl;
