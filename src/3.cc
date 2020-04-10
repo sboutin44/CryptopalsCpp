@@ -28,7 +28,7 @@ using namespace std;
 
 int dict_size;
 vector<string> dictionary;
-map<string, int> map_dico;
+set<string> map_dico;
 
 void load_dictionary(const char* filename) {
   string resourcesdir = "./resources/";
@@ -44,7 +44,7 @@ void load_dictionary(const char* filename) {
       // Get rid of the single letters in the file.
       if (line.length() != 1) {
         dictionary.push_back(line);
-        map_dico[line] = 1;  // Just add the line in the keys for quick access.
+        map_dico.insert(line);
       }
     }
     dict_size = dictionary.size();
@@ -63,7 +63,8 @@ int englishScore2(const char* sentence, int length) {
   int score = 0;
 
   // Check dictionary is loaded.
-  if (dictionary.empty() == true) load_dictionary("google_10000_english.txt");
+  // if (dictionary.empty() == true)
+  // load_dictionary("google_10000_english.txt");
 
   // Locate a possible word in the sentence:
   int pos1 = 0;

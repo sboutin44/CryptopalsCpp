@@ -53,6 +53,7 @@ void challenge_4() {
       singlebyteXORattack(hexline, size, thresold);
     }
 
+    fileToDecrypt.close();
     delete[] hexline;
 
   } catch (ios::iostate filestate) {
