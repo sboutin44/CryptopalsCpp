@@ -44,14 +44,20 @@ void challenge_2() {
                  0x1a, 0x02, 0x4b, 0x53, 0x53, 0x50, 0x09, 0x18, 0x1c};
   uint8_t b[] = {0x68, 0x69, 0x74, 0x20, 0x74, 0x68, 0x65, 0x20, 0x62,
                  0x75, 0x6c, 0x6c, 0x27, 0x73, 0x20, 0x65, 0x79, 0x65};
-
-  cout << "a: " << a << endl;
-  cout << "b: " << b << endl;
-
   int size = sizeof(a) / sizeof(uint8_t);
-  cout << size << endl;
+
+  // Since we work on raw bytes, we don't use functions relying on the
+  // nul character. 
+  cout << "\na: " << endl;
+  for (int i = 0; i < size; i++) printf("%c", a[i]);
+
+  cout << "\nb: " << endl;
+  for (int i = 0; i < size; i++) printf("%c", b[i]);
+
   uint8_t* c = myXOR(a, b, size);
-  cout << "c: " << c << endl;
+
+  cout << "\nc: " << endl;
+  for (int i = 0; i < size; i++) printf("%c", c[i]);
 
   delete[] c;
 }
