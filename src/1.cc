@@ -52,15 +52,14 @@ char* base64Encode(const char* input, int size) {
 
   // Set the output size
   if (padding == 0) {
-    output_length = (size / 3) * 4;  // Every 3 letters, 4 letters are
-                                     // created, plus the 4 last ones.
+    output_length = (size / 3) * 4;
   } else {
-    output_length = (size / 3) * 4 + 4;  // Every 3 letters, 4 letters are
-                                         // created, plus the 4 last ones.
+    output_length = (size / 3) * 4 + 4;  // For 3 letters, 4 are
+                                         // created, and 4 at the end if padded.
   }
 
   output_length += 1;  // Terminate the string with the null character.
-  char* output = new char[output_length];
+  static char* output = new char[output_length];
 
   // Treat the 3-tuples.
   int output_position = 0;  // track the position in the output array.
@@ -114,12 +113,16 @@ uint8_t* base64Decode(const char* input, int size) {
 
   // Set the output size
   int output_length = 0;
-  if (padding == 1) output_length = (size / 4) * 3 + 2;
-  if (padding == 2) output_length = (size / 4) * 3 + 1;
+  if (padding == 1)
+    output_length = ( size / 4) * 3 + 2;
+  else if (padding == 2)
+    output_length = (size / 4) * 3 + 1;
+  else
+    output_length = (size / 4) * 3;
 
   int output_position = 0;  // track the position in the output array.
 
-  uint8_t* output = new uint8_t[output_length];
+  static uint8_t* output = new uint8_t[output_length];
 
   for (int i = 0; i < (size - (size - padding) % 4); i += 4) {
     a = base64.find(input[i]);
