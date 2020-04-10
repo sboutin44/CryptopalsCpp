@@ -114,7 +114,7 @@ uint8_t* base64Decode(const char* input, int size) {
   // Set the output size
   int output_length = 0;
   if (padding == 1)
-    output_length = ( size / 4) * 3 + 2;
+    output_length = (size / 4) * 3 + 2;
   else if (padding == 2)
     output_length = (size / 4) * 3 + 1;
   else
