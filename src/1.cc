@@ -232,36 +232,46 @@ void challenge_1() {
   uint8_t* decoded;
   decoded = base64Decode(expected_output_1, strlen(expected_output_1));
   assert(strcmp(input_1, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_2, strlen(expected_output_2));
   assert(strcmp(input_2, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_3, strlen(expected_output_3));
   assert(strcmp(input_3, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_4, strlen(expected_output_4));
   assert(strcmp(input_4, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_5, strlen(expected_output_5));
   assert(strcmp(input_5, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_6, strlen(expected_output_6));
   assert(strcmp(input_6, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_7, strlen(expected_output_7));
   assert(strcmp(input_7, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_8, strlen(expected_output_8));
   assert(strcmp(input_8, (char*)decoded) == 0);
+  delete[] decoded;
 
   decoded = base64Decode(expected_output_9, strlen(expected_output_9));
   assert(strcmp(input_9, (char*)decoded) == 0);
+  delete[] decoded;
 
   char* result = base64Encode(challenge, size_challenge);
   assert(strcmp(result, expected) == 0);
 
   cout << result << endl;
 
+  delete[] result;
   delete[] res1;
   delete[] res2;
   delete[] res3;
