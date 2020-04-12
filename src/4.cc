@@ -45,7 +45,7 @@ void challenge_4() {
 
     if (fileToDecrypt.fail()) throw fileToDecrypt.rdstate();
 
-    int size = 60;
+    int size = 60 / 2;
     uint8_t* hexline = new uint8_t[size];
 
     for (std::string line; std::getline(fileToDecrypt, line);) {

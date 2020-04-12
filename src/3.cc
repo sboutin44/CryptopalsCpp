@@ -116,7 +116,7 @@ int englishScore(uint8_t* sentence) {
 
 uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   uint8_t* expandedKey = new uint8_t[size];
-  uint8_t* deciphered;
+
   load_dictionary("google_10000_english.txt");
   assert(dictionary.empty() == false);
 
@@ -130,6 +130,7 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
     // Expand the key, cast the key to uint8_t to prevent infinite loop.
     memset(expandedKey, (uint8_t)candidate_key, size);
 
+    uint8_t* deciphered;
     deciphered = myXOR(ciphertext, expandedKey, size);
     score = englishScore2((char*)deciphered, size);
 
@@ -152,6 +153,7 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
 
       key = candidate_key;
     }
+    delete[] deciphered;
   }
 
   // Display the best score:

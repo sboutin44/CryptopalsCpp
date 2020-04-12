@@ -27,7 +27,7 @@ using namespace std;
 
 uint8_t* myXOR(uint8_t* a, uint8_t* b, int size) {
   // static uint8_t* c = (uint8_t*)malloc(sizeof(uint8_t)*size);
-  static uint8_t* c = new uint8_t[size];
+  uint8_t* c = new uint8_t[size];
 
   for (int i = 0; i < size; i++) c[i] = a[i] ^ b[i];
 
