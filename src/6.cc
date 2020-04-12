@@ -70,6 +70,8 @@ char* read_text_file(const char* filename, int* length) {
     file.seekg(0, file.beg);
 
     out = (char*)malloc(sizeof(char) * (*length));
+    assert(out != NULL);
+
     file.read(out, *length);
   } catch (ios::iostate filestate) {
     if (filestate == ios::failbit) {
@@ -199,6 +201,8 @@ void plot_frequencies(const char* text) {
   int f5 = 2 * 100 * frequency(text, 'i');
   int f6 = 2 * 100 * frequency(text, 'n');
 
+  cout << endl;
+
   cout << "e ";
   for (int i = 0; i < f1; i++) cout << "-";
   cout << endl;
@@ -279,23 +283,24 @@ void challenge_6() {
   // KEYSIZE = m[norm_distances[0]];
 
   // remettre
-  // KEYSIZE = 2;
-  //
-  // int p = l / KEYSIZE;  // p blocks
-  // uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
-  // assert(blocks != NULL);
-  //
-  // // Create the blocks of length KEYSIZE each.
-  // for (int block_num = 0; block_num < p; block_num++) {
-  //   blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * KEYSIZE);
-  //   assert(blocks[block_num] != NULL);
-  //
-  //   // Fill the block with bytes.
-  //   for (int i = 0; i < p; i++)
-  //     blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
-  // }
-  //
-  // singlebyteXORattack(blocks[0], p,3);
+  KEYSIZE = 8;
+
+  int p = l / KEYSIZE;  // p blocks
+  uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
+  assert(blocks != NULL);
+
+  // Create the blocks of length KEYSIZE each.
+  for (int block_num = 0; block_num < p; block_num++) {
+    blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * KEYSIZE);
+    assert(blocks[block_num] != NULL);
+
+    // Fill the block with bytes.
+    for (int i = 0; i < p; i++)
+      blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
+  }
+
+  for (int j = 0; j < p; j++) printf("%c", blocks[j]);
+  // singlebyteXORattack(blocks[0], p, 3);
   // remettre
 
   // singlebyteXORattackWithFrequencyScore(blocks[0], p);
@@ -311,13 +316,13 @@ void challenge_6() {
   //   singlebyteXORattack(blocks[block_num], p);
 
   // test zone
-  int length;
+  // int length;
   // const char* text = read_text_file("resources/dummy_text.txt",&length);
-  const char* text = "This is a test and no it does nothing particular.";
-  length = strlen(text);
+  // const char* text = "This is a test and no it does nothing particular.";
+  // length = strlen(text);
 
   // englishScore2(text,length);
-  cout << englishScore2(text, length) << endl;
+  // cout << englishScore2(text, length) << endl;
   // cout << frequency(text,'e')  << endl;
   // cout << frequency((uint8_t*) text,'e',length)  << endl;
   // plot_frequencies(text);

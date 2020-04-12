@@ -37,6 +37,9 @@
 #include <string>
 #include <vector>
 
+// C libraries
+#include <ctype.h>
+
 char* base64Encode(const char* input, int size);
 uint8_t* base64Decode(const char* input, int size);
 uint8_t* myXOR(uint8_t* a, uint8_t* b, int size);

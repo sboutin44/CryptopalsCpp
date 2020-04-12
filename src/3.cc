@@ -129,9 +129,15 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
     // Expand the key, cast the key to uint8_t to prevent infinite loop.
     memset(expandedKey, (uint8_t)candidate_key, size);
+    uint8_t* deciphered = myXOR(ciphertext, expandedKey, size);
 
-    uint8_t* deciphered;
-    deciphered = myXOR(ciphertext, expandedKey, size);
+    // If 1st char isn't printable then it's probably not the right key.
+    if (isprint((char)deciphered[0]) == 0) {
+      delete[] deciphered;
+      continue;
+    }
+
+    // cout << "key: " << candidate_key << endl;
     score = englishScore2((char*)deciphered, size);
 
     // if (score > maxScore) {
@@ -168,36 +174,51 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   return key;
 }
 
-// void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
-//   uint8_t* key_array = new uint8_t[size];
-//   uint8_t* deciphered;
-//   load_dictionary("google_10000_english.txt");
-//   assert(dictionary.empty() == false);
-//
-//   int score = 0;
-//   int maxScore = 0;
-//
-//   // Brut force attack of single-byte XOR
-//   for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
-//     // Expand the key
-//     memset(key_array, (uint8_t)candidate_key,
-//            size);  // Cast to uint8_t to prevent an infinite loop.
-//
-//     deciphered = myXOR(ciphertext, key_array, size);
-//     // plot_frequencies(deciphered,size);
-//     // plot_frequencies((char*)deciphered);
-//     //    printf("%s\n", deciphered );
-//
-//     score = englishScore2((char*)deciphered, size);
-//     if (score > maxScore) maxScore = score;
-//
-//     // if (score > 2) {
-//     //   cout << "Score: " << score << endl;
-//     //   cout << "Key:" << key << endl;
-//     //   printf("%s\n", deciphered );
-//     //}
-//   }
-// }
+void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
+  /** Display frequencies of letters to
+   *
+   */
+
+  uint8_t* expandedKey = new uint8_t[size];
+
+  // int key = 0;
+  // int score = 0;
+  // int maxScore = 0;
+
+  // Brut force attack of single-byte XOR
+  for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
+    // Expand the key, cast the key to uint8_t to prevent infinite loop.
+    memset(expandedKey, (uint8_t)candidate_key, size);
+    uint8_t* deciphered = myXOR(ciphertext, expandedKey, size);
+
+    // If 1st char isn't printable then it's probably not the right key.
+    if (isprint((char)deciphered[0]) == 0) {
+      delete[] deciphered;
+      continue;
+    }
+    plot_frequencies((char*)deciphered);
+
+    // Display the plaintext
+    putchar('\n');
+    for (int j = 0; j < size; j++) printf("%c", deciphered[j]);
+    // printf("%s\n", deciphered);
+
+    delete[] deciphered;
+  }
+  delete[] expandedKey;
+
+  // return key;
+}
+
+void challenge_3__() {
+  uint8_t toDecrypt[] = {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15,
+                         0x1b, 0x7f, 0x2b, 0x78, 0x34, 0x31, 0x33, 0x3d, 0x78,
+                         0x39, 0x78, 0x28, 0x37, 0x2d, 0x36, 0x3c, 0x78, 0x37,
+                         0x3e, 0x78, 0x3a, 0x39, 0x3b, 0x37, 0x36};
+
+  int size = sizeof(toDecrypt);
+  singlebyteXORattackWithFrequencyScore(toDecrypt, size);
+}
 
 void challenge_3() {
   cout << "\n------------------------------------" << endl;
