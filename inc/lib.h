@@ -47,6 +47,7 @@ uint8_t* myXOR(uint8_t* a, uint8_t* b, int size);
 int test_base64();
 
 // Defined in set_1_3_lib
+void histogram(const char* text);
 void load_dictionary(const char* filename);
 void quickEnglishChecker(uint8_t* sentence);
 int englishScore(uint8_t* sentence);

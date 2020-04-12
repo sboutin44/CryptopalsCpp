@@ -220,7 +220,8 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
     }
 
     cout << "key: " << candidate_key;
-    plot_frequencies((char*)deciphered);
+    histogram((char*)deciphered);
+    // plot_frequencies((char*)deciphered);
     cout << endl;
 
     delete[] deciphered;
@@ -235,18 +236,18 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
 }
 
 void challenge_3() {
-  // int len;
-  // const char* text = read_text_file("resources/dummy_text.txt", &len);
-  // cout << ratioNonPrintChars((uint8_t*)text, len) << endl;
-
   int len;
   const char* text = read_text_file("resources/dummy_text.txt", &len);
-  uint8_t key = 128;
-  uint8_t* output = new uint8_t[len];
+  histogram(text);
 
-  singleByteXOR((uint8_t*)text, key, output, len);
-  float nonPrintableCharsRatio = 0.02;
-  singlebyteXORattackWithFrequencyScore(output, len, nonPrintableCharsRatio);
+  // int len;
+  // const char* text = read_text_file("resources/dummy_text.txt", &len);
+  // uint8_t key = 128;
+  // uint8_t* output = new uint8_t[len];
+  //
+  // singleByteXOR((uint8_t*)text, key, output, len);
+  // float nonPrintableCharsRatio = 0.02;
+  // singlebyteXORattackWithFrequencyScore(output, len, nonPrintableCharsRatio);
 }
 
 void challenge_3_() {

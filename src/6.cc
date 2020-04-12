@@ -194,6 +194,88 @@ void plot_frequencies(uint8_t* candidate, int length) {
   cout << endl;
 }
 
+void histogram(const char* text) {
+  int f1 = 100 * frequency(text, 'e');
+  int f2 = 100 * frequency(text, 't');
+  int f3 = 100 * frequency(text, 'a');
+  int f4 = 100 * frequency(text, 'o');
+  int f5 = 100 * frequency(text, 'i');
+  int f6 = 100 * frequency(text, 'n');
+  int f7 = 100 * frequency(text, 's');
+  int f8 = 100 * frequency(text, 'r');
+  int f9 = 100 * frequency(text, 'h');
+  int f10 = 100 * frequency(text, 'd');
+  int f11 = 100 * frequency(text, 'l');
+  int f12 = 100 * frequency(text, 'u');
+  int f13 = 100 * frequency(text, 'c');
+
+  cout << endl;
+
+  int hist_heigth = 15;
+  int i = hist_heigth;
+  while (i > 0) {
+    // Print a single line
+    printf(" | ");
+    if (f1 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f2 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f3 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f4 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f5 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f6 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f7 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f8 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f9 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f10 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f11 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f12 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+    if (f13 >= i)
+      printf(" * ");
+    else
+      printf("   ");
+
+    cout << endl;
+    i--;
+  }
+  printf("   --------------------------------------\n");
+  printf("    e  t  a  o  i  n  s  r  h  d  l  u  c \n");
+}
+
 void plot_frequencies(const char* text) {
   /** Plot frequencies for the first 5 letters. */
   int f1 = 2 * 100 * frequency(text, 'e');
@@ -310,12 +392,25 @@ void challenge_6() {
 
   // Histograms:
   // // for (int j = 0; j < p; j++) printf("%c", blocks[j]);
-  singlebyteXORattackWithFrequencyScore(blocks[0], p, 0.90);
+  // long int var = 0;
+  // uint8_t* repeatedkey = new uint8_t[KEYSIZE];
+  // char* decrypted = new uint8_t[l];
+  //
+  //  // extend the key
+  //  repeatedkey[0] = 67; // 38 49 64  81 85
+  //  repeatedkey[1] = key_2;
+  //  repeatedkey[2] = key_3;
+  //  repeatedkey[3] = key_4;
+  //  repeatedkey[4] = 0; // dummy
+  //
+  //  repeatedKeyXor((char*)encrypted_text, (char*)repeatedkey, decrypted);
+
+  singlebyteXORattackWithFrequencyScore(blocks[1], p, 1.);
 
   // Try to decrypt:
   // Hypothesis:
   //
-  uint8_t keyByte1 = 116;
+  uint8_t keyByte1 = 67;
 
   // uint8_t* repeatedkey = new uint8_t[KEYSIZE];
   //
