@@ -30,6 +30,14 @@ int dict_size;
 vector<string> dictionary;
 set<string> map_dico;
 
+void singleByteXOR(uint8_t* in, uint8_t key, uint8_t* out, int len) {
+  /** Xor each byte of a string with fixed byte. */
+
+  uint8_t* expandedKey = new uint8_t[len];
+  memset(expandedKey, key, len);
+  for (int i = 0; i < len; i++) out[i] = in[i] ^ key;
+}
+
 void load_dictionary(const char* filename) {
   string resourcesdir = "./resources/";
   ifstream file;
@@ -175,15 +183,9 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
 }
 
 void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
-  /** Display frequencies of letters to
-   *
-   */
+  /** Display frequencies of some letters. */
 
   uint8_t* expandedKey = new uint8_t[size];
-
-  // int key = 0;
-  // int score = 0;
-  // int maxScore = 0;
 
   // Brut force attack of single-byte XOR
   for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
@@ -196,11 +198,13 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
       delete[] deciphered;
       continue;
     }
+    cout << "key: " << candidate_key;
     plot_frequencies((char*)deciphered);
+    cout << endl;
 
     // Display the plaintext
-    putchar('\n');
-    for (int j = 0; j < size; j++) printf("%c", deciphered[j]);
+    // putchar('\n');
+    // for (int j = 0; j < size; j++) printf("%c", deciphered[j]);
     // printf("%s\n", deciphered);
 
     delete[] deciphered;
@@ -210,7 +214,17 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
   // return key;
 }
 
-void challenge_3__() {
+void challenge_3() {
+  int len;
+  const char* text = read_text_file("resources/dummy_text.txt", &len);
+  uint8_t key = 0x03;
+  uint8_t* output = new uint8_t[len];
+
+  singleByteXOR((uint8_t*)text, key, output, len);
+  singlebyteXORattackWithFrequencyScore(output, len);
+}
+
+void challenge_3_() {
   uint8_t toDecrypt[] = {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15,
                          0x1b, 0x7f, 0x2b, 0x78, 0x34, 0x31, 0x33, 0x3d, 0x78,
                          0x39, 0x78, 0x28, 0x37, 0x2d, 0x36, 0x3c, 0x78, 0x37,
@@ -220,7 +234,7 @@ void challenge_3__() {
   singlebyteXORattackWithFrequencyScore(toDecrypt, size);
 }
 
-void challenge_3() {
+void challenge_3__() {
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 1" << endl;
   cout << "3. Single-byte XOR cipher" << endl;

@@ -47,18 +47,19 @@ void challenge_5() {
   uint8_t* expected = new uint8_t[strlen(expected_str) / 2];
   hexDecode(expected_str, expected);
 
-  const char* a =
+  const char* plaintext =
       "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a "
       "cymbal";
+  int l = strlen(plaintext);
   const char* key = "ICE";
   char* output;
 
-  output = new char[strlen(a)];
-  repeatedKeyXor(a, key, output);
+  output = new char[l];
+  repeatedKeyXor(plaintext, key, output);
   printf("\n");
-  for (int i = 0; i < (int)strlen(a); i++) printf("%02x", output[i]);
+  for (int i = 0; i < (int)l; i++) printf("%02x", output[i]);
   printf("\n");
-  for (int i = 0; i < (int)strlen(a); i++) printf("%02x", expected[i]);
+  for (int i = 0; i < (int)l; i++) printf("%02x", expected[i]);
   printf("\n");
 
   assert(memcmp((uint8_t*)output, expected, strlen(expected_str) / 2) == 0);

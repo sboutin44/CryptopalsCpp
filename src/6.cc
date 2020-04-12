@@ -116,11 +116,12 @@ void TestHammingDistance() {
 
 int occurence(const char* s, char myChar) {
   int occ = 0;
-  char current = s[0];
+  char current = tolower(s[0]);
+
   int i = 0;
   while (current != '\0') {
     if (current == myChar) occ++;
-    current = s[i + 1];
+    current = tolower(s[i + 1]);
     i++;
   }
   return occ;
@@ -130,11 +131,12 @@ int occurence(uint8_t* s, char myChar, int length) {
   /** Occurence of a character in a random byte string.  */
 
   int occ = 0;
-  char current = s[0];
+  char current = tolower(s[0]);
+
   int i = 0;
   while (i != length) {
     if (current == myChar) occ++;
-    current = s[i + 1];
+    current = tolower(s[i + 1]);
     i++;
   }
   return occ;
@@ -204,27 +206,27 @@ void plot_frequencies(const char* text) {
   cout << endl;
 
   cout << "e ";
-  for (int i = 0; i < f1; i++) cout << "-";
+  for (int i = 0; i < f1; i++) cout << "*";
   cout << endl;
 
   cout << "t ";
-  for (int i = 0; i < f2; i++) cout << "-";
+  for (int i = 0; i < f2; i++) cout << "*";
   cout << endl;
 
   cout << "a ";
-  for (int i = 0; i < f3; i++) cout << "-";
+  for (int i = 0; i < f3; i++) cout << "*";
   cout << endl;
 
   cout << "o ";
-  for (int i = 0; i < f4; i++) cout << "-";
+  for (int i = 0; i < f4; i++) cout << "*";
   cout << endl;
 
   cout << "i ";
-  for (int i = 0; i < f5; i++) cout << "-";
+  for (int i = 0; i < f5; i++) cout << "*";
   cout << endl;
 
   cout << "n ";
-  for (int i = 0; i < f6; i++) cout << "-";
+  for (int i = 0; i < f6; i++) cout << "*";
   cout << endl;
 }
 
@@ -248,62 +250,82 @@ void challenge_6() {
   map<float, int> m;
   int d;
   float n;
-  int limit = 40;
+  int keylen_start = 2;
+  int keylen_end = 40;
+  int nb_keys = keylen_end - keylen_start + 1;
   int pos = 0;  // To browse norm_distances
-  float* norm_distances = (float*)malloc(sizeof(float) * limit);
+  float* norm_distances = new float[nb_keys];
   int KEYSIZE;
 
-  for (KEYSIZE = 2; KEYSIZE <= limit; KEYSIZE++) {
+  for (KEYSIZE = 2; KEYSIZE <= keylen_end; KEYSIZE++) {
     d = hammingDistance(encrypted_text, encrypted_text + KEYSIZE, KEYSIZE);
     n = (float)d / KEYSIZE;
     // n = (float)d / (float)KEYSIZE;
-    m[n] = KEYSIZE;             // Map normalised KEYSIZE -> KEYSIZE
-    norm_distances[++pos] = n;  // To sort the normalised KEYSIZE.
+    m[n] = KEYSIZE;             // Map normalised_KEYSIZE -> KEYSIZE
+    norm_distances[pos++] = n;  // To sort the normalised KEYSIZE.
   }
 
   // 4
-  insertion_sort(norm_distances, limit);
+  insertion_sort(norm_distances, nb_keys);
 
   // 5
   // We break the ciphertext into several blocks.
   // We define the variable 'int** blocks' as follow:
   //
-  //  |                        len_cipher                          |
+  //  |                                l                           |
   //  ==============================================================
   //   [c].............[c'].............[c"]
   //  ==============================================================
   //  |               |               |               | ...        |
   //       KEYSIZE         KEYSIZE         KEYSIZE
-  // Then, blocks[0] = [c][c'][c"]... is of length KEYSIZE, except the last
-  // one. where c,c' and c" are bytes. Thus
-  //    l = p * KEYSIZE + r
-  // We have p blocks of length KEYSIZE and 1 block or length r.
+  //
+  // Then we define block[0] = [c][c'][c"]... is of length p = l / KEYSIZE.
+  // Where c,c' and c" are bytes.
+  // We have thus KEYSIZE of these blocks, each of length p.
 
-  // for (KEYSIZE = 2; KEYSIZE <= limit; KEYSIZE++) {
-  // KEYSIZE = m[norm_distances[0]];
+  // // Display normalised key sizes:
+  // for (int i = 0; i < nb_keys; i++) {
+  //   cout << "norm_distances[i]: " << norm_distances[i] << endl;
+  //   cout << m[norm_distances[i]] << endl;
+  // }
 
   // remettre
-  KEYSIZE = 8;
+  KEYSIZE = 5;
 
   int p = l / KEYSIZE;  // p blocks
-  uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
+  // uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
+  uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * KEYSIZE);
   assert(blocks != NULL);
+  cout << "p: " << p << endl;
 
-  // Create the blocks of length KEYSIZE each.
-  for (int block_num = 0; block_num < p; block_num++) {
-    blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * KEYSIZE);
+  // Create the blocks of length p each.
+  for (int block_num = 0; block_num < KEYSIZE; block_num++) {
+    blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * p);
     assert(blocks[block_num] != NULL);
 
-    // Fill the block with bytes.
+    // Fill the block with bytes c,c', c", etc...
     for (int i = 0; i < p; i++)
       blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
   }
 
-  for (int j = 0; j < p; j++) printf("%c", blocks[j]);
-  // singlebyteXORattack(blocks[0], p, 3);
-  // remettre
+  // Histograms:
+  // // for (int j = 0; j < p; j++) printf("%c", blocks[j]);
+  singlebyteXORattackWithFrequencyScore(blocks[0], p);
 
-  // singlebyteXORattackWithFrequencyScore(blocks[0], p);
+  // Try to decrypt:
+  // Hypothesis:
+  //
+  uint8_t keyByte1 = 116;
+
+  // uint8_t* repeatedkey = new uint8_t[KEYSIZE];
+  //
+  // //memset(repeatedkey, (uint8_t)singleByteKey, KEYSIZE);
+  // char* output = new char[l];
+  // repeatedKeyXor((char*)encrypted_text, (char*)repeatedkey, output);
+  //
+  // // Display decrypted text:
+  // putchar('\n');
+  // for (int j = 0; j < l; j++) printf("%c", output[j]);
 
   // Memory cleaning
   // for (int block_num = 0; block_num < p; block_num++) {
@@ -311,20 +333,5 @@ void challenge_6() {
   // }
   // free(blocks);
 
-  // Break single byte xor on
-  // for (int block_num = 0; block_num < p; block_num++)
-  //   singlebyteXORattack(blocks[block_num], p);
-
   // test zone
-  // int length;
-  // const char* text = read_text_file("resources/dummy_text.txt",&length);
-  // const char* text = "This is a test and no it does nothing particular.";
-  // length = strlen(text);
-
-  // englishScore2(text,length);
-  // cout << englishScore2(text, length) << endl;
-  // cout << frequency(text,'e')  << endl;
-  // cout << frequency((uint8_t*) text,'e',length)  << endl;
-  // plot_frequencies(text);
-  // plot_frequencies((uint8_t*)text,length);
 }
