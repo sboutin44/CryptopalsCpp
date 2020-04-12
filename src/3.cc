@@ -182,6 +182,23 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   return key;
 }
 
+int countNonPrintableChars(uint8_t* s, int size) {
+  int count = 0;
+
+  for (int i = 0; i < size; i++) {
+    if (isprint(s[i]) == 0) count += 1;
+  }
+  return count;
+}
+
+float ratioNonPrintChars(uint8_t* s, int size) {
+  /** Returns a ratio of non-printable characters in a string.
+   * Some long english texts may have non-printable characters. */
+
+  int count = countNonPrintableChars(s, size);
+  return (float)count / size;
+}
+
 void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
   /** Display frequencies of some letters. */
 
@@ -193,19 +210,16 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
     memset(expandedKey, (uint8_t)candidate_key, size);
     uint8_t* deciphered = myXOR(ciphertext, expandedKey, size);
 
-    // If 1st char isn't printable then it's probably not the right key.
-    if (isprint((char)deciphered[0]) == 0) {
+    // Too much non-printable chars ? It's probably not the right key.
+    if (ratioNonPrintChars(deciphered, size) > 10. / 100.) {
+      cout << "Skipped key = " << candidate_key << endl;
       delete[] deciphered;
       continue;
     }
+
     cout << "key: " << candidate_key;
     plot_frequencies((char*)deciphered);
     cout << endl;
-
-    // Display the plaintext
-    // putchar('\n');
-    // for (int j = 0; j < size; j++) printf("%c", deciphered[j]);
-    // printf("%s\n", deciphered);
 
     delete[] deciphered;
   }
@@ -215,9 +229,13 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
 }
 
 void challenge_3() {
+  // int len;
+  // const char* text = read_text_file("resources/dummy_text.txt", &len);
+  // cout << ratioNonPrintChars((uint8_t*)text, len) << endl;
+
   int len;
   const char* text = read_text_file("resources/dummy_text.txt", &len);
-  uint8_t key = 0x03;
+  uint8_t key = 128;
   uint8_t* output = new uint8_t[len];
 
   singleByteXOR((uint8_t*)text, key, output, len);

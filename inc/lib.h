@@ -70,6 +70,8 @@ float frequencyCheck(const char* s);
 void plot_frequencies(const char* text);
 void plot_frequencies(uint8_t* candidate, int length);
 void repeatedKeyXor(const char* input, const char* key, char* output);
+int countNonPrintableChars(uint8_t* s, int size);
+float ratioNonPrintChars(uint8_t* s, int size);
 
 // The challenges
 void challenge_1();
