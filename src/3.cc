@@ -199,11 +199,11 @@ float ratioNonPrintChars(uint8_t* s, int size) {
   return (float)count / size;
 }
 
-void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
+void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
+                                           float nonPrintableRatio) {
   /** Display frequencies of some letters. */
 
   int nonPrintableStrings = 0;
-  float nonPrintableRatio = 1. / 100.;
   uint8_t* expandedKey = new uint8_t[size];
 
   // Brut force attack of single-byte XOR
@@ -215,7 +215,6 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
     // Too many non-printable chars ? It's probably not the right key.
     if (ratioNonPrintChars(deciphered, size) > nonPrintableRatio) {
       nonPrintableStrings++;
-      cout << "Skipped key = " << candidate_key << endl;
       delete[] deciphered;
       continue;
     }
@@ -230,7 +229,8 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
 
   cout << endl;
   cout << "Skipped " << nonPrintableStrings << " strings with more than "
-       << nonPrintableRatio << "% of non-printable elements." << endl;
+       << std::fixed << setprecision(2) << nonPrintableRatio
+       << "% of non-printable elements." << endl;
   // return key;
 }
 
@@ -245,7 +245,8 @@ void challenge_3() {
   uint8_t* output = new uint8_t[len];
 
   singleByteXOR((uint8_t*)text, key, output, len);
-  singlebyteXORattackWithFrequencyScore(output, len);
+  float nonPrintableCharsRatio = 0.02;
+  singlebyteXORattackWithFrequencyScore(output, len, nonPrintableCharsRatio);
 }
 
 void challenge_3_() {
@@ -255,7 +256,7 @@ void challenge_3_() {
                          0x3e, 0x78, 0x3a, 0x39, 0x3b, 0x37, 0x36};
 
   int size = sizeof(toDecrypt);
-  singlebyteXORattackWithFrequencyScore(toDecrypt, size);
+  singlebyteXORattackWithFrequencyScore(toDecrypt, size, 0.02);
 }
 
 void challenge_3__() {

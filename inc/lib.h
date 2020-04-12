@@ -30,6 +30,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <map>
 #include <set>
@@ -54,8 +55,8 @@ int englishScore2(const char* sentence, int length);
 int englishScore22(const char* sentence, int length);
 // void singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
 uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
-void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size);
-
+void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
+                                           float nonPrintableRatio);
 // Set_1_3 Set_1_4 Set_1_5
 void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size);

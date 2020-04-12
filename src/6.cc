@@ -310,7 +310,7 @@ void challenge_6() {
 
   // Histograms:
   // // for (int j = 0; j < p; j++) printf("%c", blocks[j]);
-  singlebyteXORattackWithFrequencyScore(blocks[0], p);
+  singlebyteXORattackWithFrequencyScore(blocks[0], p, 0.90);
 
   // Try to decrypt:
   // Hypothesis:
