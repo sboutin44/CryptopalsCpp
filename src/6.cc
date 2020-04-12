@@ -403,41 +403,45 @@ void challenge_6() {
   // }
 
   // remettre
-  KEYSIZE = 5;
+  for (KEYSIZE = 40; KEYSIZE < 200; KEYSIZE++) {
+    cout << "KEYSIZE: " << KEYSIZE << endl;
+    //  KEYSIZE = 5;
 
-  int p = l / KEYSIZE;  // p blocks
-  // uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
-  uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * KEYSIZE);
-  assert(blocks != NULL);
-  cout << "p: " << p << endl;
+    int p = l / KEYSIZE;  // p blocks
+    // uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * p);
+    // uint8_t** blocks = (uint8_t**)malloc(sizeof(uint8_t*) * KEYSIZE);
+    uint8_t** blocks = new uint8_t*[KEYSIZE];
+    assert(blocks != NULL);
+    cout << "p: " << p << endl;
 
-  // Create the blocks of length p each.
-  for (int block_num = 0; block_num < KEYSIZE; block_num++) {
-    blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * p);
-    assert(blocks[block_num] != NULL);
+    // Create the blocks of length p each.
+    for (int block_num = 0; block_num < KEYSIZE; block_num++) {
+      blocks[block_num] = new uint8_t[p];
+      // blocks[block_num] = (uint8_t*)malloc(sizeof(uint8_t) * p);
+      assert(blocks[block_num] != NULL);
 
-    // Fill the block with bytes c,c', c", etc...
-    for (int i = 0; i < p; i++)
-      blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
+      // Fill the block with bytes c,c', c", etc...
+      for (int i = 0; i < p; i++)
+        blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
+    }
+
+    // Histograms:
+    // // for (int j = 0; j < p; j++) printf("%c", blocks[j]);
+    // long int var = 0;
+    // uint8_t* repeatedkey = new uint8_t[KEYSIZE];
+    // char* decrypted = new uint8_t[l];
+    //
+    //  // extend the key
+    //  repeatedkey[0] = 67; // 38 49 64  81 85
+    //  repeatedkey[1] = key_2;
+    //  repeatedkey[2] = key_3;
+    //  repeatedkey[3] = key_4;
+    //  repeatedkey[4] = 0; // dummy
+    //
+    //  repeatedKeyXor((char*)encrypted_text, (char*)repeatedkey, decrypted);
+
+    singlebyteXORattackWithFrequencyScore(blocks[0], p, .00);
   }
-
-  // Histograms:
-  // // for (int j = 0; j < p; j++) printf("%c", blocks[j]);
-  // long int var = 0;
-  // uint8_t* repeatedkey = new uint8_t[KEYSIZE];
-  // char* decrypted = new uint8_t[l];
-  //
-  //  // extend the key
-  //  repeatedkey[0] = 67; // 38 49 64  81 85
-  //  repeatedkey[1] = key_2;
-  //  repeatedkey[2] = key_3;
-  //  repeatedkey[3] = key_4;
-  //  repeatedkey[4] = 0; // dummy
-  //
-  //  repeatedKeyXor((char*)encrypted_text, (char*)repeatedkey, decrypted);
-
-  singlebyteXORattackWithFrequencyScore(blocks[1], p, 1.);
-
   // Try to decrypt:
   // Hypothesis:
   //

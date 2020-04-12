@@ -235,32 +235,23 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
   // return key;
 }
 
-void challenge_3_() {
+void histogramFromPlaintext() {
   int len;
   const char* text = read_text_file("resources/dummy_text.txt", &len);
   histogram(text, len);
-
-  // int len;
-  // const char* text = read_text_file("resources/dummy_text.txt", &len);
-  // uint8_t key = 128;
-  // uint8_t* output = new uint8_t[len];
-  //
-  // singleByteXOR((uint8_t*)text, key, output, len);
-  // float nonPrintableCharsRatio = 0.02;
-  // singlebyteXORattackWithFrequencyScore(output, len, nonPrintableCharsRatio);
 }
 
-void challenge_3() {
+void challenge_3_withFrequencies() {
   uint8_t toDecrypt[] = {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15,
                          0x1b, 0x7f, 0x2b, 0x78, 0x34, 0x31, 0x33, 0x3d, 0x78,
                          0x39, 0x78, 0x28, 0x37, 0x2d, 0x36, 0x3c, 0x78, 0x37,
                          0x3e, 0x78, 0x3a, 0x39, 0x3b, 0x37, 0x36};
 
   int size = sizeof(toDecrypt);
-  singlebyteXORattackWithFrequencyScore(toDecrypt, size, 0.02);
+  singlebyteXORattackWithFrequencyScore(toDecrypt, size, 0.00);
 }
 
-void challenge_3__() {
+void challenge_3() {
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 1" << endl;
   cout << "3. Single-byte XOR cipher" << endl;
@@ -278,7 +269,7 @@ void challenge_3__() {
 
   uint8_t* expandedKey = new uint8_t[size];
   memset(expandedKey, (uint8_t)key, size);
-  // cout << myXOR(toDecrypt, expandedKey, size) << endl;
+  cout << myXOR(toDecrypt, expandedKey, size) << endl;
 
   delete[] expandedKey;
   // singlebyteXORattackWithFrequencyScore(toDecrypt, sizeof(toDecrypt));

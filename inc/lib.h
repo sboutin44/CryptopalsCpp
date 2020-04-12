@@ -73,6 +73,9 @@ void repeatedKeyXor(const char* input, const char* key, char* output);
 int countNonPrintableChars(uint8_t* s, int size);
 float ratioNonPrintChars(uint8_t* s, int size);
 
+// Tests functions:
+void histogramFromPlaintext();
+
 // The challenges
 void challenge_1();
 void challenge_2();

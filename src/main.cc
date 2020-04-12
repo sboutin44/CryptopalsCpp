@@ -25,7 +25,7 @@
 #include "lib.h"
 using namespace std;
 
-void run_challenge(int selection) {
+void runChallenge(int selection) {
   switch (selection) {
     case 1:
       challenge_1();
@@ -45,28 +45,44 @@ void run_challenge(int selection) {
     case 6:
       challenge_6();
       break;
+
     default:
-      std::cerr << "Selection =" << unsigned(selection) << std::endl;
+      std::cerr << "Challenge " << unsigned(selection) << " not solved yet!"
+                << std::endl;
       break;
   }
 }
 
+void testFunction() { histogramFromPlaintext(); }
+
 int main(int argc, char* argv[]) {
+  /** The program can be run in two modes.
+   *
+   * Normal:
+   *    ./cryptopals {#challenge}
+   *
+   * Test:
+   *  Only used for development purpose:
+   *    ./cryptopals --test
+   * will launch the function called in testFunction().
+   */
+
   int selection = 0;
 
   if (argc == 2) {
-    selection = std::stoi(argv[1]);
-    run_challenge(selection);
-    return 0;
+    if (std::string(argv[1]) == "--test") {
+      testFunction();
+    } else {
+      selection = std::stoi(argv[1]);
+      runChallenge(selection);
+      return 0;
+    }
   }
 
   else {
     std::cerr << "\nUsage: \n\t"
               << "cryptopals"
               << " #challenge" << std::endl;
-    // std::cerr << "To launch the challenge Set 1 - 1.Convert hex to
-    // base64:"
-    // << std::endl;
     std::cerr << "\nExample:";
     std::cerr << "\n\tcryptopals"
               << " 1" << std::endl;
