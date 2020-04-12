@@ -210,6 +210,21 @@ void histogram(const char* text, int len) {
   int f13 = 100 * frequency(text, 'c');
   int ratioNonPrintables = 100 * ratioNonPrintChars((uint8_t*)text, len);
 
+  // Frequencies of char that are not so present in an english sentence
+  int s = 0;
+  s += 100 * frequency(text, '@');
+  s += 100 * frequency(text, '$');
+  s += 100 * frequency(text, '%');
+  s += 100 * frequency(text, '^');
+  s += 100 * frequency(text, '&');
+  s += 100 * frequency(text, '#');
+  s += 100 * frequency(text, '*');
+  s += 100 * frequency(text, '&');
+  s += 100 * frequency(text, '{');
+  s += 100 * frequency(text, '}');
+  s += 100 * frequency(text, '|');
+  //  s += 100 * frequency(text, '\\');
+
   cout << endl;
 
   int hist_heigth = 15;
@@ -273,6 +288,13 @@ void histogram(const char* text, int len) {
     // Separation with letters
     printf("    ");
 
+    if (s >= i)
+      printf(" * ");
+    else
+      printf("    ");
+
+    printf("   ");
+
     if (ratioNonPrintables >= i)
       printf(" * ");
     else
@@ -281,8 +303,8 @@ void histogram(const char* text, int len) {
     cout << endl;
     i--;
   }
-  printf("   ---------------------------------------------------\n");
-  printf("    e  t  a  o  i  n  s  r  h  d  l  u  c      non print\n");
+  printf("   ---------------------------------------   -------------\n");
+  printf("    e  t  a  o  i  n  s  r  h  d  l  u  c    sym  non-print\n");
 }
 
 void plot_frequencies(const char* text) {

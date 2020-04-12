@@ -235,7 +235,7 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
   // return key;
 }
 
-void challenge_3() {
+void challenge_3_() {
   int len;
   const char* text = read_text_file("resources/dummy_text.txt", &len);
   histogram(text, len);
@@ -250,7 +250,7 @@ void challenge_3() {
   // singlebyteXORattackWithFrequencyScore(output, len, nonPrintableCharsRatio);
 }
 
-void challenge_3_() {
+void challenge_3() {
   uint8_t toDecrypt[] = {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15,
                          0x1b, 0x7f, 0x2b, 0x78, 0x34, 0x31, 0x33, 0x3d, 0x78,
                          0x39, 0x78, 0x28, 0x37, 0x2d, 0x36, 0x3c, 0x78, 0x37,
