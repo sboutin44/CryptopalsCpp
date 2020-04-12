@@ -291,7 +291,7 @@ void histogram(const char* text, int len) {
     if (s >= i)
       printf(" * ");
     else
-      printf("    ");
+      printf("   ");
 
     printf("   ");
 
@@ -304,7 +304,7 @@ void histogram(const char* text, int len) {
     i--;
   }
   printf("   ---------------------------------------   -------------\n");
-  printf("    e  t  a  o  i  n  s  r  h  d  l  u  c    sym  non-print\n");
+  printf("    e  t  a  o  i  n  s  r  h  d  l  u  c    sym  non-print\n\n");
 }
 
 void plot_frequencies(const char* text) {
