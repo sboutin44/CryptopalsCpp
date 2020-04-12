@@ -220,7 +220,7 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
     }
 
     cout << "key: " << candidate_key;
-    histogram((char*)deciphered);
+    histogram((char*)deciphered, size);
     // plot_frequencies((char*)deciphered);
     cout << endl;
 
@@ -238,7 +238,7 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
 void challenge_3() {
   int len;
   const char* text = read_text_file("resources/dummy_text.txt", &len);
-  histogram(text);
+  histogram(text, len);
 
   // int len;
   // const char* text = read_text_file("resources/dummy_text.txt", &len);

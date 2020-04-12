@@ -194,7 +194,7 @@ void plot_frequencies(uint8_t* candidate, int length) {
   cout << endl;
 }
 
-void histogram(const char* text) {
+void histogram(const char* text, int len) {
   int f1 = 100 * frequency(text, 'e');
   int f2 = 100 * frequency(text, 't');
   int f3 = 100 * frequency(text, 'a');
@@ -208,6 +208,7 @@ void histogram(const char* text) {
   int f11 = 100 * frequency(text, 'l');
   int f12 = 100 * frequency(text, 'u');
   int f13 = 100 * frequency(text, 'c');
+  int ratioNonPrintables = 100 * ratioNonPrintChars((uint8_t*)text, len);
 
   cout << endl;
 
@@ -269,11 +270,19 @@ void histogram(const char* text) {
     else
       printf("   ");
 
+    // Separation with letters
+    printf("    ");
+
+    if (ratioNonPrintables >= i)
+      printf(" * ");
+    else
+      printf("   ");
+
     cout << endl;
     i--;
   }
-  printf("   --------------------------------------\n");
-  printf("    e  t  a  o  i  n  s  r  h  d  l  u  c \n");
+  printf("   ---------------------------------------------------\n");
+  printf("    e  t  a  o  i  n  s  r  h  d  l  u  c      non print\n");
 }
 
 void plot_frequencies(const char* text) {
