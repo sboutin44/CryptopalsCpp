@@ -202,6 +202,8 @@ float ratioNonPrintChars(uint8_t* s, int size) {
 void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
   /** Display frequencies of some letters. */
 
+  int nonPrintableStrings = 0;
+  float nonPrintableRatio = 1. / 100.;
   uint8_t* expandedKey = new uint8_t[size];
 
   // Brut force attack of single-byte XOR
@@ -210,8 +212,9 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
     memset(expandedKey, (uint8_t)candidate_key, size);
     uint8_t* deciphered = myXOR(ciphertext, expandedKey, size);
 
-    // Too much non-printable chars ? It's probably not the right key.
-    if (ratioNonPrintChars(deciphered, size) > 10. / 100.) {
+    // Too many non-printable chars ? It's probably not the right key.
+    if (ratioNonPrintChars(deciphered, size) > nonPrintableRatio) {
+      nonPrintableStrings++;
       cout << "Skipped key = " << candidate_key << endl;
       delete[] deciphered;
       continue;
@@ -225,6 +228,9 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size) {
   }
   delete[] expandedKey;
 
+  cout << endl;
+  cout << "Skipped " << nonPrintableStrings << " strings with more than "
+       << nonPrintableRatio << "% of non-printable elements." << endl;
   // return key;
 }
 
