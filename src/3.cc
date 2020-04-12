@@ -99,29 +99,6 @@ int englishScore2(const char* sentence, int length) {
   return score;
 }
 
-int englishScore(uint8_t* sentence) {
-  string word;
-  string sentence_string((char*)sentence);  // To use string::find
-  int score = 0;
-
-  int j = 0;
-  while (j < (int)dictionary.size()) {
-    word = dictionary[j];
-    if (sentence_string.find(" " + word + " ") != string::npos) score++;
-
-    j++;
-  }
-
-  if (score > 2)  // If the scoce is 0 we don't display anything.
-  {
-    // cout << endl;
-    // cout << "Deciphered text:  " << endl;
-    // cout << sentence << endl;
-    // cout << "score: " << score << endl;
-  }
-  return score;
-}
-
 uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   uint8_t* expandedKey = new uint8_t[size];
 
@@ -269,8 +246,7 @@ void challenge_3() {
 
   uint8_t* expandedKey = new uint8_t[size];
   memset(expandedKey, (uint8_t)key, size);
-  cout << myXOR(toDecrypt, expandedKey, size) << endl;
+  // cout << myXOR(toDecrypt, expandedKey, size) << endl;
 
   delete[] expandedKey;
-  // singlebyteXORattackWithFrequencyScore(toDecrypt, sizeof(toDecrypt));
 }

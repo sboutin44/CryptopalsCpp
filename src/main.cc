@@ -53,7 +53,7 @@ void runChallenge(int selection) {
   }
 }
 
-void testFunction() { histogramFromPlaintext(); }
+void testFunction() { testChallenge6(); }
 
 int main(int argc, char* argv[]) {
   /** The program can be run in two modes.
