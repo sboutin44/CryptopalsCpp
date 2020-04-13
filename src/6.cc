@@ -107,13 +107,6 @@ int hammingDistance(uint8_t* a, uint8_t* b, int n) {
   return distance;
 }
 
-void TestHammingDistance() {
-  string a = "this is a test";
-  string b = "wokka wokka!!!";
-  int n = strlen(a.c_str());
-  cout << hammingDistance((uint8_t*)a.c_str(), (uint8_t*)b.c_str(), n) << endl;
-}
-
 int occurence(const char* s, char myChar) {
   int occ = 0;
   char current = tolower(s[0]);
@@ -312,49 +305,67 @@ void testChallenge6() {
   float* norm_distances = new float[nb_keys];
   int KEYSIZE;
 
-  for (KEYSIZE = 2; KEYSIZE <= keylen_end; KEYSIZE++) {
-    d = hammingDistance(ciphertext, ciphertext + KEYSIZE, KEYSIZE);
-    n = (float)d / KEYSIZE;
-    // n = (float)d / (float)KEYSIZE;
-    m[n] = KEYSIZE;             // Map normalised_KEYSIZE -> KEYSIZE
-    norm_distances[pos++] = n;  // To sort the normalised KEYSIZE.
-  }
+  // original
+  // for (KEYSIZE = 2; KEYSIZE <= keylen_end; KEYSIZE++) {
+  //   d = hammingDistance(ciphertext, ciphertext + KEYSIZE, KEYSIZE);
+  //   n = (float)d / KEYSIZE;
+  //   // n = (float)d / (float)KEYSIZE;
+  //   m[n] = KEYSIZE;             // Map normalised_KEYSIZE -> KEYSIZE
+  //   norm_distances[pos++] = n;  // To sort the normalised KEYSIZE.
+  // }
 
+  // graphic
+  uint8_t* d_K = new uint8_t[keylen_end];
+  for (KEYSIZE = 0; KEYSIZE < keylen_end; KEYSIZE++) {
+    d = hammingDistance(ciphertext, ciphertext + KEYSIZE, KEYSIZE);
+    d_K[KEYSIZE] = d;
+    cout << d_K[KEYSIZE] << " ";
+  }
+  int height = max(d_K, keylen_end);
+  int i = height;
+  while (i > 0) {
+    printf("\n");
+    if (d_K[i] == i)
+      printf(" * ");
+    else
+      printf("   ");
+
+    i--;
+  }
   // 4
   insertion_sort(norm_distances, nb_keys);
   // Display normalised key sizes:
-  for (int i = 0; i < nb_keys; i++) {
-    cout << "norm_distances[i]: " << norm_distances[i] << endl;
-    cout << m[norm_distances[i]] << endl;
-  }
+  // for (int i = 0; i < nb_keys; i++) {
+  //   cout << "norm_distances[i]: " << norm_distances[i] << endl;
+  //   cout << m[norm_distances[i]] << endl;
+  // }
 
-  // for (KEYSIZE = 40; KEYSIZE < 200; KEYSIZE++) {
-  cout << "KEYSIZE: " << KEYSIZE << endl;
-  KEYSIZE = 5;
-
-  int p = l / KEYSIZE;  // p blocks
-  uint8_t** blocks = new uint8_t*[KEYSIZE];
-  assert(blocks != NULL);
-  cout << "p: " << p << endl;
-
-  // Create the blocks of length p each.
-  for (int block_num = 0; block_num < KEYSIZE; block_num++) {
-    blocks[block_num] = new uint8_t[p];
-    assert(blocks[block_num] != NULL);
-
-    // Fill the block with bytes c,c', c", etc...
-    for (int i = 0; i < p; i++)
-      blocks[block_num][i] = ciphertext[block_num + KEYSIZE * i];
-  }
-
-  singlebyteXORattackWithFrequencyScore(blocks[0], p, .05);
-  //}
-
-  // Mem cleaning
-  for (int block_num = 0; block_num < KEYSIZE; block_num++) {
-    delete[] blocks[block_num];
-  }
-  delete[] blocks;
+  cout << hammingDistance((uint8_t*)"SUNNY", (uint8_t*)"SUNNY", 5);
+  // cout << "KEYSIZE: " << KEYSIZE << endl;
+  // KEYSIZE = 5;
+  //
+  // int p = l / KEYSIZE;  // p blocks
+  // uint8_t** blocks = new uint8_t*[KEYSIZE];
+  // assert(blocks != NULL);
+  // cout << "p: " << p << endl;
+  //
+  // // Create the blocks of length p each.
+  // for (int block_num = 0; block_num < KEYSIZE; block_num++) {
+  //   blocks[block_num] = new uint8_t[p];
+  //   assert(blocks[block_num] != NULL);
+  //
+  //   // Fill the block with bytes c,c', c", etc...
+  //   for (int i = 0; i < p; i++)
+  //     blocks[block_num][i] = ciphertext[block_num + KEYSIZE * i];
+  // }
+  //
+  // singlebyteXORattackWithFrequencyScore(blocks[0], p, .05);
+  //
+  // // Mem cleaning
+  // for (int block_num = 0; block_num < KEYSIZE; block_num++) {
+  //   delete[] blocks[block_num];
+  // }
+  // delete[] blocks;
 }
 
 void challenge_6() {

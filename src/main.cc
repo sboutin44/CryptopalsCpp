@@ -23,10 +23,12 @@
 // use or other dealings in this Software without prior written authorization.
 
 #include "lib.h"
+#include "tests.h"
+
 using namespace std;
 
-void runChallenge(int selection) {
-  switch (selection) {
+void runChallenge(int challenge) {
+  switch (challenge) {
     case 1:
       challenge_1();
       break;
@@ -47,10 +49,29 @@ void runChallenge(int selection) {
       break;
 
     default:
-      std::cerr << "Challenge " << unsigned(selection) << " not solved yet!"
+      std::cerr << "Challenge " << unsigned(challenge) << " not solved yet!"
                 << std::endl;
       break;
   }
+}
+
+void runTests() { testHammingDistance(); }
+
+void displayProgramUsage() {
+  std::cerr << "\nUsage: ";
+  std::cerr << "\n\tcryptopals --challenge #challenge\n";
+
+  std::cerr << "\nExample:";
+  std::cerr << "\n\tcryptopals --challenge 1\n";
+  std::cerr << "\t=> launch Set 1 - 1.Convert hex to base64\n";
+  std::cerr << "\n\tcryptopals --challenge 9\n";
+  std::cerr << "\t=> launch Set 2 - 9.Implement PKCS#7 padding\n";
+
+  std::cerr << "\nReseved for development purposes:\n\n";
+  std::cerr << "\tcryptopals --run_tests" << std::endl;
+  std::cerr << "\tcryptopals --quick_test" << std::endl;
+
+  std::cerr << std::endl;
 }
 
 void testFunction() { testChallenge6(); }
@@ -67,31 +88,26 @@ int main(int argc, char* argv[]) {
    * will launch the function called in testFunction().
    */
 
-  int selection = 0;
-
   if (argc == 2) {
-    if (std::string(argv[1]) == "--test") {
+    if (std::string(argv[1]) == "--run_tests") {
+      runTests();
+    } else if (std::string(argv[1]) == "--quick_test") {
       testFunction();
     } else {
-      selection = std::stoi(argv[1]);
-      runChallenge(selection);
-      return 0;
+      std::cerr << "\nError: \t"
+                << " unknown argument: '" << std::string(argv[1]) << "'\n";
+      displayProgramUsage();
     }
   }
 
-  else {
-    std::cerr << "\nUsage: \n\t"
-              << "cryptopals"
-              << " #challenge" << std::endl;
-    std::cerr << "\nExample:";
-    std::cerr << "\n\tcryptopals"
-              << " 1" << std::endl;
-    std::cerr << "\t=> launch Set 1 - 1.Convert hex to base64" << std::endl;
-
-    std::cerr << "\n\tcryptopals"
-              << " 9" << std::endl;
-    std::cerr << "\t=> launch Set 2 - 9.Implement PKCS#7 padding" << std::endl;
-    std::cerr << std::endl;
+  else if (argc == 3) {
+    if (std::string(argv[1]) == "--challenge") {
+      int challenge = std::stoi(argv[2]);
+      runChallenge(challenge);
+      return 0;
+    }
+  } else {
+    displayProgramUsage();
     return 1;
   }
 }

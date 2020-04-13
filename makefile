@@ -24,27 +24,34 @@
 
 BUILD_DIR   = build
 INC         = inc
-CXX         = clang++ 
+CXX         = clang++
 CXXFLAGS    = -Wall -g -I$(INC)
 
 #VPATH = src inc # VPATH: Search Path for All Dependencies
 
 # We create a list of all object files to make from the source files
 # found in src/.
-SOURCES_LIST    = $(wildcard src/*.cc)
-OBJS            = $(subst src/,$(BUILD_DIR)/, $(subst .cc,.o, $(SOURCES_LIST)) )
+SRC_LIST    		= $(wildcard src/*.cc)
+TST_SRC_LIST    = $(wildcard test/*.cc)
+OBJS            = $(subst src/,$(BUILD_DIR)/, $(subst .cc,.o, $(SRC_LIST)) )
+TST_OBJS        = $(subst test/,$(BUILD_DIR)/, $(subst .cc,.o, $(TST_SRC_LIST)) )
 
 # List of headers
 HEADERS_LIST    := $(wildcard inc/*.h)
 HEADERS         := $(HEADERS_LIST)
 
-# Creates object files in $(BUILD_DIR)
+# Creates object files from sources in $(BUILD_DIR)
 $(BUILD_DIR)/%.o : src/%.cc $(HEADERS_LIST)
 	mkdir -p $(@D)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+# Creates object files for tests in $(BUILD_DIR).
+$(BUILD_DIR)/%.o : test/%.cc $(HEADERS_LIST)
+	mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
 # Creates the executable
-$(BUILD_DIR)/cryptopals : $(OBJS)
+$(BUILD_DIR)/cryptopals : $(OBJS) $(TST_OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 .PHONY : clean

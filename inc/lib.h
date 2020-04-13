@@ -84,4 +84,24 @@ void challenge_5();
 void challenge_6();
 // int challenge_7();
 
+template <typename T>
+T max(T* array, int len) {
+  T max = array[0];
+
+  for (int i = 0; i < len; i++) {
+    if (max < array[i]) max = array[i];
+  }
+  return max;
+}
+
+template <typename T>
+T min(T* array, int len) {
+  T min = array[0];
+
+  for (int i = 0; i < len; i++) {
+    if (min > array[i]) min = array[i];
+  }
+  return min;
+}
+
 #endif  // CRYPTOPALS_INC_LIB_H_
