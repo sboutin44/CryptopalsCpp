@@ -277,8 +277,9 @@ void testChallenge6() {
   // Test with my own plain text and key.
 
   int l;  // lenght of the cipher.
-  uint8_t* plaintext =
-      (uint8_t*)read_text_file("resources/aliceadventures.txt", &l);
+  // const char* filename = "resources/aliceadventures.txt";
+  const char* filename = "resources/dummy_text.txt";
+  uint8_t* plaintext = (uint8_t*)read_text_file(filename, &l);
 
   // encryt my own text:
   const char* key = "SUNNY";
@@ -321,6 +322,11 @@ void testChallenge6() {
 
   // 4
   insertion_sort(norm_distances, nb_keys);
+  // Display normalised key sizes:
+  for (int i = 0; i < nb_keys; i++) {
+    cout << "norm_distances[i]: " << norm_distances[i] << endl;
+    cout << m[norm_distances[i]] << endl;
+  }
 
   // for (KEYSIZE = 40; KEYSIZE < 200; KEYSIZE++) {
   cout << "KEYSIZE: " << KEYSIZE << endl;
@@ -405,7 +411,7 @@ void challenge_6() {
   // We have thus KEYSIZE of these blocks, each of length p.
 
   // for (KEYSIZE = 40; KEYSIZE < 200; KEYSIZE++) {
-  KEYSIZE = 5;
+  KEYSIZE = 11;
   cout << "KEYSIZE: " << KEYSIZE << endl;
 
   int p = l / KEYSIZE;  // p blocks
@@ -423,7 +429,7 @@ void challenge_6() {
       blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
   }
 
-  singlebyteXORattackWithFrequencyScore(blocks[0], p, .04);
+  singlebyteXORattackWithFrequencyScore(blocks[0], p, .50);
 
   //}
   // Try to decrypt:
