@@ -55,7 +55,10 @@ void runChallenge(int challenge) {
   }
 }
 
-void runTests() { testHammingDistance(); }
+void runTests() {
+  testHammingDistance();
+  testInsertionSort();
+}
 
 void displayProgramUsage() {
   std::cerr << "\nUsage: ";

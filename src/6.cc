@@ -27,7 +27,7 @@ using namespace std;
 
 void display_map() {}
 
-void insertion_sort(float arr[], float n) {
+void insertion_sort(float arr[], int n) {
   int i, j;
   float key;
   for (i = 1; i < n; i++) {
@@ -270,12 +270,12 @@ void testChallenge6() {
   // Test with my own plain text and key.
 
   int l;  // lenght of the cipher.
-  // const char* filename = "resources/aliceadventures.txt";
-  const char* filename = "resources/dummy_text.txt";
+  const char* filename = "resources/aliceadventures.txt";
+  // const char* filename = "resources/dummy_text.txt";
   uint8_t* plaintext = (uint8_t*)read_text_file(filename, &l);
 
   // encryt my own text:
-  const char* key = "SUNNY";
+  const char* key = "ABCDEFGHFIJKLMNOPQRSTU";
   uint8_t* ciphertext = new uint8_t[l];
   repeatedKeyXor((char*)plaintext, key, (char*)ciphertext);
   printf("\n");
@@ -288,7 +288,6 @@ void testChallenge6() {
   char U = 'U';
   char N = 'N';
   char Y = 'Y';
-
   printf("S: %d\n", S);
   printf("U: %d\n", U);
   printf("N: %d\n", N);
@@ -304,45 +303,38 @@ void testChallenge6() {
   int pos = 0;  // To browse norm_distances
   float* norm_distances = new float[nb_keys];
   int KEYSIZE;
+  float average;
 
-  // original
-  // for (KEYSIZE = 2; KEYSIZE <= keylen_end; KEYSIZE++) {
-  //   d = hammingDistance(ciphertext, ciphertext + KEYSIZE, KEYSIZE);
-  //   n = (float)d / KEYSIZE;
-  //   // n = (float)d / (float)KEYSIZE;
-  //   m[n] = KEYSIZE;             // Map normalised_KEYSIZE -> KEYSIZE
-  //   norm_distances[pos++] = n;  // To sort the normalised KEYSIZE.
-  // }
+  for (int KEYSIZE = keylen_start; KEYSIZE < keylen_end; KEYSIZE++) {
+    int nb_distances = l / KEYSIZE;
+    int* distances = new int[nb_distances];
+    for (int j = 1; j < nb_distances; j++) {
+      d = hammingDistance(ciphertext, &ciphertext[j * KEYSIZE], KEYSIZE);
+      distances[j] = d;
+    }
+    int min = distances[1];
 
-  // graphic
-  uint8_t* d_K = new uint8_t[keylen_end];
-  for (KEYSIZE = 0; KEYSIZE < keylen_end; KEYSIZE++) {
-    d = hammingDistance(ciphertext, ciphertext + KEYSIZE, KEYSIZE);
-    d_K[KEYSIZE] = d;
-    cout << d_K[KEYSIZE] << " ";
+    n = (float)min / KEYSIZE;
+    // cout << n << endl;
+    m[n] = KEYSIZE;                  // Map normalised_KEYSIZE -> KEYSIZE
+    norm_distances[pos] = (float)n;  // To sort the normalised KEYSIZE.
+    // printf("%f\n", norm_distances[pos]);
+    average += d;
+    pos++;
+    assert(pos < nb_keys);
   }
-  int height = max(d_K, keylen_end);
-  int i = height;
-  while (i > 0) {
-    printf("\n");
-    if (d_K[i] == i)
-      printf(" * ");
-    else
-      printf("   ");
-
-    i--;
-  }
-  // 4
-  insertion_sort(norm_distances, nb_keys);
+  // average /= nb_keys;
+  // cout << "average" << average << endl;
+  insertion_sort(norm_distances, nb_keys - 1);
   // Display normalised key sizes:
-  // for (int i = 0; i < nb_keys; i++) {
-  //   cout << "norm_distances[i]: " << norm_distances[i] << endl;
-  //   cout << m[norm_distances[i]] << endl;
-  // }
+  for (int i = 0; i < 7; i++) {
+    printf("norm_distances[%d] : %f\n", i, norm_distances[i]);
+    printf("%d\n", m[norm_distances[i]]);
+  }
 
-  cout << hammingDistance((uint8_t*)"SUNNY", (uint8_t*)"SUNNY", 5);
+  //  cout << hammingDistance((uint8_t*)"SUNNY", (uint8_t*)"SUNNY", 5);
   // cout << "KEYSIZE: " << KEYSIZE << endl;
-  // KEYSIZE = 5;
+  // KEYSIZE = 12;
   //
   // int p = l / KEYSIZE;  // p blocks
   // uint8_t** blocks = new uint8_t*[KEYSIZE];
@@ -390,13 +382,14 @@ void challenge_6() {
   float n;
   int keylen_start = 2;
   int keylen_end = 40;
-  int nb_keys = keylen_end - keylen_start + 1;
+  int nb_keys_lengths = keylen_end - keylen_start + 1;
   int pos = 0;  // To browse norm_distances
-  float* norm_distances = new float[nb_keys];
+  float* norm_distances = new float[nb_keys_lengths];
   int KEYSIZE;
 
-  for (KEYSIZE = 2; KEYSIZE <= keylen_end; KEYSIZE++) {
-    d = hammingDistance(encrypted_text, encrypted_text + KEYSIZE, KEYSIZE);
+  for (KEYSIZE = keylen_start; KEYSIZE <= keylen_end; KEYSIZE++) {
+    int block_len = KEYSIZE * 2;
+    d = hammingDistance(encrypted_text, encrypted_text + block_len, block_len);
     n = (float)d / KEYSIZE;
     // n = (float)d / (float)KEYSIZE;
     m[n] = KEYSIZE;             // Map normalised_KEYSIZE -> KEYSIZE
@@ -404,7 +397,10 @@ void challenge_6() {
   }
 
   // 4
-  insertion_sort(norm_distances, nb_keys);
+  insertion_sort(norm_distances, nb_keys_lengths);
+  // for (int j = 0; j < nb_keys_lengths; j++)
+  //   printf("norm_distances: %f \n KEYSIZE: %d\n\n", norm_distances[j],
+  //          m[norm_distances[j]]);
 
   // 5
   // We break the ciphertext into several blocks.
@@ -421,7 +417,7 @@ void challenge_6() {
   // Where c,c' and c" are bytes.
   // We have thus KEYSIZE of these blocks, each of length p.
 
-  // for (KEYSIZE = 40; KEYSIZE < 200; KEYSIZE++) {
+  // remettre
   KEYSIZE = 11;
   cout << "KEYSIZE: " << KEYSIZE << endl;
 
