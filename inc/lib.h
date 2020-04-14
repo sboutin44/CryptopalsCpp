@@ -43,6 +43,7 @@
 
 char* base64Encode(const char* input, int size);
 uint8_t* base64Decode(const char* input, int size);
+uint8_t* base64Decode(const char* input, int size, int* sizeOut);
 uint8_t* myXOR(uint8_t* a, uint8_t* b, int size);
 int test_base64();
 
@@ -64,12 +65,17 @@ char* read_text_file(const char* filename, int* length);
 int hammingDistance(uint8_t* a, uint8_t* b, int n);
 int occurence(const char* s, char myChar);
 int occurence(uint8_t* s, char myChar, int length);
+int occurence_byte(uint8_t* s, uint8_t myChar, int length);
+float indexOfCoincidence(uint8_t* s, int N);
+float indexOfCoincidence_(uint8_t* s, int N);
 float frequency(const char* s, char c);
 float frequency(uint8_t* s, char c, int length);
 float frequencyCheck(const char* s);
 void repeatedKeyXor(const char* input, const char* key, char* output);
 int countNonPrintableChars(uint8_t* s, int size);
 float ratioNonPrintChars(uint8_t* s, int size);
+
+// Challenge 6
 
 // Tests functions:
 void histogramFromPlaintext();

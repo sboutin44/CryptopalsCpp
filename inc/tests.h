@@ -2,3 +2,4 @@
 
 void testHammingDistance();
 void testInsertionSort();
+void testIndexOfCoincidence();

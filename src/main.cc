@@ -58,6 +58,7 @@ void runChallenge(int challenge) {
 void runTests() {
   testHammingDistance();
   testInsertionSort();
+  testIndexOfCoincidence();
 }
 
 void displayProgramUsage() {

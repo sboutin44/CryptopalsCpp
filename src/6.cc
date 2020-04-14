@@ -266,6 +266,71 @@ void histogram(const char* text, int len) {
   printf("    e  t  a  o  i  n  s  r  h  d  l  u  c    sym  non-print\n\n");
 }
 
+int occurence_byte(uint8_t* s, uint8_t myChar, int length) {
+  /** Occurence of a character in a random byte string.  */
+
+  int occ = 0;
+  uint8_t current = s[0];
+
+  int i = 0;
+  while (i != length) {
+    if (current == myChar) occ++;
+    current = s[i + 1];
+    i++;
+  }
+  return occ;
+}
+
+double indexOfCoincidence_(uint8_t* s, int N) {
+  /** Returns the indexOfCoincidence over the latin alphabet.
+   *
+   * Since encrpytion here is based on single-byte XOR, our alphabet is made of
+   * 256 possibilities.
+   */
+
+  double I = 0;
+  int c = 26;
+
+  for (int letter = 65; letter <= 122; letter++) {
+    // letter defined as int to prevent an infinite loop.
+    letter = (uint8_t)letter;
+
+    int n_i = occurence((uint8_t*)s, (char)letter, N);
+
+    // Sum occurences of all letters.
+    I += n_i * (n_i - 1);
+  }
+
+  I = (double)I / (N * (N - 1)) * c;
+
+  return I;
+}
+
+float indexOfCoincidence(uint8_t* s, int N) {
+  /** Returns the indexOfCoincidence for a string over the "ASCII" alphabet.
+   *
+   * Since encrpytion here is based on single-byte XOR, our alphabet is made of
+   * 256 possibilities.
+   */
+
+  float I = 0;
+  int c = 256;
+
+  for (int letter = 0; letter < 256; letter++) {
+    // letter defined as int to prevent an infinite loop.
+    letter = (uint8_t)letter;
+
+    int n_i = occurence_byte((uint8_t*)s, letter, N);
+
+    // Sum occurences of all letters.
+    I += n_i * (n_i - 1);
+  }
+
+  I = (float)I / (N * (N - 1)) * c;
+
+  return I;
+}
+
 void testChallenge6() {
   // Test with my own plain text and key.
 
@@ -275,7 +340,7 @@ void testChallenge6() {
   uint8_t* plaintext = (uint8_t*)read_text_file(filename, &l);
 
   // encryt my own text:
-  const char* key = "ABCDEFGHFIJKLMNOPQRSTU";
+  const char* key = "ABCDEFG";
   uint8_t* ciphertext = new uint8_t[l];
   repeatedKeyXor((char*)plaintext, key, (char*)ciphertext);
   printf("\n");
@@ -283,15 +348,6 @@ void testChallenge6() {
          countNonPrintableChars(ciphertext, l));
   printf("My plaintext ratioNonPrintChars: %f\n",
          ratioNonPrintChars(ciphertext, l));
-
-  char S = 'S';
-  char U = 'U';
-  char N = 'N';
-  char Y = 'Y';
-  printf("S: %d\n", S);
-  printf("U: %d\n", U);
-  printf("N: %d\n", N);
-  printf("Y: %d\n", Y);
 
   // 1)
   map<float, int> m;
@@ -303,33 +359,43 @@ void testChallenge6() {
   int pos = 0;  // To browse norm_distances
   float* norm_distances = new float[nb_keys];
   int KEYSIZE;
-  float average;
 
-  for (int KEYSIZE = keylen_start; KEYSIZE < keylen_end; KEYSIZE++) {
-    int nb_distances = l / KEYSIZE;
-    int* distances = new int[nb_distances];
-    for (int j = 1; j < nb_distances; j++) {
-      d = hammingDistance(ciphertext, &ciphertext[j * KEYSIZE], KEYSIZE);
-      distances[j] = d;
+  for (KEYSIZE = keylen_start; KEYSIZE < keylen_end; KEYSIZE++) {
+    int multiple = -1;
+
+    for (int offset = 0; offset < keylen_end - KEYSIZE;
+         offset = offset + KEYSIZE) {
+      int nb_distances = l;  // KEYSIZE;
+      int* distances = new int[nb_distances];
+      // for (int j = 1; j < nb_distances; j++) {
+      for (int j = 1; j < l - KEYSIZE; j++) {
+        multiple = offset + KEYSIZE + j;
+
+        // d = hammingDistance(&ciphertext[offset],
+        //                     &ciphertext[offset + j * KEYSIZE], KEYSIZE);
+        distances[j] = d;
+
+        if (d == 0) {
+          cout << "KEYSIZEs for d = 0: " << KEYSIZE << endl;
+        }
+      }
+      int min = distances[1];
+
+      n = (float)min / KEYSIZE;
+      m[n] = KEYSIZE;                  // Map normalised_KEYSIZE -> KEYSIZE
+      norm_distances[pos] = (float)n;  // To sort the normalised KEYSIZE.
+      pos++;
+      // assert(pos < nb_keys);
+
+      delete[] distances;
     }
-    int min = distances[1];
-
-    n = (float)min / KEYSIZE;
-    // cout << n << endl;
-    m[n] = KEYSIZE;                  // Map normalised_KEYSIZE -> KEYSIZE
-    norm_distances[pos] = (float)n;  // To sort the normalised KEYSIZE.
-    // printf("%f\n", norm_distances[pos]);
-    average += d;
-    pos++;
-    assert(pos < nb_keys);
   }
-  // average /= nb_keys;
-  // cout << "average" << average << endl;
   insertion_sort(norm_distances, nb_keys - 1);
-  // Display normalised key sizes:
+
+  // Display a few possible key sizes:
   for (int i = 0; i < 7; i++) {
-    printf("norm_distances[%d] : %f\n", i, norm_distances[i]);
-    printf("%d\n", m[norm_distances[i]]);
+    // printf("norm_distances[%d] : %f\n", i, norm_distances[i]);
+    // printf("%d\n", m[norm_distances[i]]);
   }
 
   //  cout << hammingDistance((uint8_t*)"SUNNY", (uint8_t*)"SUNNY", 5);
@@ -372,9 +438,23 @@ void challenge_6() {
   cout << "------------------------------------\n" << endl;
 
   // TestHammingDistance();
-  int l;  // lenght of the cipher.
-  char* base64ed_encrypted_text = read_text_file("resources/6.txt", &l);
-  uint8_t* encrypted_text = base64Decode(base64ed_encrypted_text, l);
+  int l_text;  // lenght of the cipher.
+  int l;
+  uint8_t* ciphertext = (uint8_t*)read_text_file("resources/6_decoded.txt", &l);
+  //  char* base64ed_encrypted_text = read_text_file("resources/6.txt",
+  //  &l_text); uint8_t* ciphertext = base64Decode(base64ed_encrypted_text,
+  //  l_text);
+  // uint8_t* ciphertext = base64Decode(base64ed_encrypted_text, l_text, &l);
+
+  // int l_dec;
+  // uint8_t* tttt = (uint8_t*)read_text_file("resources/6_decoded.txt",
+  // &l_dec);
+
+  // cout << l_dec << endl;
+  // cout << l_text << endl;
+  // cout << l << endl;
+  // // for (int i=0;i<)
+  //  assert(memcmp(tttt, ciphertext, l_dec) == 0);
 
   // 1)
   map<float, int> m;
@@ -382,22 +462,47 @@ void challenge_6() {
   float n;
   int keylen_start = 2;
   int keylen_end = 40;
+  int nb_keys = keylen_end - keylen_start + 1;
   int nb_keys_lengths = keylen_end - keylen_start + 1;
   int pos = 0;  // To browse norm_distances
   float* norm_distances = new float[nb_keys_lengths];
   int KEYSIZE;
 
-  for (KEYSIZE = keylen_start; KEYSIZE <= keylen_end; KEYSIZE++) {
-    int block_len = KEYSIZE * 2;
-    d = hammingDistance(encrypted_text, encrypted_text + block_len, block_len);
-    n = (float)d / KEYSIZE;
-    // n = (float)d / (float)KEYSIZE;
-    m[n] = KEYSIZE;             // Map normalised_KEYSIZE -> KEYSIZE
-    norm_distances[pos++] = n;  // To sort the normalised KEYSIZE.
-  }
+  // for (KEYSIZE = keylen_start; KEYSIZE <= keylen_end; KEYSIZE++) {
+  //   int block_len = KEYSIZE * 2;
+  //   d = hammingDistance(ciphertext, ciphertext + block_len, block_len);
+  //   n = (float)d / KEYSIZE;
+  //   // n = (float)d / (float)KEYSIZE;
+  //   m[n] = KEYSIZE;             // Map normalised_KEYSIZE -> KEYSIZE
+  //   norm_distances[pos++] = n;  // To sort the normalised KEYSIZE.
+  // }
 
   // 4
-  insertion_sort(norm_distances, nb_keys_lengths);
+  // insertion_sort(norm_distances, nb_keys_lengths);
+
+  for (KEYSIZE = keylen_start; KEYSIZE < keylen_end; KEYSIZE++) {
+    int nb_distances = l / KEYSIZE;
+    int* distances = new int[nb_distances];
+    for (int j = 1; j < nb_distances; j++) {
+      d = hammingDistance(ciphertext, &ciphertext[j * KEYSIZE], KEYSIZE);
+      distances[j] = d;
+    }
+    int min = distances[1];
+
+    n = (float)min / KEYSIZE;
+    m[n] = KEYSIZE;                  // Map normalised_KEYSIZE -> KEYSIZE
+    norm_distances[pos] = (float)n;  // To sort the normalised KEYSIZE.
+    pos++;
+    assert(pos < nb_keys_lengths);
+  }
+  insertion_sort(norm_distances, nb_keys_lengths - 1);
+
+  // Display a few possible key sizes:
+  for (int i = 0; i < 8; i++) {
+    printf("norm_distances[%d] : %f\n", i, norm_distances[i]);
+    printf("%d\n", m[norm_distances[i]]);
+  }
+
   // for (int j = 0; j < nb_keys_lengths; j++)
   //   printf("norm_distances: %f \n KEYSIZE: %d\n\n", norm_distances[j],
   //          m[norm_distances[j]]);
@@ -418,7 +523,7 @@ void challenge_6() {
   // We have thus KEYSIZE of these blocks, each of length p.
 
   // remettre
-  KEYSIZE = 11;
+  KEYSIZE = 4;
   cout << "KEYSIZE: " << KEYSIZE << endl;
 
   int p = l / KEYSIZE;  // p blocks
@@ -433,10 +538,10 @@ void challenge_6() {
 
     // Fill the block with bytes c,c', c", etc...
     for (int i = 0; i < p; i++)
-      blocks[block_num][i] = encrypted_text[block_num + KEYSIZE * i];
+      blocks[block_num][i] = ciphertext[block_num + KEYSIZE * i];
   }
 
-  singlebyteXORattackWithFrequencyScore(blocks[0], p, .50);
+  singlebyteXORattackWithFrequencyScore(blocks[2], p, .40);
 
   //}
   // Try to decrypt:
@@ -447,7 +552,7 @@ void challenge_6() {
   //
   // //memset(repeatedkey, (uint8_t)singleByteKey, KEYSIZE);
   // char* output = new char[l];
-  // repeatedKeyXor((char*)encrypted_text, (char*)repeatedkey, output);
+  // repeatedKeyXor((char*)ciphertext, (char*)repeatedkey, output);
   //
   // // Display decrypted text:
   // putchar('\n');

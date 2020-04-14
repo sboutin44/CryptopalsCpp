@@ -33,3 +33,20 @@ void testInsertionSort() {
   assert(memcmp((float*)a, (float*)a_sorted, len) == 0);
   cout << "testInsertionSort passed" << endl;
 }
+
+void testIndexOfCoincidence() {
+  // Load an english text.
+  int N;
+  const char* filename1 = "resources/aliceadventures.txt";
+  const char* filename2 = "resources/dummy_text.txt";
+  uint8_t* text1 = (uint8_t*)read_text_file(filename1, &N);
+  uint8_t* text2 = (uint8_t*)read_text_file(filename2, &N);
+
+  // float I1 = indexOfCoincidence(text1, N);
+  // float I2 = indexOfCoincidence(text2, N);
+  float I1 = indexOfCoincidence_(text1, N);
+  float I2 = indexOfCoincidence_(text2, N);
+
+  cout << I1 << endl;
+  cout << I2 << endl;
+}

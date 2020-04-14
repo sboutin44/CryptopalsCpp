@@ -104,6 +104,11 @@ char* base64Encode(const char* input, int size) {
 }
 
 uint8_t* base64Decode(const char* input, int size) {
+  int sizeOut = 0;
+  return base64Decode(input, size, &sizeOut);
+}
+
+uint8_t* base64Decode(const char* input, int size, int* sizeOut) {
   int padding = 0;
   uint8_t a, b, c, d;
   // Padding ?
@@ -124,6 +129,8 @@ uint8_t* base64Decode(const char* input, int size) {
   int output_position = 0;  // track the position in the output array.
 
   uint8_t* output = new uint8_t[output_length + 1];  // +1 for the \0 character.
+
+  *sizeOut = output_length;  // don't count the \0 character.
 
   for (int i = 0; i < (size - (size - padding) % 4); i += 4) {
     assert(i < size);

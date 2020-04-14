@@ -207,7 +207,7 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
 
   cout << endl;
   cout << "Skipped " << nonPrintableStrings << " strings with more than "
-       << std::fixed << setprecision(2) << nonPrintableRatio
+       << std::fixed << setprecision(0) << nonPrintableRatio * 100
        << "% of non-printable elements." << endl;
   // return key;
 }
