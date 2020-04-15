@@ -308,27 +308,29 @@ float indexOfCoincidence_(uint8_t* s, int len) {
   return I;
 }
 
-float indexOfCoincidence(uint8_t* s, int N) {
+float indexOfCoincidence(uint8_t* s, int len) {
   /** Returns the indexOfCoincidence for a string over the "ASCII" alphabet.
    *
    * Since encrpytion here is based on single-byte XOR, our alphabet is made of
    * 256 possibilities.
    */
 
-  float I = 0;
-  int c = 256;
+  float sum = 0;
+  float I = 0.;
+  float c = 26.;
+  float N = (float)len;
 
   for (int letter = 0; letter < 256; letter++) {
     // letter defined as int to prevent an infinite loop.
     letter = (uint8_t)letter;
 
-    int n_i = occurence_byte((uint8_t*)s, letter, N);
+    float n_i = (float)occurence_byte((uint8_t*)s, letter, N);
 
     // Sum occurences of all letters.
-    I += n_i * (n_i - 1);
+    sum += n_i * (n_i - 1);
   }
 
-  I = (float)I / (N * (N - 1)) * c;
+  I = sum / (N * (N - 1)) * c;
 
   return I;
 }
