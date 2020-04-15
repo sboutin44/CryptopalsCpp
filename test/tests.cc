@@ -40,7 +40,7 @@ void testIndexOfCoincidence() {
   const char* filename1 = "resources/s1.txt";  // About 3700 characters
   const char* filename2 = "resources/s2.txt";
   const char* filename3 = "resources/s3.txt";
-  const char* filename4 = "resources/earth.txt";
+  const char* filename4 = "resources/sMax.txt";
   const char* filename5 = "resources/history.txt";
   const char* filename6 = "resources/michael.txt";
   const char* filename7 = "resources/united_states.txt";
