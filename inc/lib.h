@@ -60,7 +60,6 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
 // Set_1_3 Set_1_4 Set_1_5
 void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size);
-void insertion_sort(float arr[], int n);
 char* read_text_file(const char* filename, int* length);
 int hammingDistance(uint8_t* a, uint8_t* b, int n);
 int occurence(const char* s, char myChar);

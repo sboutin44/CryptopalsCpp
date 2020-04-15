@@ -27,70 +27,6 @@ using namespace std;
 
 void display_map() {}
 
-void insertion_sort(float arr[], int n) {
-  int i, j;
-  float key;
-  for (i = 1; i < n; i++) {
-    key = arr[i];
-    j = i - 1;
-
-    /* Move elements of arr[0..i-1], that are
-    greater than key, to one position ahead
-    of their current position */
-    while (j >= 0 && arr[j] > key) {
-      arr[j + 1] = arr[j];
-      j = j - 1;
-    }
-    arr[j + 1] = key;
-  }
-}
-
-char* read_text_file(const char* filename, int* length) {
-  /** Return a text read from a file as well as its length.
-   *
-   * No prior allocation is needed since we don't know the text size before
-   * reading the file.
-   *
-   * @param  filename A text file.
-   * @return text     An allocated char array with the text.
-   * @return length   The length of the read text.
-   */
-
-  ifstream file;
-  char* out;
-
-  try {
-    file.open(filename);
-
-    if (file.fail()) throw file.rdstate();
-
-    // get length of file:
-    file.seekg(0, file.end);
-    *length = file.tellg();
-    file.seekg(0, file.beg);
-
-    out = (char*)malloc(sizeof(char) * (*length));
-    assert(out != NULL);
-
-    file.read(out, *length);
-  } catch (ios::iostate filestate) {
-    if (filestate == ios::failbit) {
-      cout << "failbit" << endl;
-    }
-
-    if (filestate == ios::badbit) {
-      cout << "badbit" << endl;
-    }
-  }
-  return out;
-}
-
-char* read_text_file(const char* filename) {
-  /** Read a text file and discard the text length. */
-  int length;
-  return read_text_file(filename, &length);
-}
-
 int hammingDistance(uint8_t* a, uint8_t* b, int n) {
   uint8_t byte;
   int distance = 0;
@@ -105,52 +41,6 @@ int hammingDistance(uint8_t* a, uint8_t* b, int n) {
     }
   }
   return distance;
-}
-
-int occurence(const char* s, char myChar) {
-  int occ = 0;
-  char current = tolower(s[0]);
-
-  int i = 0;
-  while (current != '\0') {
-    if (current == myChar) occ++;
-    current = tolower(s[i + 1]);
-    i++;
-  }
-  return occ;
-}
-
-int occurence(uint8_t* s, char myChar, int length) {
-  /** Occurrence of a character in a random byte string.  */
-
-  int occ = 0;
-  char current = tolower(s[0]);
-
-  int i = 0;
-  while (i != length) {
-    if (current == myChar) occ++;
-    current = tolower(s[i + 1]);
-    i++;
-  }
-  return occ;
-}
-
-float frequency(const char* s, char c) {
-  if (occurence(s, c) == 0) {
-    return 0;
-  } else {
-    return ((float)occurence(s, c) / (float)strlen(s));
-  }
-}
-
-float frequency(uint8_t* s, char c, int length) {
-  /** Frequency (0<f<100) of a character in a random byte string */
-
-  if (occurence(s, c, length) == 0) {
-    return 0;
-  } else {
-    return ((float)occurence(s, c, length) / (float)length);
-  }
 }
 
 void histogram(const char* text, int len) {
@@ -264,21 +154,6 @@ void histogram(const char* text, int len) {
   }
   printf("   ---------------------------------------   -------------\n");
   printf("    e  t  a  o  i  n  s  r  h  d  l  u  c    sym  non-print\n\n");
-}
-
-int occurence_byte(uint8_t* s, uint8_t myChar, int length) {
-  /** Occurence of a character in a random byte string.  */
-
-  int occ = 0;
-  uint8_t current = s[0];
-
-  int i = 0;
-  while (i != length) {
-    if (current == myChar) occ++;
-    current = s[i + 1];
-    i++;
-  }
-  return occ;
 }
 
 float indexOfCoincidence_(uint8_t* s, int len) {
