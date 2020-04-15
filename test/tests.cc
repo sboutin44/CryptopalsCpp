@@ -58,6 +58,14 @@ void testInsertionSort() {
   cout << "testInsertionSort passed" << endl;
 }
 
+void testHistogram() {
+  int N;
+  const char* filename1 = "resources/aliceAdventures.txt";
+  const char* english_text = read_text_file(filename1, &N);
+
+  histogram(english_text, N);
+}
+
 void testIndexOfCoincidence() {
   // Load an english text.
   int N1, N2, N3, N4, N5, N6, N7;
@@ -109,5 +117,60 @@ void testIndexOfCoincidence() {
          indexOfCoincidence((uint8_t*)read_text_file(filename6, &N6), N6));
   printf("%f\n",
          indexOfCoincidence((uint8_t*)read_text_file(filename7, &N7), N7));
-  
+}
+
+void testFindKeyLength() {
+  int l_plaintext;
+  const char* filename = "resources/united_states.txt";
+  uint8_t* plaintext = (uint8_t*)read_text_file(filename, &l_plaintext);
+
+  // Cipher my own text:
+  const char* key1 = "WHY";
+  const char* key2 = "YOU'RE FIRED";
+  const char* key3 = "What is your name?";
+  const char* key4 = "terminator X: the return What is your name?";
+
+  // Bigger keys
+  // const char* key5 = new char[l_plaintext];
+  // memcpy((uint8_t*)key5, plaintext, l_plaintext - 1);
+
+  int len_key1 = strlen(key1);
+  int len_key2 = strlen(key2);
+  int len_key3 = strlen(key3);
+  int len_key4 = strlen(key4);
+  int len_key5 = l_plaintext - 1;
+
+  int l_ciphertext = l_plaintext;
+  uint8_t* ciphertext1 = new uint8_t[l_ciphertext];
+  uint8_t* ciphertext2 = new uint8_t[l_ciphertext];
+  uint8_t* ciphertext3 = new uint8_t[l_ciphertext];
+  uint8_t* ciphertext4 = new uint8_t[l_ciphertext];
+  uint8_t* ciphertext5 = new uint8_t[l_ciphertext - 1];
+
+  // Cipher the plaintext
+  repeatedKeyXor((char*)plaintext, key1, (char*)ciphertext1);
+  repeatedKeyXor((char*)plaintext, key2, (char*)ciphertext2);
+  repeatedKeyXor((char*)plaintext, key3, (char*)ciphertext3);
+  repeatedKeyXor((char*)plaintext, key4, (char*)ciphertext4);
+  // repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
+
+  // Find the keys
+  int guess_key1 = findKeyLength(ciphertext1, l_ciphertext);
+  int guess_key2 = findKeyLength(ciphertext2, l_ciphertext);
+  int guess_key3 = findKeyLength(ciphertext3, l_ciphertext);
+  int guess_key4 = findKeyLength(ciphertext4, l_ciphertext);
+
+  // For this one with set the max length to guess to 'l_ciphertext'
+  int guess_key5 = findKeyLength(ciphertext5, l_ciphertext, l_ciphertext);
+
+  cout << "\nKEYSIZE: " << len_key1 << endl;
+  cout << "Guessed KEYSIZE: " << guess_key1 << endl;
+  cout << "\nKEYSIZE: " << len_key2 << endl;
+  cout << "Guessed KEYSIZE: " << guess_key2 << endl;
+  cout << "\nKEYSIZE: " << len_key3 << endl;
+  cout << "Guessed KEYSIZE: " << guess_key3 << endl;
+  cout << "\nKEYSIZE: " << len_key4 << endl;
+  cout << "Guessed KEYSIZE: " << guess_key4 << endl;
+  //  cout << "\nKEYSIZE: " << len_key5 << endl;
+  //  cout << "Guessed KEYSIZE: " << guess_key5 << endl;
 }

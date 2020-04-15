@@ -25,9 +25,14 @@
 #include "lib.h"
 using namespace std;
 
-void display_map() {}
-
 int hammingDistance(uint8_t* a, uint8_t* b, int n) {
+  /** Returns the edit distance of two byte strings.
+   *
+   * @param a A byte string
+   * @param b A byte string
+   * @param len Length of the byte strings to xor. Must be equals
+   */
+
   uint8_t byte;
   int distance = 0;
 
@@ -44,35 +49,31 @@ int hammingDistance(uint8_t* a, uint8_t* b, int n) {
 }
 
 void histogram(const char* text, int len) {
-  int f1 = 100 * frequency(text, 'e');
-  int f2 = 100 * frequency(text, 't');
-  int f3 = 100 * frequency(text, 'a');
-  int f4 = 100 * frequency(text, 'o');
-  int f5 = 100 * frequency(text, 'i');
-  int f6 = 100 * frequency(text, 'n');
-  int f7 = 100 * frequency(text, 's');
-  int f8 = 100 * frequency(text, 'r');
-  int f9 = 100 * frequency(text, 'h');
-  int f10 = 100 * frequency(text, 'd');
-  int f11 = 100 * frequency(text, 'l');
-  int f12 = 100 * frequency(text, 'u');
-  int f13 = 100 * frequency(text, 'c');
-  int ratioNonPrintables = 100 * ratioNonPrintChars((uint8_t*)text, len);
+  /** Display frequencies of the frequent letters found in 'text'.
+   *
+   * @param text A byte string representing a text.
+   * @param len  The length of the text
+   * Because english texts normally do not include special symbols
+   * like '@', '^', etc..., we display a bar in the historgram for the
+   * occurence of these symbols. They are specified in 'SYMBOLS' hereinafter.
+   */
 
-  // Frequencies of char that are not so present in an english sentence
-  int s = 0;
-  s += 100 * frequency(text, '@');
-  s += 100 * frequency(text, '$');
-  s += 100 * frequency(text, '%');
-  s += 100 * frequency(text, '^');
-  s += 100 * frequency(text, '&');
-  s += 100 * frequency(text, '#');
-  s += 100 * frequency(text, '*');
-  s += 100 * frequency(text, '&');
-  s += 100 * frequency(text, '{');
-  s += 100 * frequency(text, '}');
-  s += 100 * frequency(text, '|');
-  //  s += 100 * frequency(text, '\\');
+  const char* SYMBOLS = "@^&#*{}|";  // Symbols to exclude from the stats.
+  const char* LETTERS = "etaoinsrhdluc";
+
+  // Prepare an array of frequencies for letters in 'letters' appearing in text.
+  int len_letters = strlen(LETTERS);
+  int* freqs_letters = new int[len_letters];
+  for (int i = 0; i < len_letters; i++)
+    freqs_letters[i] = 100 * frequency(text, (char)LETTERS[i]);
+
+  // Sum the occurences of symbols listed in SYMBOLS appearing in 'text'.
+  int len_symbols = strlen(SYMBOLS);
+  int freqs_symbols = 0;
+  for (int i = 0; i < len_symbols; i++)
+    freqs_symbols += 100 * frequency(text, (char)SYMBOLS[i]);
+
+  int ratioNonPrintables = 100 * ratioNonPrintChars((uint8_t*)text, len);
 
   cout << endl;
 
@@ -81,68 +82,25 @@ void histogram(const char* text, int len) {
   while (i > 0) {
     // Print a single line
     printf(" | ");
-    if (f1 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f2 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f3 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f4 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f5 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f6 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f7 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f8 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f9 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f10 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f11 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f12 >= i)
-      printf(" * ");
-    else
-      printf("   ");
-    if (f13 >= i)
-      printf(" * ");
-    else
-      printf("   ");
+
+    for (int j = 0; j < len_letters; j++) {
+      if (freqs_letters[j] >= i)
+        printf(" * ");
+      else
+        printf("   ");
+    }
 
     // Separation with letters
     printf("    ");
 
-    if (s >= i)
+    // for (int j = 0; j < len_letters; j++) {
+    if (freqs_symbols >= i)
       printf(" * ");
     else
       printf("   ");
+    //}
 
-    printf("   ");
+    printf("    ");
 
     if (ratioNonPrintables >= i)
       printf(" * ");
@@ -332,6 +290,49 @@ void testChallenge6() {
   }
 }
 
+int findKeyLength(uint8_t* ciphertext, int len) {
+  int maxKeysize = 100;
+  return findKeyLength(ciphertext, len, maxKeysize);
+}
+
+int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
+  /** Find the length of the key of a ciphertext.
+   *
+   * Here we try to guess KEYSIZE. We test every values in a chosen range and
+   * for each guessed KEYSIZE we reorganise the ciphertext into blocks of length
+   * KEYSIZE. The new ciphertext looks now mono-alphabetically xor'ed. Then we
+   * compute the index of coincidence Ic based on a 256 alphabet (ASCII) a
+   * block, eg. the first one . The hightest Ic indicates you guessed the
+   * correct key. Any hight values are going to be correspond to a multiple of
+   * KEYSIZE. It works really well !
+   */
+
+  // int maxKeysize = 100;
+  int l = len;
+
+  for (int KEYSIZE = 2; KEYSIZE < maxKeysize; KEYSIZE++) {
+    int p = l / KEYSIZE;  // p blocks
+    uint8_t** blocks = new uint8_t*[KEYSIZE];
+    assert(blocks != NULL);
+
+    // Create the blocks of length p each.
+    for (int block_num = 0; block_num < KEYSIZE; block_num++) {
+      blocks[block_num] = new uint8_t[p];
+      assert(blocks[block_num] != NULL);
+
+      // Fill the block with bytes c,c', c", etc...
+      for (int i = 0; i < p; i++)
+        blocks[block_num][i] = ciphertext[block_num + KEYSIZE * i];
+    }
+
+    float I = indexOfCoincidence(blocks[1], p);
+    if (I > 0.060) {
+      //      cout << "KEYSIZE: " << KEYSIZE << " Ic = " << I << endl;
+      return KEYSIZE;
+    }
+  }
+}
+
 void challenge_6() {
   /** 6. Break repeating-key XOR
    *
@@ -346,12 +347,13 @@ void challenge_6() {
   // TestHammingDistance();
   int l_ciphertext;  // lenght of the cipher.
   int l;
-  // uint8_t* ciphertext = (uint8_t*)read_text_file("resources/6_decoded.txt",
-  // &l);
+  //  uint8_t* ciphertext = (uint8_t*)read_text_file("resources/6_decoded.txt",
+  //  &l);
 
   char* base64ed_encrypted_text =
       read_text_file("resources/6.txt", &l_ciphertext);
-  // uint8_t* ciphertext = base64Decode(base64ed_encrypted_text, l_ciphertext);
+  //      uint8_t* ciphertext = base64Decode(base64ed_encrypted_text,
+  //      l_ciphertext);
   uint8_t* ciphertext = base64Decode(base64ed_encrypted_text, l_ciphertext, &l);
 
   cout << "------------------------------" << endl;
@@ -455,8 +457,9 @@ void challenge_6() {
   // cout << KEYSIZE << "   " << I << endl;
 
   // for (int i=0;i<KEYSIZE;i++)
-  singlebyteXORattackWithFrequencyScore(blocks[18], p, .3);
+  singlebyteXORattackWithFrequencyScore(blocks[1], p, .5);
 
+  // Test the reconstituted key.
   const char* repeatedkey = "terminator X: Bring the noise";
   char* output = new char[l];
   repeatedKeyXor((char*)ciphertext, (char*)repeatedkey, output);

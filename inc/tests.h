@@ -27,3 +27,5 @@
 void testHammingDistance();
 void testInsertionSort();
 void testIndexOfCoincidence();
+void testHistogram();
+void testFindKeyLength();

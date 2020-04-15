@@ -59,6 +59,8 @@ void runTests() {
   testHammingDistance();
   testInsertionSort();
   testIndexOfCoincidence();
+  testHistogram();
+  testFindKeyLength();
 }
 
 void displayProgramUsage() {
