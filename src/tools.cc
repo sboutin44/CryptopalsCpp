@@ -22,8 +22,3 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
-#include "lib.h"
-
-void testHammingDistance();
-void testInsertionSort();
-void testIndexOfCoincidence();
