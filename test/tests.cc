@@ -36,17 +36,33 @@ void testInsertionSort() {
 
 void testIndexOfCoincidence() {
   // Load an english text.
-  int N;
+  int N1, N2, N3, N4, N5, N6, N7;
   const char* filename1 = "resources/aliceadventures.txt";
   const char* filename2 = "resources/dummy_text.txt";
-  uint8_t* text1 = (uint8_t*)read_text_file(filename1, &N);
-  uint8_t* text2 = (uint8_t*)read_text_file(filename2, &N);
+  const char* filename3 = "resources/gpl-3.0.txt";
+  const char* filename4 = "resources/earth.txt";
+  const char* filename5 = "resources/history.txt";
+  const char* filename6 = "resources/michael.txt";
+  const char* filename7 = "resources/united_states.txt";
 
   // float I1 = indexOfCoincidence(text1, N);
   // float I2 = indexOfCoincidence(text2, N);
-  float I1 = indexOfCoincidence_(text1, N);
-  float I2 = indexOfCoincidence_(text2, N);
 
-  cout << I1 << endl;
-  cout << I2 << endl;
+  // cout << indexOfCoincidence_(text1, N1) << endl;
+  // cout << indexOfCoincidence_(text2, N2) << endl;
+  // cout << indexOfCoincidence_(text3, N3) << endl;
+  printf("%f\n",
+         indexOfCoincidence_((uint8_t*)read_text_file(filename1, &N1), N1));
+  printf("%f\n",
+         indexOfCoincidence_((uint8_t*)read_text_file(filename2, &N2), N2));
+  printf("%f\n",
+         indexOfCoincidence_((uint8_t*)read_text_file(filename3, &N3), N3));
+  printf("%f\n",
+         indexOfCoincidence_((uint8_t*)read_text_file(filename4, &N4), N4));
+  printf("%f\n",
+         indexOfCoincidence_((uint8_t*)read_text_file(filename5, &N5), N5));
+  printf("%f\n",
+         indexOfCoincidence_((uint8_t*)read_text_file(filename6, &N6), N6));
+  printf("%f\n",
+         indexOfCoincidence_((uint8_t*)read_text_file(filename7, &N7), N7));
 }

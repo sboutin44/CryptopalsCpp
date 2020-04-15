@@ -90,6 +90,8 @@ void challenge_5();
 void challenge_6();
 // int challenge_7();
 
+// Functions in tools.h
+
 template <typename T>
 T max(T* array, int len) {
   T max = array[0];
