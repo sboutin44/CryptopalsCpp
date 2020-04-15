@@ -291,7 +291,15 @@ float indexOfCoincidence_(uint8_t* s, int len) {
   float sum = 0;
   float I = 0.;
   float c = 26.;
-  float N = (float)len;
+
+  // Count only latin chars out of the total len:
+  int nb_latin_chars = 0;
+  for (int j = 0; j < len; j++) {
+    char c = s[j];
+    if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) nb_latin_chars++;
+  }
+
+  float N = (float)nb_latin_chars;
 
   for (int letter = 97; letter <= 122; letter++) {
     // letter defined as int to prevent an infinite loop.
