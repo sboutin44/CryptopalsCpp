@@ -155,20 +155,21 @@ void testFindKeyLength() {
   repeatedKeyXor((char*)plaintext, key4, (char*)ciphertext4);
   repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
 
-  // Find the keys
+  // Find the keys, default max key length defined in findKeyLength
   int guess_key1 = findKeyLength(ciphertext1, l_ciphertext);
   int guess_key2 = findKeyLength(ciphertext2, l_ciphertext);
   int guess_key3 = findKeyLength(ciphertext3, l_ciphertext);
   int guess_key4 = findKeyLength(ciphertext4, l_ciphertext);
 
-  // For this one with set the max length to guess to 'l_ciphertext'
-  int guess_key5 = findKeyLength(ciphertext5, l_ciphertext, len_key5 + 10);
+  // We use a custom max key length for bigger values.
+  int guess_key5 = findKeyLength(ciphertext5, l_ciphertext, len_key5 + 1);
 
   // Verifications.
   assert(len_key1 == guess_key1);
   assert(len_key2 == guess_key2);
   assert(len_key3 == guess_key3);
   assert(len_key4 == guess_key4);
+  assert(len_key5 == guess_key5);
 
   cout << "\nKEYSIZE: " << len_key5 << endl;
   cout << "Guessed KEYSIZE: " << guess_key5 << endl;
