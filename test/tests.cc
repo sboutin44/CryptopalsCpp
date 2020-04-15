@@ -37,9 +37,9 @@ void testInsertionSort() {
 void testIndexOfCoincidence() {
   // Load an english text.
   int N1, N2, N3, N4, N5, N6, N7;
-  const char* filename1 = "resources/aliceadventures.txt";
-  const char* filename2 = "resources/dummy_text.txt";
-  const char* filename3 = "resources/gpl-3.0.txt";
+  const char* filename1 = "resources/s1.txt";  // About 3700 characters
+  const char* filename2 = "resources/s2.txt";
+  const char* filename3 = "resources/s3.txt";
   const char* filename4 = "resources/earth.txt";
   const char* filename5 = "resources/history.txt";
   const char* filename6 = "resources/michael.txt";
@@ -51,6 +51,9 @@ void testIndexOfCoincidence() {
   // cout << indexOfCoincidence_(text1, N1) << endl;
   // cout << indexOfCoincidence_(text2, N2) << endl;
   // cout << indexOfCoincidence_(text3, N3) << endl;
+
+  // Index of coincidence for latin alphabet.
+  cout << " Index of coincidence for latin alphabet." << endl;
   printf("%f\n",
          indexOfCoincidence_((uint8_t*)read_text_file(filename1, &N1), N1));
   printf("%f\n",
@@ -65,4 +68,29 @@ void testIndexOfCoincidence() {
          indexOfCoincidence_((uint8_t*)read_text_file(filename6, &N6), N6));
   printf("%f\n",
          indexOfCoincidence_((uint8_t*)read_text_file(filename7, &N7), N7));
+
+  // Index of coincidence for "ASCII" alphabet.
+  cout << " Index of coincidence for ASCII alphabet." << endl;
+  printf("%f\n",
+         indexOfCoincidence((uint8_t*)read_text_file(filename1, &N1), N1));
+  printf("%f\n",
+         indexOfCoincidence((uint8_t*)read_text_file(filename2, &N2), N2));
+  printf("%f\n",
+         indexOfCoincidence((uint8_t*)read_text_file(filename3, &N3), N3));
+  printf("%f\n",
+         indexOfCoincidence((uint8_t*)read_text_file(filename4, &N4), N4));
+  printf("%f\n",
+         indexOfCoincidence((uint8_t*)read_text_file(filename5, &N5), N5));
+  printf("%f\n",
+         indexOfCoincidence((uint8_t*)read_text_file(filename6, &N6), N6));
+  printf("%f\n",
+         indexOfCoincidence((uint8_t*)read_text_file(filename7, &N7), N7));
+
+  // cout << "N1: " << N1 << endl;
+  // cout << "N2: " << N2 << endl;
+  // cout << "N3: " << N3 << endl;
+  // cout << "N4: " << N4 << endl;
+  // cout << "N5: " << N5 << endl;
+  // cout << "N6: " << N6 << endl;
+  // cout << "N7: " << N7 << endl;
 }

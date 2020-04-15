@@ -303,7 +303,7 @@ float indexOfCoincidence_(uint8_t* s, int len) {
     sum += n_i * (n_i - 1);
   }
 
-  I = sum / (N * (N - 1)) * c;
+  I = sum / (N * (N - 1));  //'* c;
 
   return I;
 }
@@ -317,7 +317,7 @@ float indexOfCoincidence(uint8_t* s, int len) {
 
   float sum = 0;
   float I = 0.;
-  float c = 26.;
+  float c = 256.;
   float N = (float)len;
 
   for (int letter = 0; letter < 256; letter++) {
@@ -330,21 +330,33 @@ float indexOfCoincidence(uint8_t* s, int len) {
     sum += n_i * (n_i - 1);
   }
 
-  I = sum / (N * (N - 1)) * c;
+  I = sum / (N * (N - 1));  //* c;
 
   return I;
+}
+
+float friedmanTest(uint8_t* s, int len) {
+  // Reference index for ASCII alphabet computed from custom enlgish texts.
+  float I_ref = 0.062;
+  float I = indexOfCoincidence(s, len);
+  float N = 256.;
+  float n = (float)len;
+
+  float res = ((I_ref - 1. / N) * n) / ((n - 1) * I - n / N + I_ref);
+
+  return res;
 }
 
 void testChallenge6() {
   // Test with my own plain text and key.
 
   int l;  // lenght of the cipher.
-  const char* filename = "resources/aliceadventures.txt";
+  const char* filename = "resources/s1.txt";
   // const char* filename = "resources/dummy_text.txt";
   uint8_t* plaintext = (uint8_t*)read_text_file(filename, &l);
 
   // encryt my own text:
-  const char* key = "ABCDEFG";
+  const char* key = "ABCDEFGH";
   uint8_t* ciphertext = new uint8_t[l];
   repeatedKeyXor((char*)plaintext, key, (char*)ciphertext);
   printf("\n");
@@ -353,48 +365,52 @@ void testChallenge6() {
   printf("My plaintext ratioNonPrintChars: %f\n",
          ratioNonPrintChars(ciphertext, l));
 
+  // friedmanTest
+  cout << "friedmanTest: " << friedmanTest(ciphertext, l) << endl;
+
   // 1)
-  map<float, int> m;
-  int d;
-  float n;
-  int keylen_start = 2;
-  int keylen_end = 40;
-  int nb_keys = keylen_end - keylen_start + 1;
-  int pos = 0;  // To browse norm_distances
-  float* norm_distances = new float[nb_keys];
-  int KEYSIZE;
 
-  for (KEYSIZE = keylen_start; KEYSIZE < keylen_end; KEYSIZE++) {
-    int multiple = -1;
-
-    for (int offset = 0; offset < keylen_end - KEYSIZE;
-         offset = offset + KEYSIZE) {
-      int nb_distances = l;  // KEYSIZE;
-      int* distances = new int[nb_distances];
-      // for (int j = 1; j < nb_distances; j++) {
-      for (int j = 1; j < l - KEYSIZE; j++) {
-        multiple = offset + KEYSIZE + j;
-
-        // d = hammingDistance(&ciphertext[offset],
-        //                     &ciphertext[offset + j * KEYSIZE], KEYSIZE);
-        distances[j] = d;
-
-        if (d == 0) {
-          cout << "KEYSIZEs for d = 0: " << KEYSIZE << endl;
-        }
-      }
-      int min = distances[1];
-
-      n = (float)min / KEYSIZE;
-      m[n] = KEYSIZE;                  // Map normalised_KEYSIZE -> KEYSIZE
-      norm_distances[pos] = (float)n;  // To sort the normalised KEYSIZE.
-      pos++;
-      // assert(pos < nb_keys);
-
-      delete[] distances;
-    }
-  }
-  insertion_sort(norm_distances, nb_keys - 1);
+  // map<float, int> m;
+  // int d;
+  // float n;
+  // int keylen_start = 2;
+  // int keylen_end = 40;
+  // int nb_keys = keylen_end - keylen_start + 1;
+  // int pos = 0;  // To browse norm_distances
+  // float* norm_distances = new float[nb_keys];
+  // int KEYSIZE;
+  //
+  // for (KEYSIZE = keylen_start; KEYSIZE < keylen_end; KEYSIZE++) {
+  //   int multiple = -1;
+  //
+  //   for (int offset = 0; offset < keylen_end - KEYSIZE;
+  //        offset = offset + KEYSIZE) {
+  //     int nb_distances = l;  // KEYSIZE;
+  //     int* distances = new int[nb_distances];
+  //     // for (int j = 1; j < nb_distances; j++) {
+  //     for (int j = 1; j < l - KEYSIZE; j++) {
+  //       multiple = offset + KEYSIZE + j;
+  //
+  //       // d = hammingDistance(&ciphertext[offset],
+  //       //                     &ciphertext[offset + j * KEYSIZE], KEYSIZE);
+  //       distances[j] = d;
+  //
+  //       if (d == 0) {
+  //         cout << "KEYSIZEs for d = 0: " << KEYSIZE << endl;
+  //       }
+  //     }
+  //     int min = distances[1];
+  //
+  //     n = (float)min / KEYSIZE;
+  //     m[n] = KEYSIZE;                  // Map normalised_KEYSIZE -> KEYSIZE
+  //     norm_distances[pos] = (float)n;  // To sort the normalised KEYSIZE.
+  //     pos++;
+  //     // assert(pos < nb_keys);
+  //
+  //     delete[] distances;
+  //   }
+  // }
+  // insertion_sort(norm_distances, nb_keys - 1);
 
   // Display a few possible key sizes:
   for (int i = 0; i < 7; i++) {
@@ -442,13 +458,21 @@ void challenge_6() {
   cout << "------------------------------------\n" << endl;
 
   // TestHammingDistance();
-  int l_text;  // lenght of the cipher.
+  int l_ciphertext;  // lenght of the cipher.
   int l;
-  uint8_t* ciphertext = (uint8_t*)read_text_file("resources/6_decoded.txt", &l);
-  //  char* base64ed_encrypted_text = read_text_file("resources/6.txt",
-  //  &l_text); uint8_t* ciphertext = base64Decode(base64ed_encrypted_text,
-  //  l_text);
-  // uint8_t* ciphertext = base64Decode(base64ed_encrypted_text, l_text, &l);
+  // uint8_t* ciphertext = (uint8_t*)read_text_file("resources/6_decoded.txt",
+  // &l);
+
+  char* base64ed_encrypted_text =
+      read_text_file("resources/6.txt", &l_ciphertext);
+  uint8_t* ciphertext = base64Decode(base64ed_encrypted_text, l_ciphertext);
+  // uint8_t* ciphertext = base64Decode(base64ed_encrypted_text, l_ciphertext,
+  // &l);
+
+  cout << "------------------------------" << endl;
+  cout << l << endl;
+  cout << l_ciphertext << endl;
+  cout << "------------------------------" << endl;
 
   // int l_dec;
   // uint8_t* tttt = (uint8_t*)read_text_file("resources/6_decoded.txt",
@@ -545,7 +569,7 @@ void challenge_6() {
       blocks[block_num][i] = ciphertext[block_num + KEYSIZE * i];
   }
 
-  singlebyteXORattackWithFrequencyScore(blocks[2], p, .40);
+  // singlebyteXORattackWithFrequencyScore(blocks[2], p, .40);
 
   //}
   // Try to decrypt:

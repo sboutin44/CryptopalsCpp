@@ -76,6 +76,7 @@ int countNonPrintableChars(uint8_t* s, int size);
 float ratioNonPrintChars(uint8_t* s, int size);
 
 // Challenge 6
+float friedmanTest(uint8_t* s, int len);
 
 // Tests functions:
 void histogramFromPlaintext();
