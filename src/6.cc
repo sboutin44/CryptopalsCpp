@@ -121,7 +121,7 @@ int occurence(const char* s, char myChar) {
 }
 
 int occurence(uint8_t* s, char myChar, int length) {
-  /** Occurence of a character in a random byte string.  */
+  /** Occurrence of a character in a random byte string.  */
 
   int occ = 0;
   char current = tolower(s[0]);
@@ -282,9 +282,9 @@ int occurence_byte(uint8_t* s, uint8_t myChar, int length) {
 }
 
 float indexOfCoincidence_(uint8_t* s, int len) {
-  /** Returns the indexOfCoincidence over the latin alphabet.
+  /** Returns the indexOfCoincidence over the Latin alphabet.
    *
-   * Since encrpytion here is based on single-byte XOR, our alphabet is made of
+   * Since encryption here is based on single-byte XOR, our alphabet is made of
    * 256 possibilities.
    */
 
@@ -292,7 +292,7 @@ float indexOfCoincidence_(uint8_t* s, int len) {
   float I = 0.;
   float c = 26.;
 
-  // Count only latin chars out of the total len:
+  // Count only Latin chars out of the total length:
   int nb_latin_chars = 0;
   for (int j = 0; j < len; j++) {
     char currentChar = s[j];
@@ -307,7 +307,7 @@ float indexOfCoincidence_(uint8_t* s, int len) {
     // letter defined as int to prevent an infinite loop.
     float n_i = (float)occurence((uint8_t*)s, (char)letter, N);
 
-    // Sum occurences of all letters.
+    // Sum occurrences of all letters.
     sum += n_i * (n_i - 1);
   }
 
@@ -319,7 +319,7 @@ float indexOfCoincidence_(uint8_t* s, int len) {
 float indexOfCoincidence(uint8_t* s, int len) {
   /** Returns the indexOfCoincidence for a string over the "ASCII" alphabet.
    *
-   * Since encrpytion here is based on single-byte XOR, our alphabet is made of
+   * Since encryption here is based on single-byte XOR, our alphabet is made of
    * 256 possibilities.
    */
 
@@ -334,7 +334,7 @@ float indexOfCoincidence(uint8_t* s, int len) {
 
     float n_i = (float)occurence_byte((uint8_t*)s, (uint8_t)letter, N);
 
-    // Sum occurences of all letters.
+    // Sum occurrences of all letters.
     sum += n_i * (n_i - 1);
   }
 
@@ -344,7 +344,7 @@ float indexOfCoincidence(uint8_t* s, int len) {
 }
 
 float friedmanTest(uint8_t* s, int len) {
-  // Reference index for ASCII alphabet computed from custom enlgish texts.
+  // Reference index for ASCII alphabet computed from custom english texts.
   float I_ref = 0.045;
   float I = indexOfCoincidence(s, len);
   float N = 256.;
