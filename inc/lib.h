@@ -78,7 +78,6 @@ float ratioNonPrintChars(uint8_t* s, int size);
 void histogram(const char* text, int len);
 void histogram2(const char* text, int len);
 float friedmanTest(uint8_t* s, int len);
-int findKeyLength(uint8_t* ciphertext, int len);
 int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 
 // Tests functions:

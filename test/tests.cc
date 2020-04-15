@@ -69,54 +69,27 @@ void testHistogram() {
 void testIndexOfCoincidence() {
   // Load an english text.
   int N1, N2, N3, N4, N5, N6, N7;
-  const char* filename1 = "resources/s1.txt";  // About 3700 characters
+  const char* filename1 = "resources/s1.txt";
   const char* filename2 = "resources/s2.txt";
   const char* filename3 = "resources/s3.txt";
-  const char* filename4 = "resources/sMax.txt";
-  const char* filename5 = "resources/history.txt";
-  const char* filename6 = "resources/michael.txt";
-  const char* filename7 = "resources/united_states.txt";
+  const char* filename4 = "resources/united_states.txt";
 
-  // float I1 = indexOfCoincidence(text1, N);
-  // float I2 = indexOfCoincidence(text2, N);
+  uint8_t* text1 = (uint8_t*)read_text_file(filename1, &N1);
+  uint8_t* text2 = (uint8_t*)read_text_file(filename2, &N2);
+  uint8_t* text3 = (uint8_t*)read_text_file(filename3, &N3);
+  uint8_t* text4 = (uint8_t*)read_text_file(filename4, &N4);
 
-  // cout << indexOfCoincidence_(text1, N1) << endl;
-  // cout << indexOfCoincidence_(text2, N2) << endl;
-  // cout << indexOfCoincidence_(text3, N3) << endl;
+  float I1 = indexOfCoincidence(text1, N1);
+  float I2 = indexOfCoincidence(text2, N2);
+  float I3 = indexOfCoincidence(text3, N3);
+  float I4 = indexOfCoincidence(text4, N4);
 
-  // Index of coincidence for latin alphabet.
-  cout << " Index of coincidence for latin alphabet." << endl;
-  printf("%f\n",
-         indexOfCoincidence_((uint8_t*)read_text_file(filename1, &N1), N1));
-  printf("%f\n",
-         indexOfCoincidence_((uint8_t*)read_text_file(filename2, &N2), N2));
-  printf("%f\n",
-         indexOfCoincidence_((uint8_t*)read_text_file(filename3, &N3), N3));
-  printf("%f\n",
-         indexOfCoincidence_((uint8_t*)read_text_file(filename4, &N4), N4));
-  printf("%f\n",
-         indexOfCoincidence_((uint8_t*)read_text_file(filename5, &N5), N5));
-  printf("%f\n",
-         indexOfCoincidence_((uint8_t*)read_text_file(filename6, &N6), N6));
-  printf("%f\n",
-         indexOfCoincidence_((uint8_t*)read_text_file(filename7, &N7), N7));
+  cout << indexOfCoincidence_(text1, N1) << endl;
+  cout << indexOfCoincidence_(text2, N2) << endl;
+  cout << indexOfCoincidence_(text3, N3) << endl;
+  cout << indexOfCoincidence_(text4, N4) << endl;
 
-  // Index of coincidence for "ASCII" alphabet.
-  cout << " Index of coincidence for ASCII alphabet." << endl;
-  printf("%f\n",
-         indexOfCoincidence((uint8_t*)read_text_file(filename1, &N1), N1));
-  printf("%f\n",
-         indexOfCoincidence((uint8_t*)read_text_file(filename2, &N2), N2));
-  printf("%f\n",
-         indexOfCoincidence((uint8_t*)read_text_file(filename3, &N3), N3));
-  printf("%f\n",
-         indexOfCoincidence((uint8_t*)read_text_file(filename4, &N4), N4));
-  printf("%f\n",
-         indexOfCoincidence((uint8_t*)read_text_file(filename5, &N5), N5));
-  printf("%f\n",
-         indexOfCoincidence((uint8_t*)read_text_file(filename6, &N6), N6));
-  printf("%f\n",
-         indexOfCoincidence((uint8_t*)read_text_file(filename7, &N7), N7));
+  cout << "testIndexOfCoincidence passed" << endl;
 }
 
 void testFindKeyLength() {
@@ -156,10 +129,11 @@ void testFindKeyLength() {
   repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
 
   // Find the keys, default max key length defined in findKeyLength
-  int guess_key1 = findKeyLength(ciphertext1, l_ciphertext);
-  int guess_key2 = findKeyLength(ciphertext2, l_ciphertext);
-  int guess_key3 = findKeyLength(ciphertext3, l_ciphertext);
-  int guess_key4 = findKeyLength(ciphertext4, l_ciphertext);
+  int maxKeysizeTried = 100;
+  int guess_key1 = findKeyLength(ciphertext1, l_ciphertext, maxKeysizeTried);
+  int guess_key2 = findKeyLength(ciphertext2, l_ciphertext, maxKeysizeTried);
+  int guess_key3 = findKeyLength(ciphertext3, l_ciphertext, maxKeysizeTried);
+  int guess_key4 = findKeyLength(ciphertext4, l_ciphertext, maxKeysizeTried);
 
   // We use a custom max key length for bigger values.
   int guess_key5 = findKeyLength(ciphertext5, l_ciphertext, len_key5 + 1);
@@ -171,6 +145,5 @@ void testFindKeyLength() {
   assert(len_key4 == guess_key4);
   assert(len_key5 == guess_key5);
 
-  cout << "\nKEYSIZE: " << len_key5 << endl;
-  cout << "Guessed KEYSIZE: " << guess_key5 << endl;
+  cout << "testFindKeyLength passed" << endl;
 }

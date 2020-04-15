@@ -290,11 +290,6 @@ void testChallenge6() {
   }
 }
 
-int findKeyLength(uint8_t* ciphertext, int len) {
-  int maxKeysize = 100;
-  return findKeyLength(ciphertext, len, maxKeysize);
-}
-
 int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
   /** Find the length of the key of a ciphertext.
    *
