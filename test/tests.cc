@@ -131,14 +131,15 @@ void testFindKeyLength() {
   const char* key4 = "terminator X: the return What is your name?";
 
   // Bigger keys
-  // const char* key5 = new char[l_plaintext];
-  // memcpy((uint8_t*)key5, plaintext, l_plaintext - 1);
+
+  int len_key5 = 1000;
+  const char* key5 = new char[len_key5];
+  memcpy((uint8_t*)key5, plaintext, len_key5);
 
   int len_key1 = strlen(key1);
   int len_key2 = strlen(key2);
   int len_key3 = strlen(key3);
   int len_key4 = strlen(key4);
-  int len_key5 = l_plaintext - 1;
 
   int l_ciphertext = l_plaintext;
   uint8_t* ciphertext1 = new uint8_t[l_ciphertext];
@@ -152,7 +153,7 @@ void testFindKeyLength() {
   repeatedKeyXor((char*)plaintext, key2, (char*)ciphertext2);
   repeatedKeyXor((char*)plaintext, key3, (char*)ciphertext3);
   repeatedKeyXor((char*)plaintext, key4, (char*)ciphertext4);
-  // repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
+  repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
 
   // Find the keys
   int guess_key1 = findKeyLength(ciphertext1, l_ciphertext);
@@ -161,16 +162,14 @@ void testFindKeyLength() {
   int guess_key4 = findKeyLength(ciphertext4, l_ciphertext);
 
   // For this one with set the max length to guess to 'l_ciphertext'
-  int guess_key5 = findKeyLength(ciphertext5, l_ciphertext, l_ciphertext);
+  int guess_key5 = findKeyLength(ciphertext5, l_ciphertext, len_key5 + 10);
 
-  cout << "\nKEYSIZE: " << len_key1 << endl;
-  cout << "Guessed KEYSIZE: " << guess_key1 << endl;
-  cout << "\nKEYSIZE: " << len_key2 << endl;
-  cout << "Guessed KEYSIZE: " << guess_key2 << endl;
-  cout << "\nKEYSIZE: " << len_key3 << endl;
-  cout << "Guessed KEYSIZE: " << guess_key3 << endl;
-  cout << "\nKEYSIZE: " << len_key4 << endl;
-  cout << "Guessed KEYSIZE: " << guess_key4 << endl;
-  //  cout << "\nKEYSIZE: " << len_key5 << endl;
-  //  cout << "Guessed KEYSIZE: " << guess_key5 << endl;
+  // Verifications.
+  assert(len_key1 == guess_key1);
+  assert(len_key2 == guess_key2);
+  assert(len_key3 == guess_key3);
+  assert(len_key4 == guess_key4);
+
+  cout << "\nKEYSIZE: " << len_key5 << endl;
+  cout << "Guessed KEYSIZE: " << guess_key5 << endl;
 }
