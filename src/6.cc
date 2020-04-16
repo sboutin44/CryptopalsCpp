@@ -321,11 +321,10 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
     }
 
     float I = indexOfCoincidence(blocks[1], p);
-    if (I > 0.060) {
-      //      cout << "KEYSIZE: " << KEYSIZE << " Ic = " << I << endl;
-      return KEYSIZE;
-    }
+    if (I > 0.060) return KEYSIZE;
   }
+
+  return -1;
 }
 
 void challenge_6() {
