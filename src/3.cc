@@ -67,12 +67,8 @@ void load_dictionary(const char* filename) {
   }
 }
 
-int englishScore2(const char* sentence, int length) {
+int englishScore(const char* sentence, int length) {
   int score = 0;
-
-  // Check dictionary is loaded.
-  // if (dictionary.empty() == true)
-  // load_dictionary("google_10000_english.txt");
 
   // Locate a possible word in the sentence:
   int pos1 = 0;
@@ -108,7 +104,6 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
   int key = 0;
   int score = 0;
   int maxScore = 0;
-  // char* plaintext;
 
   // Brut force attack of single-byte XOR
   for (int candidate_key = 0; candidate_key <= 0xFF; candidate_key++) {
@@ -121,16 +116,7 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
       delete[] deciphered;
       continue;
     }
-
-    // cout << "key: " << candidate_key << endl;
-    score = englishScore2((char*)deciphered, size);
-
-    // if (score > maxScore) {
-    //   maxScore = score;
-    //   key = candidate_key;
-    //   plaintext = (char*)malloc (sizeof(char) * size);
-    //   strncpy(plaintext,(char*)deciphered,size);
-    // }
+    score = englishScore((char*)deciphered, size);
 
     // Display the plaintext
     if (score >= thresold) {
@@ -140,19 +126,11 @@ uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold) {
 
       putchar('\n');
       for (int j = 0; j < size; j++) printf("%c", deciphered[j]);
-      // printf("%s\n", deciphered);
 
       key = candidate_key;
     }
     delete[] deciphered;
   }
-
-  // Display the best score:
-  // Display the plaintext
-  // cout << "maxScore: " << maxScore << endl;
-  // cout << "Key:" << key << endl;
-  //  cout << plaintext << endl;
-  // printf("%s\n", deciphered );
 
   delete[] expandedKey;
 
@@ -198,7 +176,6 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
 
     cout << "key: " << candidate_key;
     histogram((char*)deciphered, size);
-    // plot_frequencies((char*)deciphered);
     cout << endl;
 
     delete[] deciphered;
@@ -209,23 +186,6 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
   cout << "Skipped " << nonPrintableStrings << " strings with more than "
        << std::fixed << setprecision(0) << nonPrintableRatio * 100
        << "% of non-printable elements." << endl;
-  // return key;
-}
-
-void histogramFromPlaintext() {
-  int len;
-  const char* text = read_text_file("resources/dummy_text.txt", &len);
-  histogram(text, len);
-}
-
-void challenge_3_withFrequencies() {
-  uint8_t toDecrypt[] = {0x1b, 0x37, 0x37, 0x33, 0x31, 0x36, 0x3f, 0x78, 0x15,
-                         0x1b, 0x7f, 0x2b, 0x78, 0x34, 0x31, 0x33, 0x3d, 0x78,
-                         0x39, 0x78, 0x28, 0x37, 0x2d, 0x36, 0x3c, 0x78, 0x37,
-                         0x3e, 0x78, 0x3a, 0x39, 0x3b, 0x37, 0x36};
-
-  int size = sizeof(toDecrypt);
-  singlebyteXORattackWithFrequencyScore(toDecrypt, size, 0.00);
 }
 
 void challenge_3() {
@@ -242,11 +202,5 @@ void challenge_3() {
   int thresold = 3;
   int size = sizeof(toDecrypt);
 
-  int key = singlebyteXORattack(toDecrypt, size, thresold);
-
-  uint8_t* expandedKey = new uint8_t[size];
-  memset(expandedKey, (uint8_t)key, size);
-  // cout << myXOR(toDecrypt, expandedKey, size) << endl;
-
-  delete[] expandedKey;
+  singlebyteXORattack(toDecrypt, size, thresold);
 }
