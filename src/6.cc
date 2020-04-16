@@ -219,7 +219,7 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
     }
 
     float I = indexOfCoincidence(blocks[0], p);
-    cout << I << endl;
+    // cout << I << endl;
     if (I > 0.050) return KEYSIZE;
   }
 
@@ -287,7 +287,7 @@ void challenge_6() {
       blocks[block_num][i] = ciphertext[block_num + KEYSIZE * i];
   }
 
-  // Example of histogram with the 2nd letter...key is 101
+  // The key for this block is 101 = 'e'
   singlebyteXORattackWithFrequencyScore(blocks[1], p, .5);
 
   // ... we try for the remaing blocks and we have the key:
