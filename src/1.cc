@@ -129,22 +129,13 @@ uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
   return output_length;
 }
 
-uint8_t* base64Decode(uint8_t* input, int size, uint8_t* out) {
-  int padding = 0;
+uint8_t* base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
   uint8_t a, b, c, d;
-  // Padding ?
-  if (input[size - 1] == '=') {
-    padding = 1;
-    if (input[size - 2] == '=') padding = 2;
-  }
-
-  // Set the output size
-  int output_length = getDecodedTextSize(input, (uint64_t)size, &padding);
+  // Get Padding
+  int padding = 0;
+  getDecodedTextSize(input, size, &padding);
 
   int output_position = 0;  // track the position in the output array.
-
-  uint8_t* output = new uint8_t[output_length + 1];  // +1 for the \0 character.
-
   for (int i = 0; i < (size - (size - padding) % 4); i += 4) {
     assert(i < size);
     a = base64.find((char)input[i]);
@@ -166,10 +157,6 @@ uint8_t* base64Decode(uint8_t* input, int size, uint8_t* out) {
   if (padding == 1) {
     output[output_position - 1] = '\0';
   }
-
-  output[output_position++] = '\0';
-
-  memcpy(out, output, getDecodedTextSize(input, (uint64_t)size));
   return output;
 }
 

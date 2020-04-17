@@ -86,7 +86,7 @@ void testBase64Encode() {
   const char* expected_output_9 = "YXN1cmUu";
   const char* expected_output_10 = "c3VyZS4=";
 
-  const char challenge[] = {
+  uint8_t challenge[] = {
       0x49, 0x27, 0x6d, 0x20, 0x6b, 0x69, 0x6c, 0x6c, 0x69, 0x6e, 0x67, 0x20,
       0x79, 0x6f, 0x75, 0x72, 0x20, 0x62, 0x72, 0x61, 0x69, 0x6e, 0x20, 0x6c,
       0x69, 0x6b, 0x65, 0x20, 0x61, 0x20, 0x70, 0x6f, 0x69, 0x73, 0x6f, 0x6e,
@@ -94,6 +94,8 @@ void testBase64Encode() {
   const char* expected =
       "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
   int size_challenge = sizeof(challenge);
+  uint64_t encoded_challenge_size = getEncodedSize(challenge, size_challenge);
+  uint8_t* encoded_challenge = new uint8_t[encoded_challenge_size];
 
   base64Encode((uint8_t*)input_1, size_input1, input1_encoded);
   base64Encode((uint8_t*)input_2, size_input2, input2_encoded);
@@ -105,6 +107,7 @@ void testBase64Encode() {
   base64Encode((uint8_t*)input_8, size_input8, input8_encoded);
   base64Encode((uint8_t*)input_9, size_input9, input9_encoded);
   base64Encode((uint8_t*)input_10, size_input10, input10_encoded);
+  base64Encode((uint8_t*)challenge, size_challenge, encoded_challenge);
 
   // Encoding tests
   assert(memcmp(input1_encoded, expected_output_1, strlen(expected_output_1)) ==
@@ -127,6 +130,7 @@ void testBase64Encode() {
          0);
   assert(memcmp(input10_encoded, expected_output_10,
                 strlen(expected_output_10)) == 0);
+  assert(memcmp(encoded_challenge, expected, strlen(expected)) == 0);
 
   cout << "testBase64Encode passed" << endl;
 }
@@ -186,58 +190,75 @@ void testBase64Decode() {
   const char* encoded_9 = "YXN1cmUu";
   const char* encoded_10 = "c3VyZS4=";
 
-  const char challenge[] = {
+  // Base64 Decoding Tests
+  uint8_t* decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_1, size_input1_decoded)];
+  base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
+  assert(memcmp((uint8_t*)input_1, decoded, size_input1_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_2, size_input2_decoded)];
+  base64Decode((uint8_t*)encoded_2, strlen(encoded_2), decoded);
+  assert(memcmp((uint8_t*)input_2, decoded, size_input2_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_3, size_input3_decoded)];
+  base64Decode((uint8_t*)encoded_3, strlen(encoded_3), decoded);
+  assert(memcmp((uint8_t*)input_3, decoded, size_input3_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_4, size_input4_decoded)];
+  base64Decode((uint8_t*)encoded_4, strlen(encoded_4), decoded);
+  assert(memcmp((uint8_t*)input_4, decoded, size_input4_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_5, size_input5_decoded)];
+  base64Decode((uint8_t*)encoded_5, strlen(encoded_5), decoded);
+  assert(memcmp((uint8_t*)input_5, decoded, size_input5_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_6, size_input6_decoded)];
+  base64Decode((uint8_t*)encoded_6, strlen(encoded_6), decoded);
+  assert(memcmp((uint8_t*)input_6, decoded, size_input6_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_7, size_input7_decoded)];
+  base64Decode((uint8_t*)encoded_7, strlen(encoded_7), decoded);
+  assert(memcmp((uint8_t*)input_7, decoded, size_input7_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_8, size_input8_decoded)];
+  base64Decode((uint8_t*)encoded_8, strlen(encoded_8), decoded);
+  assert(memcmp((uint8_t*)input_8, decoded, size_input8_decoded) == 0);
+  delete[] decoded;
+
+  decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)input_9, size_input9_decoded)];
+  base64Decode((uint8_t*)encoded_9, strlen(encoded_9), decoded);
+  assert(memcmp((uint8_t*)input_9, decoded, size_input9_decoded) == 0);
+  delete[] decoded;
+
+  uint8_t challenge[] = {
       0x49, 0x27, 0x6d, 0x20, 0x6b, 0x69, 0x6c, 0x6c, 0x69, 0x6e, 0x67, 0x20,
       0x79, 0x6f, 0x75, 0x72, 0x20, 0x62, 0x72, 0x61, 0x69, 0x6e, 0x20, 0x6c,
       0x69, 0x6b, 0x65, 0x20, 0x61, 0x20, 0x70, 0x6f, 0x69, 0x73, 0x6f, 0x6e,
       0x6f, 0x75, 0x73, 0x20, 0x6d, 0x75, 0x73, 0x68, 0x72, 0x6f, 0x6f, 0x6d};
   const char* expected =
       "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+  int size_expected = strlen(expected);
   int size_challenge = sizeof(challenge);
 
-  // Base64 Decoding Tests
-  uint8_t* decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_1, size_input1_decoded)];
-  base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
-  assert(strcmp(input_1, (char*)decoded) == 0);
-  delete[] decoded;
-
-  // TODO: readd
-  // decoded = base64Decode(expected_output_2, strlen(expected_output_2));
-  // assert(strcmp(input_2, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // decoded = base64Decode(expected_output_3, strlen(expected_output_3));
-  // assert(strcmp(input_3, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // decoded = base64Decode(expected_output_4, strlen(expected_output_4));
-  // assert(strcmp(input_4, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // decoded = base64Decode(expected_output_5, strlen(expected_output_5));
-  // assert(strcmp(input_5, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // decoded = base64Decode(expected_output_6, strlen(expected_output_6));
-  // assert(strcmp(input_6, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // decoded = base64Decode(expected_output_7, strlen(expected_output_7));
-  // assert(strcmp(input_7, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // decoded = base64Decode(expected_output_8, strlen(expected_output_8));
-  // assert(strcmp(input_8, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // decoded = base64Decode(expected_output_9, strlen(expected_output_9));
-  // assert(strcmp(input_9, (char*)decoded) == 0);
-  // delete[] decoded;
-
-  // TODO: readd
-  //  char* result = base64Encode(challenge, size_challenge);
-  //  assert(strcmp(result, expected) == 0);
+  uint8_t* challenge_decoded =
+      new uint8_t[getDecodedTextSize((uint8_t*)expected, size_expected)];
+  base64Decode((uint8_t*)expected, size_expected, challenge_decoded);
+  assert(memcmp(challenge_decoded, challenge, size_challenge) == 0);
 
   cout << "testBase64Decode passed" << endl;
 }
