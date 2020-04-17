@@ -55,12 +55,14 @@ char* read_text_file(const char* filename, int* length) {
     file.read(out, *length);
   } catch (ios::iostate filestate) {
     if (filestate == ios::failbit) {
-      cout << "failbit" << endl;
+      cerr << "failbit" << endl;
     }
 
     if (filestate == ios::badbit) {
-      cout << "badbit" << endl;
+      cerr << "badbit" << endl;
     }
+    cerr << "Failed to open file '" << filename << "'"  << endl;
+    exit(EXIT_FAILURE);
   }
   return out;
 }
