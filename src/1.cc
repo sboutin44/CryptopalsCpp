@@ -110,7 +110,7 @@ void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* output) {
 
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size) {
   int padding = 0;
-  getDecodedTextSize(input, size, &padding);
+  return getDecodedTextSize(input, size, &padding);
 }
 
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
@@ -129,12 +129,12 @@ uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
   return output_length;
 }
 
-uint8_t* base64Decode(const char* input, int size) {
+uint8_t* base64Decode(uint8_t* input, int size) {
   int sizeOut = 0;
   return base64Decode(input, size, &sizeOut);
 }
 
-uint8_t* base64Decode(const char* input, int size, int* sizeOut) {
+uint8_t* base64Decode(uint8_t* input, int size, int* sizeOut) {
   int padding = 0;
   uint8_t a, b, c, d;
   // Padding ?
@@ -144,8 +144,7 @@ uint8_t* base64Decode(const char* input, int size, int* sizeOut) {
   }
 
   // Set the output size
-  int output_length =
-      getDecodedTextSize((uint8_t*)input, (uint64_t)size, &padding);
+  int output_length = getDecodedTextSize(input, (uint64_t)size, &padding);
 
   int output_position = 0;  // track the position in the output array.
 
@@ -155,10 +154,10 @@ uint8_t* base64Decode(const char* input, int size, int* sizeOut) {
 
   for (int i = 0; i < (size - (size - padding) % 4); i += 4) {
     assert(i < size);
-    a = base64.find(input[i]);
-    b = base64.find(input[i + 1]);
-    c = base64.find(input[i + 2]);
-    d = base64.find(input[i + 3]);
+    a = base64.find((char)input[i]);
+    b = base64.find((char)input[i + 1]);
+    c = base64.find((char)input[i + 2]);
+    d = base64.find((char)input[i + 3]);
 
     output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
     output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
