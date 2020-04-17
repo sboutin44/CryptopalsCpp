@@ -108,9 +108,12 @@ void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* output) {
   }
 }
 
+uint64_t getDecodedTextSize(uint8_t* input, uint64_t size) {
+  int padding = 0;
+  getDecodedTextSize(input, size, &padding);
+}
+
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
-  // int padding = 0;
-  // Padding ?
   if (input[size - 1] == '=') {
     *padding = 1;
     if (input[size - 2] == '=') *padding = 2;
