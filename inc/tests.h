@@ -29,3 +29,5 @@ void testInsertionSort();
 void testIndexOfCoincidence();
 void testHistogram();
 void testFindKeyLength();
+void testBase64Encode();
+void testBase64Decode();

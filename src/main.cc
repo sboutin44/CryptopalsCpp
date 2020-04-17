@@ -56,6 +56,8 @@ void runChallenge(int challenge) {
 }
 
 void runTests() {
+  testBase64Encode();
+  testBase64Decode();
   testHammingDistance();
   testInsertionSort();
   testIndexOfCoincidence();
