@@ -198,7 +198,7 @@ void testBase64Decode() {
   // Base64 Decoding Tests
   uint8_t* decoded =
       new uint8_t[getDecodedTextSize((uint8_t*)input_1, size_input1_decoded)];
-  decoded = base64Decode((uint8_t*)encoded_1, strlen(encoded_1));
+  base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
   assert(strcmp(input_1, (char*)decoded) == 0);
   delete[] decoded;
 
