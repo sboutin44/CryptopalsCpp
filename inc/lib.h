@@ -42,6 +42,7 @@
 #include <ctype.h>
 
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn);
+uint64_t getDecodedTextSize(uint8_t* input, uint64_t size);
 void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* out);
 uint8_t* base64Decode(const char* input, int size);
 uint8_t* base64Decode(const char* input, int size, int* sizeOut);

@@ -108,6 +108,24 @@ void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* output) {
   }
 }
 
+uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
+  // int padding = 0;
+  // Padding ?
+  if (input[size - 1] == '=') {
+    *padding = 1;
+    if (input[size - 2] == '=') *padding = 2;
+  }
+  // Set the output size
+  uint64_t output_length = 0;
+  if (*padding == 1)
+    output_length = (size / 4) * 3 + 2;
+  else if (*padding == 2)
+    output_length = (size / 4) * 3 + 1;
+  else
+    output_length = (size / 4) * 3;
+  return output_length;
+}
+
 uint8_t* base64Decode(const char* input, int size) {
   int sizeOut = 0;
   return base64Decode(input, size, &sizeOut);
@@ -123,13 +141,8 @@ uint8_t* base64Decode(const char* input, int size, int* sizeOut) {
   }
 
   // Set the output size
-  int output_length = 0;
-  if (padding == 1)
-    output_length = (size / 4) * 3 + 2;
-  else if (padding == 2)
-    output_length = (size / 4) * 3 + 1;
-  else
-    output_length = (size / 4) * 3;
+  int output_length =
+      getDecodedTextSize((uint8_t*)input, (uint64_t)size, &padding);
 
   int output_position = 0;  // track the position in the output array.
 
