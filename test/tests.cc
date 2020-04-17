@@ -191,62 +191,52 @@ void testBase64Decode() {
   const char* encoded_10 = "c3VyZS4=";
 
   // Base64 Decoding Tests
-  uint8_t* decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_1, size_input1_decoded)];
+  uint8_t* decoded = new uint8_t[size_input1_decoded];
   base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
   assert(memcmp((uint8_t*)input_1, decoded, size_input1_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_2, size_input2_decoded)];
+  decoded = new uint8_t[size_input2_decoded];
   base64Decode((uint8_t*)encoded_2, strlen(encoded_2), decoded);
   assert(memcmp((uint8_t*)input_2, decoded, size_input2_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_3, size_input3_decoded)];
+  decoded = new uint8_t[size_input3_decoded];
   base64Decode((uint8_t*)encoded_3, strlen(encoded_3), decoded);
   assert(memcmp((uint8_t*)input_3, decoded, size_input3_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_4, size_input4_decoded)];
+  decoded = new uint8_t[size_input4_decoded];
   base64Decode((uint8_t*)encoded_4, strlen(encoded_4), decoded);
   assert(memcmp((uint8_t*)input_4, decoded, size_input4_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_5, size_input5_decoded)];
+  decoded = new uint8_t[size_input5_decoded];
   base64Decode((uint8_t*)encoded_5, strlen(encoded_5), decoded);
   assert(memcmp((uint8_t*)input_5, decoded, size_input5_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_6, size_input6_decoded)];
+  decoded = new uint8_t[size_input6_decoded];
   base64Decode((uint8_t*)encoded_6, strlen(encoded_6), decoded);
   assert(memcmp((uint8_t*)input_6, decoded, size_input6_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_7, size_input7_decoded)];
+  decoded = new uint8_t[size_input7_decoded];
   base64Decode((uint8_t*)encoded_7, strlen(encoded_7), decoded);
   assert(memcmp((uint8_t*)input_7, decoded, size_input7_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_8, size_input8_decoded)];
+  decoded = new uint8_t[size_input8_decoded];
   base64Decode((uint8_t*)encoded_8, strlen(encoded_8), decoded);
   assert(memcmp((uint8_t*)input_8, decoded, size_input8_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_9, size_input9_decoded)];
+  decoded = new uint8_t[size_input9_decoded];
   base64Decode((uint8_t*)encoded_9, strlen(encoded_9), decoded);
   assert(memcmp((uint8_t*)input_9, decoded, size_input9_decoded) == 0);
   delete[] decoded;
 
-  decoded =
-      new uint8_t[getDecodedTextSize((uint8_t*)input_10, size_input10_decoded)];
+  decoded = new uint8_t[size_input10_decoded];
   base64Decode((uint8_t*)encoded_10, strlen(encoded_10), decoded);
   assert(memcmp((uint8_t*)input_10, decoded, size_input10_decoded) == 0);
   delete[] decoded;
