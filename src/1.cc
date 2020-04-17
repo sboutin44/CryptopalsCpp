@@ -182,7 +182,23 @@ void challenge_1() {
   //  char* result = base64Encode(challenge, size_challenge);
   //  assert(strcmp(result, expected) == 0);
   //
-  //  cout << result << endl;
+  uint8_t challenge[] = {
+      0x49, 0x27, 0x6d, 0x20, 0x6b, 0x69, 0x6c, 0x6c, 0x69, 0x6e, 0x67, 0x20,
+      0x79, 0x6f, 0x75, 0x72, 0x20, 0x62, 0x72, 0x61, 0x69, 0x6e, 0x20, 0x6c,
+      0x69, 0x6b, 0x65, 0x20, 0x61, 0x20, 0x70, 0x6f, 0x69, 0x73, 0x6f, 0x6e,
+      0x6f, 0x75, 0x73, 0x20, 0x6d, 0x75, 0x73, 0x68, 0x72, 0x6f, 0x6f, 0x6d};
+  const char* expected =
+      "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
+  int size_challenge = sizeof(challenge);
+  uint64_t encoded_challenge_size = getEncodedSize(challenge, size_challenge);
+  uint8_t* encoded_challenge = new uint8_t[encoded_challenge_size];
+  base64Encode((uint8_t*)challenge, size_challenge, encoded_challenge);
+
+  assert(memcmp(encoded_challenge, expected, strlen(expected)) == 0);
+
+  putchar('\n');
+  for (int j = 0; j < encoded_challenge_size; j++)
+    printf("%c", encoded_challenge[j]);
 
   //  delete[] result;
 }
