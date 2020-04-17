@@ -123,7 +123,7 @@ float indexOfCoincidence_(uint8_t* s, int len) {
 
   float sum = 0.;
   float I = 0.;
-  float c = 26.;
+  //  float c = 26.;
 
   // Count only Latin chars out of the total length:
   int nb_latin_chars = 0;
@@ -158,7 +158,7 @@ float indexOfCoincidence(uint8_t* s, int len) {
 
   float sum = 0.;
   float I = 0.;
-  float c = 256.;
+  //  float c = 256.;
   float N = (float)len;
 
   for (int letter = 0; letter < 256; letter++) {
@@ -238,7 +238,7 @@ void challenge_6() {
   cout << "------------------------------------\n" << endl;
 
   // TestHammingDistance();
-  int l_ciphertext;  // lenght of the cipher.
+  //  int l_ciphertext;  // lenght of the cipher.
   int l;
   uint8_t* ciphertext = (uint8_t*)read_text_file("resources/6_decoded.txt", &l);
 

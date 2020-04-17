@@ -61,7 +61,7 @@ char* read_text_file(const char* filename, int* length) {
     if (filestate == ios::badbit) {
       cerr << "badbit" << endl;
     }
-    cerr << "Failed to open file '" << filename << "'"  << endl;
+    cerr << "Failed to open file '" << filename << "'" << endl;
     exit(EXIT_FAILURE);
   }
   return out;
