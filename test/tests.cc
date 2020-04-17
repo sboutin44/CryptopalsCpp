@@ -298,7 +298,7 @@ void testInsertionSort() {
 
 void testHistogram() {
   int N;
-  const char* filename1 = "resources/aliceAdventures.txt";
+  const char* filename1 = "resources/aliceadventures.txt";
   const char* english_text = read_text_file(filename1, &N);
 
   histogram(english_text, N);
