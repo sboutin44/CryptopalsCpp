@@ -40,36 +40,34 @@ void hexDecode(const char* input, uint8_t* out) {
 }
 
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn) {
-  uint64_t size = sizeIn;
   uint64_t output_length;
-  uint8_t padding = size % 3;
+  uint8_t padding = sizeIn % 3;
 
-  // Set the output size
+  // Set the output sizeIn
   if (padding == 0) {
-    output_length = (size / 3) * 4;
+    output_length = (sizeIn / 3) * 4;
   } else {
-    output_length = (size / 3) * 4 + 4;  // For 3 letters, 4 are
-                                         // created, and 4 at the end if padded.
+    output_length =
+        (sizeIn / 3) * 4 + 4;  // For 3 letters, 4 are
+                               // created, and 4 at the end if padded.
   }
   return output_length;
 }
 
-uint8_t* base64Encode(uint8_t* input, int sizeIn /*, uint8_t* out*/) {
+void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* output) {
   /** Encode an input made of raw bytes in base64.
    *
-   * @param input String input treated as raw bytes.
-   * @param size String size.
+   * @param input   Clear byte string.
+   * @param size    Byte string size.
+   * @param output  Encoded byte string.
    */
   int size = sizeIn;
 
   uint8_t a, b, c, d, e, f, g;
   int output_length;  //= getEncodedSize(input,sizeIn);
   int padding = size % 3;
-
-  int outLen = output_length;
   output_length = getEncodedSize(input, sizeIn);
   output_length += 1;  // Terminate the string with the null character.
-  uint8_t* output = new uint8_t[output_length];
 
   // Treat the 3-tuples.
   int output_position = 0;  // track the position in the output array.
@@ -108,11 +106,6 @@ uint8_t* base64Encode(uint8_t* input, int sizeIn /*, uint8_t* out*/) {
     output[output_position++] = '=';
     output[output_position++] = '=';
   }
-
-  output[output_position++] = '\0';
-
-  // memcpy(out,output, getEncodedSize(input, sizeIn)) ;
-  return output;
 }
 
 uint8_t* base64Decode(const char* input, int size) {

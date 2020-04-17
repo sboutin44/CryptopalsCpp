@@ -29,17 +29,6 @@ void testBase64Encode() {
   // Sources of the inputs:
   // https://en.wikipedia.org/wiki/Base64
 
-  uint8_t* res1;
-  uint8_t* res2;
-  uint8_t* res3;
-  uint8_t* res4;
-  uint8_t* res5;
-  uint8_t* res6;
-  uint8_t* res7;
-  uint8_t* res8;
-  uint8_t* res9;
-  uint8_t* res10;
-
   const char* input_1 = "any carnal pleasure.";
   const char* input_2 = "any carnal pleasure";
   const char* input_3 = "any carnal pleasur";
@@ -50,6 +39,41 @@ void testBase64Encode() {
   const char* input_8 = "easure.";
   const char* input_9 = "asure.";
   const char* input_10 = "sure.";
+
+  uint64_t size_input1 = strlen(input_1);
+  uint64_t size_input2 = strlen(input_2);
+  uint64_t size_input3 = strlen(input_3);
+  uint64_t size_input4 = strlen(input_4);
+  uint64_t size_input5 = strlen(input_5);
+  uint64_t size_input6 = strlen(input_6);
+  uint64_t size_input7 = strlen(input_7);
+  uint64_t size_input8 = strlen(input_8);
+  uint64_t size_input9 = strlen(input_9);
+  uint64_t size_input10 = strlen(input_10);
+
+  uint64_t size_input1_encoded = getEncodedSize((uint8_t*)input_1, size_input1);
+  uint64_t size_input2_encoded = getEncodedSize((uint8_t*)input_2, size_input2);
+  uint64_t size_input3_encoded = getEncodedSize((uint8_t*)input_3, size_input3);
+  uint64_t size_input4_encoded = getEncodedSize((uint8_t*)input_4, size_input4);
+  uint64_t size_input5_encoded = getEncodedSize((uint8_t*)input_5, size_input5);
+  uint64_t size_input6_encoded = getEncodedSize((uint8_t*)input_6, size_input6);
+  uint64_t size_input7_encoded = getEncodedSize((uint8_t*)input_7, size_input7);
+  uint64_t size_input8_encoded = getEncodedSize((uint8_t*)input_8, size_input8);
+  uint64_t size_input9_encoded = getEncodedSize((uint8_t*)input_9, size_input9);
+  uint64_t size_input10_encoded =
+      getEncodedSize((uint8_t*)input_10, size_input10);
+
+  // Allocate memory for encoded texts.
+  uint8_t* input1_encoded = new uint8_t[size_input1_encoded];
+  uint8_t* input2_encoded = new uint8_t[size_input2_encoded];
+  uint8_t* input3_encoded = new uint8_t[size_input3_encoded];
+  uint8_t* input4_encoded = new uint8_t[size_input4_encoded];
+  uint8_t* input5_encoded = new uint8_t[size_input5_encoded];
+  uint8_t* input6_encoded = new uint8_t[size_input6_encoded];
+  uint8_t* input7_encoded = new uint8_t[size_input7_encoded];
+  uint8_t* input8_encoded = new uint8_t[size_input8_encoded];
+  uint8_t* input9_encoded = new uint8_t[size_input9_encoded];
+  uint8_t* input10_encoded = new uint8_t[size_input10_encoded];
 
   const char* expected_output_1 = "YW55IGNhcm5hbCBwbGVhc3VyZS4=";
   const char* expected_output_2 = "YW55IGNhcm5hbCBwbGVhc3VyZQ==";
@@ -71,28 +95,38 @@ void testBase64Encode() {
       "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
   int size_challenge = sizeof(challenge);
 
-  res1 = (uint8_t*)base64Encode((uint8_t*)input_1, strlen(input_1));
-  res2 = (uint8_t*)base64Encode((uint8_t*)input_2, strlen(input_2));
-  res3 = (uint8_t*)base64Encode((uint8_t*)input_3, strlen(input_3));
-  res4 = (uint8_t*)base64Encode((uint8_t*)input_4, strlen(input_4));
-  res5 = (uint8_t*)base64Encode((uint8_t*)input_5, strlen(input_5));
-  res6 = (uint8_t*)base64Encode((uint8_t*)input_6, strlen(input_6));
-  res7 = (uint8_t*)base64Encode((uint8_t*)input_7, strlen(input_7));
-  res8 = (uint8_t*)base64Encode((uint8_t*)input_8, strlen(input_8));
-  res9 = (uint8_t*)base64Encode((uint8_t*)input_9, strlen(input_9));
-  res10 = (uint8_t*)base64Encode((uint8_t*)input_10, strlen(input_10));
+  base64Encode((uint8_t*)input_1, size_input1, input1_encoded);
+  base64Encode((uint8_t*)input_2, size_input2, input2_encoded);
+  base64Encode((uint8_t*)input_3, size_input3, input3_encoded);
+  base64Encode((uint8_t*)input_4, size_input4, input4_encoded);
+  base64Encode((uint8_t*)input_5, size_input5, input5_encoded);
+  base64Encode((uint8_t*)input_6, size_input6, input6_encoded);
+  base64Encode((uint8_t*)input_7, size_input7, input7_encoded);
+  base64Encode((uint8_t*)input_8, size_input8, input8_encoded);
+  base64Encode((uint8_t*)input_9, size_input9, input9_encoded);
+  base64Encode((uint8_t*)input_10, size_input10, input10_encoded);
 
   // Encoding tests
-  assert(memcmp(res1, expected_output_1, strlen(expected_output_1)) == 0);
-  assert(memcmp(res2, expected_output_2, strlen(expected_output_2)) == 0);
-  assert(memcmp(res3, expected_output_3, strlen(expected_output_3)) == 0);
-  assert(memcmp(res4, expected_output_4, strlen(expected_output_4)) == 0);
-  assert(memcmp(res5, expected_output_5, strlen(expected_output_5)) == 0);
-  assert(memcmp(res6, expected_output_6, strlen(expected_output_6)) == 0);
-  assert(memcmp(res7, expected_output_7, strlen(expected_output_7)) == 0);
-  assert(memcmp(res8, expected_output_8, strlen(expected_output_8)) == 0);
-  assert(memcmp(res9, expected_output_9, strlen(expected_output_9)) == 0);
-  assert(memcmp(res10, expected_output_10, strlen(expected_output_10)) == 0);
+  assert(memcmp(input1_encoded, expected_output_1, strlen(expected_output_1)) ==
+         0);
+  assert(memcmp(input2_encoded, expected_output_2, strlen(expected_output_2)) ==
+         0);
+  assert(memcmp(input3_encoded, expected_output_3, strlen(expected_output_3)) ==
+         0);
+  assert(memcmp(input4_encoded, expected_output_4, strlen(expected_output_4)) ==
+         0);
+  assert(memcmp(input5_encoded, expected_output_5, strlen(expected_output_5)) ==
+         0);
+  assert(memcmp(input6_encoded, expected_output_6, strlen(expected_output_6)) ==
+         0);
+  assert(memcmp(input7_encoded, expected_output_7, strlen(expected_output_7)) ==
+         0);
+  assert(memcmp(input8_encoded, expected_output_8, strlen(expected_output_8)) ==
+         0);
+  assert(memcmp(input9_encoded, expected_output_9, strlen(expected_output_9)) ==
+         0);
+  assert(memcmp(input10_encoded, expected_output_10,
+                strlen(expected_output_10)) == 0);
 
   cout << "testBase64Encode passed" << endl;
 }
