@@ -323,10 +323,10 @@ void testIndexOfCoincidence() {
   uint8_t* text3 = (uint8_t*)read_text_file(filename3, &N3);
   uint8_t* text4 = (uint8_t*)read_text_file(filename4, &N4);
 
-  cout << indexOfCoincidence_(text1, N1) << endl;
-  cout << indexOfCoincidence_(text2, N2) << endl;
-  cout << indexOfCoincidence_(text3, N3) << endl;
-  cout << indexOfCoincidence_(text4, N4) << endl;
+  cout << indexOfCoincidence_latin(text1, N1) << endl;
+  cout << indexOfCoincidence_latin(text2, N2) << endl;
+  cout << indexOfCoincidence_latin(text3, N3) << endl;
+  cout << indexOfCoincidence_latin(text4, N4) << endl;
 
   cout << "testIndexOfCoincidence passed" << endl;
 }

@@ -114,7 +114,7 @@ void histogram(const char* text, int len) {
   printf("    e  t  a  o  i  n  s  r  h  d  l  u  c    sym  non-print\n\n");
 }
 
-float indexOfCoincidence_(uint8_t* s, int len) {
+float indexOfCoincidence_latin(uint8_t* s, int len) {
   /** Returns the indexOfCoincidence over the Latin alphabet.
    *
    * Since encryption here is based on single-byte XOR, our alphabet is made of
@@ -149,7 +149,7 @@ float indexOfCoincidence_(uint8_t* s, int len) {
   return I;
 }
 
-float indexOfCoincidence(uint8_t* s, int len) {
+float indexOfCoincidence_ASCII(uint8_t* s, int len) {
   /** Returns the indexOfCoincidence for a string over the "ASCII" alphabet.
    *
    * Since encryption here is based on single-byte XOR, our alphabet is made of
@@ -179,7 +179,7 @@ float indexOfCoincidence(uint8_t* s, int len) {
 float friedmanTest(uint8_t* s, int len) {
   // Reference index for ASCII alphabet computed from custom english texts.
   float I_ref = 0.045;
-  float I = indexOfCoincidence(s, len);
+  float I = indexOfCoincidence_ASCII(s, len);
   float N = 256.;
   float n = (float)len;
 
@@ -218,7 +218,7 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
         blocks[block_num][i] = ciphertext[block_num + KEYSIZE * i];
     }
 
-    float I = indexOfCoincidence(blocks[0], p);
+    float I = indexOfCoincidence_ASCII(blocks[0], p);
     // cout << I << endl;
     if (I > 0.050) return KEYSIZE;
   }
