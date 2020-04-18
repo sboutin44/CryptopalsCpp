@@ -158,27 +158,6 @@ void testBase64Decode() {
   uint64_t size_input9 = strlen(input_9);
   uint64_t size_input10 = strlen(input_10);
 
-  uint64_t size_input1_decoded =
-      getDecodedTextSize((uint8_t*)input_1, size_input1);
-  uint64_t size_input2_decoded =
-      getDecodedTextSize((uint8_t*)input_2, size_input2);
-  uint64_t size_input3_decoded =
-      getDecodedTextSize((uint8_t*)input_3, size_input3);
-  uint64_t size_input4_decoded =
-      getDecodedTextSize((uint8_t*)input_4, size_input4);
-  uint64_t size_input5_decoded =
-      getDecodedTextSize((uint8_t*)input_5, size_input5);
-  uint64_t size_input6_decoded =
-      getDecodedTextSize((uint8_t*)input_6, size_input6);
-  uint64_t size_input7_decoded =
-      getDecodedTextSize((uint8_t*)input_7, size_input7);
-  uint64_t size_input8_decoded =
-      getDecodedTextSize((uint8_t*)input_8, size_input8);
-  uint64_t size_input9_decoded =
-      getDecodedTextSize((uint8_t*)input_9, size_input9);
-  uint64_t size_input10_decoded =
-      getDecodedTextSize((uint8_t*)input_10, size_input10);
-
   const char* encoded_1 = "YW55IGNhcm5hbCBwbGVhc3VyZS4=";
   const char* encoded_2 = "YW55IGNhcm5hbCBwbGVhc3VyZQ==";
   const char* encoded_3 = "YW55IGNhcm5hbCBwbGVhc3Vy";
@@ -190,9 +169,63 @@ void testBase64Decode() {
   const char* encoded_9 = "YXN1cmUu";
   const char* encoded_10 = "c3VyZS4=";
 
+  uint64_t size_encoded1 = strlen(encoded_1);
+  uint64_t size_encoded2 = strlen(encoded_2);
+  uint64_t size_encoded3 = strlen(encoded_3);
+  uint64_t size_encoded4 = strlen(encoded_4);
+  uint64_t size_encoded5 = strlen(encoded_5);
+  uint64_t size_encoded6 = strlen(encoded_6);
+  uint64_t size_encoded7 = strlen(encoded_7);
+  uint64_t size_encoded8 = strlen(encoded_8);
+  uint64_t size_encoded9 = strlen(encoded_9);
+  uint64_t size_encoded10 = strlen(encoded_10);
+
+  uint64_t size_input1_decoded =
+      getDecodedTextSize((uint8_t*)encoded_1, size_encoded1);
+  uint64_t size_input2_decoded =
+      getDecodedTextSize((uint8_t*)encoded_2, size_encoded2);
+  uint64_t size_input3_decoded =
+      getDecodedTextSize((uint8_t*)encoded_3, size_encoded3);
+  uint64_t size_input4_decoded =
+      getDecodedTextSize((uint8_t*)encoded_4, size_encoded4);
+  uint64_t size_input5_decoded =
+      getDecodedTextSize((uint8_t*)encoded_5, size_encoded5);
+  uint64_t size_input6_decoded =
+      getDecodedTextSize((uint8_t*)encoded_6, size_encoded6);
+  uint64_t size_input7_decoded =
+      getDecodedTextSize((uint8_t*)encoded_7, size_encoded7);
+  uint64_t size_input8_decoded =
+      getDecodedTextSize((uint8_t*)encoded_8, size_encoded8);
+  uint64_t size_input9_decoded =
+      getDecodedTextSize((uint8_t*)encoded_9, size_encoded9);
+  uint64_t size_input10_decoded =
+      getDecodedTextSize((uint8_t*)encoded_10, size_encoded10);
+
   // Base64 Decoding Tests
   uint8_t* decoded = new uint8_t[size_input1_decoded];
   base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
+
+  assert(size_input1 == size_input1_decoded);
+  assert(size_input2 == size_input2_decoded);
+  assert(size_input3 == size_input3_decoded);
+  assert(size_input4 == size_input4_decoded);
+  assert(size_input5 == size_input5_decoded);
+  assert(size_input6 == size_input6_decoded);
+  assert(size_input7 == size_input7_decoded);
+  assert(size_input8 == size_input8_decoded);
+  assert(size_input9 == size_input9_decoded);
+  assert(size_input10 == size_input10_decoded);
+  cout << size_input1 << endl;
+  cout << size_input1_decoded << endl;
+
+  for (int i = 0; i < size_input1; i++) {
+    printf("%c ", input_1[i]);
+  }
+  printf("\n");
+  for (int i = 0; i < size_input1_decoded; i++) {
+    printf("%c ", decoded[i]);
+  }
+
   assert(memcmp((uint8_t*)input_1, decoded, size_input1_decoded) == 0);
   delete[] decoded;
 

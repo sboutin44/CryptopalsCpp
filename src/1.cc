@@ -117,13 +117,16 @@ uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
   if (input[size - 1] == '=') {
     *padding = 1;
     if (input[size - 2] == '=') *padding = 2;
+  } else {
+    *padding = 0;
   }
+
   // Set the output size
   uint64_t output_length = 0;
   if (*padding == 1)
-    output_length = (size / 4) * 3 + 2;
+    output_length = (size / 4 - 1) * 3 + 2;
   else if (*padding == 2)
-    output_length = (size / 4) * 3 + 1;
+    output_length = (size / 4 - 1) * 3 + 1;
   else
     output_length = (size / 4) * 3;
   return output_length;
@@ -133,31 +136,49 @@ void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
   uint8_t a, b, c, d;
   // Get Padding
   int padding = 0;
-  getDecodedTextSize(input, size, &padding);  // set padding only.
+  int v = getDecodedTextSize(input, size, &padding);  // set padding only.
 
   uint64_t output_position = 0;  // track the position in the output array.
-  for (int i = 0; i < (size - (size - padding) % 4); i += 4) {
+  for (int i = 0; i < (size - ((size - padding) % 4)); i += 4) {
     assert(i < size);
     a = base64.find((char)input[i]);
     b = base64.find((char)input[i + 1]);
     c = base64.find((char)input[i + 2]);
     d = base64.find((char)input[i + 3]);
 
-    output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
-    output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
-    output[output_position++] = (c & 0x03) << 6 ^ (d & 0x3F);
+    output[i % 3] = a << 2 ^ (b & 0x30) >> 4;
+    output[i % 3] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+    output[i % 3] = (c & 0x03) << 6 ^ (d & 0x3F);
+
+    // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+    // output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+    // output[output_position++] = (c & 0x03) << 6 ^ (d & 0x3F);
   }
+  cout << v << endl;
+  cout << output_position << endl;
 
   // Treat the end of the string when 2 characters remain.
-  //  if (padding == 2) {
-  //    output[output_position - 2] = '\0';
-  //  }
-  //
-  //  // Treat the end when 1 character remain.
-  //  if (padding == 1) {
-  //    output[output_position - 1] = '\0';
-  //  }
-  //  return output;
+  if (padding == 2) {
+    int i = (size - 4);
+    a = base64.find((char)input[i]);
+    b = base64.find((char)input[i + 1]);
+
+    // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+    output[(size / 4 - 1) * 3] = a << 2 ^ (b & 0x30) >> 4;
+  }
+
+  // Treat the end when 1 character remain.
+  if (padding == 1) {
+    int i = (size - 4);
+    a = base64.find((char)input[i]);
+    b = base64.find((char)input[i + 1]);
+    c = base64.find((char)input[i + 2]);
+
+    output[(size / 4 - 1) * 3] = a << 2 ^ (b & 0x30) >> 4;
+    output[(size / 4 - 1) * 3 + 1] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+    // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+    // output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+  }
 }
 
 void challenge_1() {
