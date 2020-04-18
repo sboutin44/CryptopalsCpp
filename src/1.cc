@@ -146,13 +146,9 @@ void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
     c = base64.find((char)input[i + 2]);
     d = base64.find((char)input[i + 3]);
 
-    output[i % 3] = a << 2 ^ (b & 0x30) >> 4;
-    output[i % 3] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
-    output[i % 3] = (c & 0x03) << 6 ^ (d & 0x3F);
-
-    // output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
-    // output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
-    // output[output_position++] = (c & 0x03) << 6 ^ (d & 0x3F);
+    output[output_position++] = a << 2 ^ (b & 0x30) >> 4;
+    output[output_position++] = (b & 0x0F) << 4 ^ (c & 0x3C) >> 2;
+    output[output_position++] = (c & 0x03) << 6 ^ (d & 0x3F);
   }
   cout << v << endl;
   cout << output_position << endl;

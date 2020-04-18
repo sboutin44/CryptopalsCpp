@@ -215,8 +215,6 @@ void testBase64Decode() {
   assert(size_input8 == size_input8_decoded);
   assert(size_input9 == size_input9_decoded);
   assert(size_input10 == size_input10_decoded);
-  cout << size_input1 << endl;
-  cout << size_input1_decoded << endl;
 
   for (int i = 0; i < size_input1; i++) {
     printf("%c ", input_1[i]);
