@@ -136,7 +136,7 @@ void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
   uint8_t a, b, c, d;
   // Get Padding
   int padding = 0;
-  int v = getDecodedTextSize(input, size, &padding);  // set padding only.
+  getDecodedTextSize(input, size, &padding);  // set padding only.
 
   uint64_t output_position = 0;  // track the position in the output array.
 

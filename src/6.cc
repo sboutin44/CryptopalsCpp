@@ -48,7 +48,7 @@ int hammingDistance(uint8_t* a, uint8_t* b, int n) {
   return distance;
 }
 
-void histogram(const char* text, int len) {
+void histogram(uint8_t* text, int len) {
   /** Display frequencies of the frequent letters found in 'text'.
    *
    * @param text A byte string representing a text.
@@ -65,15 +65,15 @@ void histogram(const char* text, int len) {
   int len_letters = strlen(LETTERS);
   int* freqs_letters = new int[len_letters];
   for (int i = 0; i < len_letters; i++)
-    freqs_letters[i] = 100 * frequency((uint8_t*)text, (char)LETTERS[i] , len);
+    freqs_letters[i] = 100 * frequency(text, (char)LETTERS[i], len);
 
   // Sum the occurences of symbols listed in SYMBOLS appearing in 'text'.
   int len_symbols = strlen(SYMBOLS);
   int freqs_symbols = 0;
   for (int i = 0; i < len_symbols; i++)
-    freqs_symbols += 100 * frequency((uint8_t*)text, (char)SYMBOLS[i],len);
+    freqs_symbols += 100 * frequency(text, (char)SYMBOLS[i], len);
 
-  int ratioNonPrintables = 100 * ratioNonPrintChars((uint8_t*)text, len);
+  int ratioNonPrintables = 100 * ratioNonPrintChars(text, len);
 
   cout << endl;
 

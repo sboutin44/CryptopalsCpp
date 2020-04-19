@@ -175,7 +175,7 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
     }
 
     cout << "key: " << candidate_key;
-    histogram((char*)deciphered, size);
+    histogram(deciphered, size);
     cout << endl;
 
     delete[] deciphered;

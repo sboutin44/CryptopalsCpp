@@ -217,14 +217,6 @@ void testBase64Decode() {
   uint8_t* decoded = new uint8_t[size_input1_decoded];
   base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
 
-  for (int i = 0; i < size_input1; i++) {
-    printf("%c ", input_1[i]);
-  }
-  printf("\n");
-  for (int i = 0; i < size_input1_decoded; i++) {
-    printf("%c ", decoded[i]);
-  }
-
   assert(memcmp((uint8_t*)input_1, decoded, size_input1_decoded) == 0);
   delete[] decoded;
 
@@ -329,7 +321,7 @@ void testHistogram() {
   const char* filename1 = "resources/aliceadventures.txt";
   const char* english_text = read_text_file(filename1, &N);
 
-  histogram(english_text, N);
+  histogram((uint8_t*)english_text, N);
 }
 
 void testIndexOfCoincidence() {
