@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
    *
    * Test:
    *  Only used for development purpose:
-   *    ./cryptopals --test
+   *    ./cryptopals --run_tests
    * will launch the function called in testFunction().
    */
 

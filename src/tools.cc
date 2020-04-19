@@ -81,8 +81,8 @@ int occurence_byte(uint8_t* s, uint8_t myChar, int length) {
 
   int i = 0;
   while (i != length) {
+    current = s[i];
     if (current == myChar) occ++;
-    current = s[i + 1];
     i++;
   }
   return occ;
@@ -94,8 +94,8 @@ int occurence(const char* s, char myChar) {
 
   int i = 0;
   while (current != '\0') {
+    current = tolower(s[i]);
     if (current == myChar) occ++;
-    current = tolower(s[i + 1]);
     i++;
   }
   return occ;
@@ -109,8 +109,8 @@ int occurence(uint8_t* s, char myChar, int length) {
 
   int i = 0;
   while (i != length) {
+    current = tolower(s[i]);
     if (current == myChar) occ++;
-    current = tolower(s[i + 1]);
     i++;
   }
   return occ;
