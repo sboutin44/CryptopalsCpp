@@ -296,7 +296,12 @@ void challenge_6() {
   // Test the reconstituted key.
   const char* repeatedkey = "terminator X: Bring the noise";
   char* output = new char[l];
-  repeatedKeyXor((char*)ciphertext, (char*)repeatedkey, output);
+
+  // repeatedKeyXor
+  for (int i = 0; i < l; i++)
+    output[i] = ciphertext[i] ^ repeatedkey[i % strlen(repeatedkey)];
+
+  // repeatedKeyXor((char*)ciphertext, (char*)repeatedkey, output);
 
   // Display decrypted text:
   putchar('\n');

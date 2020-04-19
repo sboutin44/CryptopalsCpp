@@ -374,12 +374,23 @@ void testFindKeyLength() {
   uint8_t* ciphertext4 = new uint8_t[l_ciphertext];
   uint8_t* ciphertext5 = new uint8_t[l_ciphertext - 1];
 
-  // Cipher the plaintext
-  repeatedKeyXor((char*)plaintext, key1, (char*)ciphertext1);
-  repeatedKeyXor((char*)plaintext, key2, (char*)ciphertext2);
-  repeatedKeyXor((char*)plaintext, key3, (char*)ciphertext3);
-  repeatedKeyXor((char*)plaintext, key4, (char*)ciphertext4);
-  repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
+  // Cipher plaintext with the different keys
+  for (int i = 0; i < l_ciphertext; i++)
+    ciphertext1[i] = plaintext[i] ^ key1[i % strlen(key1)];
+  for (int i = 0; i < l_ciphertext; i++)
+    ciphertext2[i] = plaintext[i] ^ key2[i % strlen(key2)];
+  for (int i = 0; i < l_ciphertext; i++)
+    ciphertext3[i] = plaintext[i] ^ key3[i % strlen(key3)];
+  for (int i = 0; i < l_ciphertext; i++)
+    ciphertext4[i] = plaintext[i] ^ key4[i % strlen(key4)];
+  for (int i = 0; i < l_ciphertext - 1; i++)
+    ciphertext5[i] = plaintext[i] ^ key5[i % strlen(key5)];
+
+  // repeatedKeyXor((char*)plaintext, key1, (char*)ciphertext1);
+  // repeatedKeyXor((char*)plaintext, key2, (char*)ciphertext2);
+  // repeatedKeyXor((char*)plaintext, key3, (char*)ciphertext3);
+  // repeatedKeyXor((char*)plaintext, key4, (char*)ciphertext4);
+  // repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
 
   // Find the keys, default max key length defined in findKeyLength
   int maxKeysizeTried = 100;

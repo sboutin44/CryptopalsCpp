@@ -25,15 +25,6 @@
 #include "lib.h"
 using namespace std;
 
-void repeatedKeyXor(const char* input, const char* key, char* output) {
-  int inputSize = strlen(input);
-  int keySize = strlen(key);
-
-  for (int i = 0; i < inputSize; i++) {
-    output[i] = input[i] ^ key[i % keySize];
-  }
-}
-
 void challenge_5() {
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 1" << endl;
@@ -52,10 +43,11 @@ void challenge_5() {
       "cymbal";
   int l = strlen(plaintext);
   const char* key = "ICE";
-  char* output;
+  char* output = new char[l];
 
-  output = new char[l];
-  repeatedKeyXor(plaintext, key, output);
+  //  repeatedKeyXor
+  for (int i = 0; i < l; i++) output[i] = plaintext[i] ^ key[i % strlen(key)];
+
   printf("\n");
   for (int i = 0; i < (int)l; i++) printf("%02x", output[i]);
   printf("\n");
