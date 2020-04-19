@@ -201,10 +201,7 @@ void testBase64Decode() {
   uint64_t size_input10_decoded =
       getDecodedTextSize((uint8_t*)encoded_10, size_encoded10);
 
-  // Base64 Decoding Tests
-  uint8_t* decoded = new uint8_t[size_input1_decoded];
-  base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
-
+  // Check we compute correctly the size of the decoded srting.
   assert(size_input1 == size_input1_decoded);
   assert(size_input2 == size_input2_decoded);
   assert(size_input3 == size_input3_decoded);
@@ -215,6 +212,10 @@ void testBase64Decode() {
   assert(size_input8 == size_input8_decoded);
   assert(size_input9 == size_input9_decoded);
   assert(size_input10 == size_input10_decoded);
+
+  // Base64 Decoding Tests
+  uint8_t* decoded = new uint8_t[size_input1_decoded];
+  base64Decode((uint8_t*)encoded_1, strlen(encoded_1), decoded);
 
   for (int i = 0; i < size_input1; i++) {
     printf("%c ", input_1[i]);
