@@ -133,8 +133,7 @@ void shiftRows(byte* state)
 
 }
 
-void mixColumns(byte* state)
-{
+void mixColumns(byte* state){
   byte matrix[] = {
     0x02,0x03,0x01,0x01,
     0x01,0x02,0x03,0x01,
@@ -142,11 +141,28 @@ void mixColumns(byte* state)
     0x03,0x01,0x01,0x02
   };
 
+    mixColumns_(state,matrix);
+}
+
+void invMixColumns(byte* state)
+{
+  byte matrix[] = {
+  0x0e,0x0b,0x0d,0x09,
+  0x09,0x0e,0x0b,0x0d,
+  0x0d,0x09,0x0e,0x0b,
+  0x0b,0x0d,0x09,0x0e
+  };
+
+  mixColumns_(state,matrix);
+}
+
+void mixColumns_(byte* state, byte* matrix)
+{
+
   byte s;
   byte* word = new byte[4]; // Store computed values of mult.
 
   for (int col = 0 ; col < 4*Nb ; col+=4) {
-    cout << col << endl;
     for (int i = 0 ; i < 4 ; i++) {
       s = 0;
       for (int j = 0 ; j < 4 ; j++)
@@ -170,10 +186,7 @@ void invShiftRows(byte* state){
   shiftRows(state);
 }
 
-void invMixColumns(byte* state)
-{
 
-}
 
 void invSubBytes(byte* state)
 {
@@ -198,6 +211,7 @@ void printState()
 {
   for (int i = 0 ; i < 4*Nb ; i++)
     printf("%02x ", state[i]);
+  printf("\n");
 }
 
 int main()
@@ -216,7 +230,8 @@ int main()
   subBytes(state);
   shiftRows(state);
   mixColumns(state);
-
+  printState();
+  invMixColumns(state);
 
   printState();
 

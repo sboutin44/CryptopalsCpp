@@ -33,6 +33,8 @@ typedef unsigned char byte;
 
 void expandKey();
 
+void mixColumns_(byte* state, byte* matrix);
+
 // AES functions
 void addRoundKey(byte* state, byte* round_key);
 void subBytes(byte* state);
