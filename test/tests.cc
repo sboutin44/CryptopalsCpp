@@ -328,9 +328,6 @@ void testBase64Decode() {
   base64Decode((uint8_t*)encoded_big_text, size_encoded_big_text, decoded);
   assert(memcmp(decoded_big_text, decoded, my_size_decoded_big_text) == 0);
 
-  // for (int i = 0; i < my_size_decoded_big_text; i++) printf("%d ",
-  // decoded[i]);
-
   cout << my_size_decoded_big_text << endl;
   cout << size_decoded_big_text << endl;
 

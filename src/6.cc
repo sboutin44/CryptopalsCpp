@@ -93,12 +93,10 @@ void histogram(uint8_t* text, int len) {
     // Separation with letters
     printf("    ");
 
-    // for (int j = 0; j < len_letters; j++) {
     if (freqs_symbols >= i)
       printf(" * ");
     else
       printf("   ");
-    //}
 
     printf("    ");
 
@@ -162,9 +160,6 @@ float indexOfCoincidence_ASCII(uint8_t* s, int len) {
   float N = (float)len;
 
   for (int letter = 0; letter < 256; letter++) {
-    // letter defined as int to prevent an infinite loop.
-    //    letter = (uint8_t)letter;
-
     float n_i = (float)occurence_byte((uint8_t*)s, (uint8_t)letter, N);
 
     // Sum occurrences of all letters.
@@ -177,6 +172,8 @@ float indexOfCoincidence_ASCII(uint8_t* s, int len) {
 }
 
 float friedmanTest(uint8_t* s, int len) {
+  /* Doesn't do what it's supposed to do... */
+
   // Reference index for ASCII alphabet computed from custom english texts.
   float I_ref = 0.045;
   float I = indexOfCoincidence_ASCII(s, len);
@@ -219,26 +216,10 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
     }
 
     float I = indexOfCoincidence_ASCII(blocks[0], p);
-    // cout << I << endl;
     if (I > 0.050) return KEYSIZE;
   }
 
   return -1;
-}
-
-void testChallenge6() {
-  int l_encoded_ciphertext;
-  int l;
-  uint8_t* ciphertext = (uint8_t*)read_base64_file("resources/6.txt", &l);
-
-  char* _6_decoded =
-      read_text_file("resources/6_decoded.txt", &l_encoded_ciphertext);
-
-  cout << l << endl;
-  cout << l_encoded_ciphertext << endl;
-  // for (int i = 0; i < l; i++) {
-  //   if (_6_decoded[i] != ciphertext[i]) cout << i << endl;
-  // }
 }
 
 void challenge_6() {
@@ -254,20 +235,7 @@ void challenge_6() {
 
   // TestHammingDistance();
   int l;  // lenght of the cipher.
-  int l_6_decoded;
-  uint8_t* ciphertext_ =
-      (uint8_t*)read_text_file("resources/6_decoded.txt", &l_6_decoded);
-
   uint8_t* ciphertext = read_base64_file("resources/6.txt", &l);
-
-  cout << l << endl;
-  cout << l_6_decoded << endl;
-  for (int i = 0; i < l; i++) {
-    if (ciphertext[i] != ciphertext_[i]) cout << i << endl;
-  }
-
-  // return;
-  //
 
   // 1) Find the key
   int maxKeysizeTried = 40;

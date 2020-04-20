@@ -40,16 +40,12 @@ uint8_t* read_base64_file(const char* filename, int* length) {
     file.seekg(0, file.beg);
 
     // Count lines
-    int f = 0;
     uint64_t sizeDecoded = 0;
     uint64_t sizeLineDecoded = 0;
-
     for (std::string line; std::getline(file, line);) {
       sizeLineDecoded =
           getDecodedTextSize((uint8_t*)line.c_str(), strlen(line.c_str()));
-      // cout << sizeLineDecoded << endl;
       sizeDecoded += sizeLineDecoded;
-      // getDecodedTextSize((uint8_t*)line.c_str(), strlen(line.c_str()));
     }
     file.seekg(0, file.beg);
     file.close();
@@ -64,16 +60,8 @@ uint8_t* read_base64_file(const char* filename, int* length) {
     for (std::string line; std::getline(file, line);) {
       sizeLineDecoded =
           getDecodedTextSize((uint8_t*)line.c_str(), strlen(line.c_str()));
-
       int line_len = strlen(line.c_str());
-      // memcpy(&out[pos], line.c_str(), line_len);
       base64Decode((uint8_t*)line.c_str(), line_len, &out[pos]);
-
-      // cout << line << endl;
-      // for (int i = 0; i < strlen(line.c_str()); i++)
-      //   printf("%s", &out[pos + i]);
-      // cout << endl;
-
       pos += sizeLineDecoded;
     }
     cout << "pos: " << pos << endl;
@@ -118,14 +106,6 @@ char* read_text_file(const char* filename, int* length) {
 
     out = (char*)malloc(sizeof(char) * (*length));
     assert(out != NULL);
-
-    // // Read the file line by line, and remove line endings.
-    // int pos = 0;  // position in out
-    // for (std::string line; std::getline(file, line);) {
-    //   int line_len = strlen(line.c_str());
-    //   memcpy(&out[pos], line.c_str(), line_len);
-    //   pos += line_len;
-    // }
 
     file.read(out, *length);
   } catch (ios::iostate filestate) {

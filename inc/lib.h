@@ -48,17 +48,16 @@ uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding);
 void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* out);
 void base64Decode(uint8_t* input, uint64_t size, uint8_t* output);
 uint8_t* myXOR(uint8_t* a, uint8_t* b, int size);
-int test_base64();
 
 // Defined in set_1_3_lib
 void histogram(uint8_t* text, int len);
 void load_dictionary(const char* filename);
-void quickEnglishChecker(uint8_t* sentence);
 int englishScore(uint8_t* sentence, int length);
 int englishScore(const char* sentence, int length);
 uint8_t singlebyteXORattack(uint8_t* ciphertext, int size, int thresold);
 void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
                                            float nonPrintableRatio);
+
 // Set_1_3 Set_1_4 Set_1_5
 void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size);
@@ -79,13 +78,10 @@ float ratioNonPrintChars(uint8_t* s, int size);
 
 // Challenge 6
 void histogram(const char* text, int len);
-void histogram2(const char* text, int len);
 float friedmanTest(uint8_t* s, int len);
 int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 
 // Tests functions:
-void histogramFromPlaintext();
-void testChallenge6();
 
 // The challenges
 void challenge_1();
