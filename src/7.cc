@@ -2,10 +2,8 @@
 #include "aes.h"
 using namespace std;
 
-void testAES()
-{
 
-}
+
 
 void challenge_7() {
 

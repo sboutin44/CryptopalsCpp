@@ -1,11 +1,17 @@
 #ifndef CRYPTOPALS_INC_AES_H_
 #define CRYPTOPALS_INC_AES_H_
 
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+
+typedef unsigned char byte;
+
 void expandKey();
 
-void addRoundKey();
+void addRoundKey(byte* state, byte* round_key);
 void shiftRows();
-void mixColumns();
+void mixColumns(byte* state);
 void subBytes();
 
 void invAddRoundKey();
