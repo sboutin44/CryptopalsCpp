@@ -389,16 +389,15 @@ void testFindKeyLength() {
   const char* key3 = "What is your name?";
   const char* key4 = "terminator X: the return What is your name?";
 
-  // Bigger keys
-
-  int len_key5 = 1000;
-  const char* key5 = new char[len_key5];
-  memcpy((uint8_t*)key5, plaintext, len_key5);
-
   int len_key1 = strlen(key1);
   int len_key2 = strlen(key2);
   int len_key3 = strlen(key3);
   int len_key4 = strlen(key4);
+
+  // Bigger keys
+  int len_key5 = 1000;
+  const char* key5 = new char[len_key5];
+  memcpy((uint8_t*)key5, plaintext, len_key5);
 
   int l_ciphertext = l_plaintext;
   uint8_t* ciphertext1 = new uint8_t[l_ciphertext];
@@ -409,15 +408,15 @@ void testFindKeyLength() {
 
   // Cipher plaintext with the different keys
   for (int i = 0; i < l_ciphertext; i++)
-    ciphertext1[i] = plaintext[i] ^ key1[i % strlen(key1)];
+    ciphertext1[i] = plaintext[i] ^ key1[i % len_key1];
   for (int i = 0; i < l_ciphertext; i++)
-    ciphertext2[i] = plaintext[i] ^ key2[i % strlen(key2)];
+    ciphertext2[i] = plaintext[i] ^ key2[i % len_key2];
   for (int i = 0; i < l_ciphertext; i++)
-    ciphertext3[i] = plaintext[i] ^ key3[i % strlen(key3)];
+    ciphertext3[i] = plaintext[i] ^ key3[i % len_key3];
   for (int i = 0; i < l_ciphertext; i++)
-    ciphertext4[i] = plaintext[i] ^ key4[i % strlen(key4)];
+    ciphertext4[i] = plaintext[i] ^ key4[i % len_key4];
   for (int i = 0; i < l_ciphertext - 1; i++)
-    ciphertext5[i] = plaintext[i] ^ key5[i % strlen(key5)];
+    ciphertext5[i] = plaintext[i] ^ key5[i % len_key5];
 
   // Find the keys, default max key length defined in findKeyLength
   int maxKeysizeTried = 100;

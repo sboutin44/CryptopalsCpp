@@ -104,7 +104,8 @@ char* read_text_file(const char* filename, int* length) {
     *length = file.tellg();
     file.seekg(0, file.beg);
 
-    out = (char*)malloc(sizeof(char) * (*length));
+    //out = (char*)malloc(sizeof(char) * (*length));
+    out = new char[*length];
     assert(out != NULL);
 
     file.read(out, *length);
