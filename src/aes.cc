@@ -1,4 +1,29 @@
+// Copyright © 2020 Sebastien BOUTIN
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to
+// deal in the Software without restriction, including without limitation the
+// rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+// sell copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+// IN THE SOFTWARE.
+//
+// Except as contained in this notice, the name(s) of the above copyright
+// holders shall not be used in advertising or otherwise to promote the sale,
+// use or other dealings in this Software without prior written authorization.
+
 #include "aes.h"
+using namespace std;
 
 byte Sbox[] ={
 0x63,0x7c,0x77,0x7b,0xf2,0x6b,0x6f,0xc5,0x30,0x01,0x67,0x2b,0xfe,0xd7,0xab,0x76,
@@ -42,6 +67,32 @@ int Nb = 128/32;
 // int Nr;
 byte* state;
 
+byte xtime(byte b){
+  unsigned int c = ((int)b) << 1;
+
+  if ( (c & 0x100))
+    c ^= 0x1b;
+
+  return (byte)c;
+}
+
+byte GF8Mul(byte a, byte b) {
+   byte aa = a;
+   byte bb = b;
+   byte r = 0;
+   byte t;
+   while (aa != 0) {
+      if ((aa & 1) != 0)
+         r = r ^ bb;
+      t = bb & 0x80;
+      bb = bb << 1;
+      if (t != 0)
+         bb = bb ^ 0x1b;
+      aa = aa >> 1;
+   }
+   return r;
+}
+
 void addRoundKey(byte* state, byte* round_key)
 {
   for (int i = 0 ; i < 4*Nb ; i++)
@@ -84,7 +135,26 @@ void shiftRows(byte* state)
 
 void mixColumns(byte* state)
 {
+  byte matrix[] = {
+    0x02,0x03,0x01,0x01,
+    0x01,0x02,0x03,0x01,
+    0x01,0x01,0x02,0x03,
+    0x03,0x01,0x01,0x02
+  };
 
+  byte s;
+  byte* word = new byte[4]; // Store computed values of mult.
+
+  for (int col = 0 ; col < 4*Nb ; col+=4) {
+    cout << col << endl;
+    for (int i = 0 ; i < 4 ; i++) {
+      s = 0;
+      for (int j = 0 ; j < 4 ; j++)
+        s ^= GF8Mul ( matrix[4*i + j] , state[col + j] );
+      word[i] = s;
+    }
+    memcpy (&state[col],word,4 );
+  }
 }
 
 void subBytes(byte* state)
@@ -111,6 +181,19 @@ void invSubBytes(byte* state)
     state[i] = invSbox[state[i]];
 }
 
+// tests
+void testXtime()
+{
+  assert (xtime(0x57) == 0xae);
+  assert (xtime(0xae) == 0x47);
+  assert (xtime(0x47) == 0x8e);
+  assert (xtime(0x8e) == 0x07);
+}
+
+void testMult() {
+  assert( GF8Mul(0x57 , 0x13) == 0xfe ) ;
+}
+
 void printState()
 {
   for (int i = 0 ; i < 4*Nb ; i++)
@@ -128,11 +211,15 @@ int main()
 
   state = new byte[4*Nb];
   memcpy(state,input,4*Nb);
+
   addRoundKey(state,key);
   subBytes(state);
   shiftRows(state);
-  invShiftRows(state);
+  mixColumns(state);
+
+
   printState();
+
 return 0;
 }
 
