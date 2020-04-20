@@ -202,8 +202,7 @@ void testXtime()
   assert (xtime(0x8e) == 0x07);
 }
 
-void rotWord(byte* word)
-{
+void rotWord(byte* word){
   byte tmp = word[0];
 
   word[0] = word[1];
@@ -212,6 +211,13 @@ void rotWord(byte* word)
   word[3] = tmp;
 }
 
+void subWord(byte* word){
+  for (int i = 0 ; i < 4 ; i++)
+    word[i] = Sbox[word[i]];
+}
+
+
+//
 // void KeyExpansion(byte* key, byte* w, int Nk) {
 //   i=0;
 //
@@ -247,17 +253,27 @@ void testRotWord()
 {
   byte word[] = {0x09,0xcf,0x4f,0x3c};
 
-  printf("Before\n");
-  for (int i = 0 ; i < 4 ; i++)
-    printf("%02x ", word[i]);
-  printf("\n");
+  // printf("Before\n");
+  // for (int i = 0 ; i < 4 ; i++)
+  //   printf("%02x ", word[i]);
+  // printf("\n");
 
   rotWord(word);
 
-  printf("After\n");
-  for (int i = 0 ; i < 4 ; i++)
-    printf("%02x ", word[i]);
-  printf("\n");
+  byte expected[] = {0xcf,0x4f,0x3c,0x09};
+  assert (memcmp(expected,word,4) == 0);
+
+  // printf("After\n");
+  // for (int i = 0 ; i < 4 ; i++)
+  //   printf("%02x ", word[i]);
+  // printf("\n");
+}
+
+void testSubWord(){
+ byte word[] = {0xcf,0x4f,0x3c,0x09};
+  subWord(word);
+  byte expected[] = {0x8a,0x84,0xeb,0x01};
+  assert (memcmp(expected,word,4) == 0);
 }
 
 void testKeyExpansion()
@@ -307,8 +323,8 @@ int main()
 
 
   // testKeyExpansion();
-testRotWord();
-
+  testRotWord();
+  testSubWord();
   printState();
 
 return 0;
