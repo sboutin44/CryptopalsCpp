@@ -11,14 +11,14 @@ void expandKey();
 
 // AES functions
 void addRoundKey(byte* state, byte* round_key);
-void shiftRows();
+void shiftRows(byte* state);
 void mixColumns(byte* state);
 void subBytes(byte* state);
 
 // invAES functions
-void invShiftRows();
-void invMixColumns();
-void invSubBytes();
+void invShiftRows(byte* state);
+void invMixColumns(byte* state);
+void invSubBytes(byte* state);
 
 
 #endif //CRYPTOPALS_INC_AES_H_

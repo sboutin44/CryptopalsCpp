@@ -48,8 +48,37 @@ void addRoundKey(byte* state, byte* round_key)
     state[i] ^= round_key[i];
 }
 
-void shiftRows()
+void shiftRows(byte* state)
 {
+  byte tmp1 = state[5];
+  byte tmp2 = state[9];
+  byte tmp3 = state[13];
+  byte tmp4 = state[1];
+
+  state[1] = tmp1;
+  state[5] = tmp2;
+  state[9] = tmp3;
+  state[13] = tmp4;
+
+  tmp1 = state[2];
+  tmp2 = state[6];
+  tmp3 = state[10];
+  tmp4 = state[14];
+
+  state[2] = tmp3;
+  state[6] = tmp4;
+  state[10] = tmp1;
+  state[14] = tmp2;
+
+  tmp1 = state[3];
+  tmp2 = state[7];
+  tmp3 = state[11];
+  tmp4 = state[15];
+
+  state[3] = tmp4;
+  state[7] = tmp1;
+  state[11] = tmp2;
+  state[15] = tmp3;
 
 }
 
@@ -99,7 +128,7 @@ int main()
   memcpy(state,input,4*Nb);
   addRoundKey(state,key);
   subBytes(state);
-  invSubBytes(state);
+  shiftRows(state);
 
   printState();
 return 0;
