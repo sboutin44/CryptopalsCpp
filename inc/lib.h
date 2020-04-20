@@ -89,7 +89,7 @@ void challenge_3();
 void challenge_4();
 void challenge_5();
 void challenge_6();
-// int challenge_7();
+void challenge_7();
 
 // Functions in tools.h
 
