@@ -110,6 +110,8 @@ void histogram(uint8_t* text, int len) {
   }
   printf("   ---------------------------------------   -------------\n");
   printf("    e  t  a  o  i  n  s  r  h  d  l  u  c    sym  non-print\n\n");
+  
+  delete[] freqs_letters;
 }
 
 float indexOfCoincidence_latin(uint8_t* s, int len) {
@@ -217,6 +219,11 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
 
     float I = indexOfCoincidence_ASCII(blocks[0], p);
     if (I > 0.050) return KEYSIZE;
+    
+  for (int i = 0; i < KEYSIZE; i++)
+	delete[] blocks[i];
+  
+  delete[] blocks;
   }
 
   return -1;
@@ -244,6 +251,8 @@ void challenge_6() {
   if (KEYSIZE == -1) {
     cerr << "Bad KEYSIZE guess. KEYSIZE = " << KEYSIZE << endl;
     return;
+  } else {
+	cout << "KEYSIZE found:" << KEYSIZE << endl;
   }
 
   // 5
@@ -276,7 +285,7 @@ void challenge_6() {
   }
 
   // The key for this block is 101 = 'e'
-  singlebyteXORattackWithFrequencyScore(blocks[1], p, .5);
+  singlebyteXORattackWithFrequencyScore(blocks[1], p, .4);
 
   // ... we try for the remaing blocks and we have the key:
   // terminator X: Bring the noise

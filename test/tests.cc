@@ -132,6 +132,18 @@ void testBase64Encode() {
                 strlen(expected_output_10)) == 0);
   assert(memcmp(encoded_challenge, expected, strlen(expected)) == 0);
 
+  delete[] input1_encoded ;
+  delete[] input2_encoded ;
+  delete[] input3_encoded ;
+  delete[] input4_encoded ;
+  delete[] input5_encoded ;
+  delete[] input6_encoded ;
+  delete[] input7_encoded ;
+  delete[] input8_encoded ;
+  delete[] input9_encoded ;
+  delete[] input10_encoded;
+delete[] encoded_challenge;
+
   cout << "testBase64Encode \tpassed" << endl;
 }
 
@@ -282,6 +294,7 @@ void testBase64Decode() {
       new uint8_t[getDecodedTextSize((uint8_t*)expected, size_expected)];
   base64Decode((uint8_t*)expected, size_expected, challenge_decoded);
   assert(memcmp(challenge_decoded, challenge, size_challenge) == 0);
+	delete[] challenge_decoded;
 
   // Test on bigger texts:
   int size_encoded_big_text;
@@ -333,6 +346,7 @@ void testBase64Decode() {
   delete[] decoded;
   delete[] encoded_big_text;
   delete[] decoded_big_text;
+	delete[] encoded_big_text_;
 
   cout << "testBase64Decode \tpassed" << endl;
 }
@@ -376,6 +390,8 @@ void testHistogram() {
   const char* english_text = read_text_file(filename1, &N);
 
   histogram((uint8_t*)english_text, N);
+  
+  delete[] english_text;
 }
 
 void testFindKeyLength() {
@@ -436,6 +452,14 @@ void testFindKeyLength() {
 
   // TODO: does not pass on linux
   //  assert(len_key5 == guess_key5);
+
+delete[] plaintext;
+delete[] key5;
+delete[] ciphertext1;
+delete[] ciphertext2;
+delete[] ciphertext3;
+delete[] ciphertext4;
+delete[] ciphertext5;
 
   cout << "testFindKeyLength \tpassed" << endl;
 }
