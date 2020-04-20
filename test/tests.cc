@@ -132,7 +132,7 @@ void testBase64Encode() {
                 strlen(expected_output_10)) == 0);
   assert(memcmp(encoded_challenge, expected, strlen(expected)) == 0);
 
-  cout << "testBase64Encode passed" << endl;
+  cout << "testBase64Encode \tpassed" << endl;
 }
 
 void testBase64Decode() {
@@ -322,20 +322,17 @@ void testBase64Decode() {
       getDecodedTextSize((uint8_t*)encoded_big_text, size_encoded_big_text);
 
   assert(my_size_decoded_big_text != 0);
-  // assert(my_size_decoded_big_text == size_decoded_big_text);
+  assert(my_size_decoded_big_text == size_decoded_big_text);
 
   decoded = new uint8_t[my_size_decoded_big_text];
   base64Decode((uint8_t*)encoded_big_text, size_encoded_big_text, decoded);
   assert(memcmp(decoded_big_text, decoded, my_size_decoded_big_text) == 0);
 
-  cout << my_size_decoded_big_text << endl;
-  cout << size_decoded_big_text << endl;
-
   delete[] decoded;
   delete[] encoded_big_text;
   delete[] decoded_big_text;
 
-  cout << "testBase64Decode passed" << endl;
+  cout << "testBase64Decode \tpassed" << endl;
 }
 
 void testHammingDistance() {
@@ -357,7 +354,7 @@ void testHammingDistance() {
   assert(d2 == 37);
   assert(d3 == 37);
 
-  cout << "testHammingDistance passed" << endl;
+  cout << "testHammingDistance \tpassed" << endl;
 }
 
 void testInsertionSort() {
@@ -368,7 +365,7 @@ void testInsertionSort() {
   insertionSort(a, len);
 
   assert(memcmp((float*)a, (float*)a_sorted, len) == 0);
-  cout << "testInsertionSort passed" << endl;
+  cout << "testInsertionSort \tpassed" << endl;
 }
 
 void testHistogram() {
@@ -377,27 +374,6 @@ void testHistogram() {
   const char* english_text = read_text_file(filename1, &N);
 
   histogram((uint8_t*)english_text, N);
-}
-
-void testIndexOfCoincidence() {
-  // Load an english text.
-  int N1, N2, N3, N4;
-  const char* filename1 = "resources/s1.txt";
-  const char* filename2 = "resources/s2.txt";
-  const char* filename3 = "resources/s3.txt";
-  const char* filename4 = "resources/united_states.txt";
-
-  uint8_t* text1 = (uint8_t*)read_text_file(filename1, &N1);
-  uint8_t* text2 = (uint8_t*)read_text_file(filename2, &N2);
-  uint8_t* text3 = (uint8_t*)read_text_file(filename3, &N3);
-  uint8_t* text4 = (uint8_t*)read_text_file(filename4, &N4);
-
-  cout << indexOfCoincidence_latin(text1, N1) << endl;
-  cout << indexOfCoincidence_latin(text2, N2) << endl;
-  cout << indexOfCoincidence_latin(text3, N3) << endl;
-  cout << indexOfCoincidence_latin(text4, N4) << endl;
-
-  cout << "testIndexOfCoincidence passed" << endl;
 }
 
 void testFindKeyLength() {
@@ -460,5 +436,5 @@ void testFindKeyLength() {
   // TODO: does not pass on linux
   //  assert(len_key5 == guess_key5);
 
-  cout << "testFindKeyLength passed" << endl;
+  cout << "testFindKeyLength \tpassed" << endl;
 }

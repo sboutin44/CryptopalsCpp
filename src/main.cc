@@ -60,7 +60,6 @@ void runTests() {
   testBase64Decode();
   testHammingDistance();
   testInsertionSort();
-  testIndexOfCoincidence();
   testHistogram();
   testFindKeyLength();
 }
