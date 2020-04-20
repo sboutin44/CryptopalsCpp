@@ -94,8 +94,10 @@ void subBytes(byte* state)
 }
 
 
-void invShiftRows(){
-
+void invShiftRows(byte* state){
+  shiftRows(state);
+  shiftRows(state);
+  shiftRows(state);
 }
 
 void invMixColumns(byte* state)
@@ -129,7 +131,7 @@ int main()
   addRoundKey(state,key);
   subBytes(state);
   shiftRows(state);
-
+  invShiftRows(state);
   printState();
 return 0;
 }
