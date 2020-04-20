@@ -41,6 +41,9 @@
 // C libraries
 #include <ctype.h>
 
+// My Functions
+#include "aes.h"
+
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn);
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size);
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding);
@@ -79,6 +82,9 @@ float ratioNonPrintChars(uint8_t* s, int size);
 void histogram(const char* text, int len);
 float friedmanTest(uint8_t* s, int len);
 int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
+
+// Challenge 7
+void testAES();
 
 // Tests functions:
 

@@ -1,4 +1,12 @@
 #include "lib.h"
+#include "aes.h"
 using namespace std;
 
-void challenge_7() {}
+void testAES()
+{
+
+}
+
+void challenge_7() {
+
+}
