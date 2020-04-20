@@ -218,10 +218,16 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
     }
 
     float I = indexOfCoincidence_ASCII(blocks[0], p);
-    if (I > 0.050) return KEYSIZE;
+    if (I > 0.050) {
+      // De-allocate
+      for (int i = 0; i < KEYSIZE; i++) delete[] blocks[i];
+      delete[] blocks;
+
+      return KEYSIZE;
+    }
+    // De-allocate
 
     for (int i = 0; i < KEYSIZE; i++) delete[] blocks[i];
-
     delete[] blocks;
   }
 
