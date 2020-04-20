@@ -292,14 +292,16 @@ void testBase64Decode() {
   char* decoded_big_text =
       read_text_file("resources/united_states.txt", &size_decoded_big_text);
 
+  // -1 for the new line character.
   int my_size_decoded_big_text =
-      getDecodedTextSize((uint8_t*)encoded_big_text, size_encoded_big_text);
+      getDecodedTextSize((uint8_t*)encoded_big_text, size_encoded_big_text - 1);
 
   assert(my_size_decoded_big_text != 0);
   assert(my_size_decoded_big_text == size_decoded_big_text);
 
   decoded = new uint8_t[my_size_decoded_big_text];
-  base64Decode((uint8_t*)encoded_big_text, size_encoded_big_text, decoded);
+  // -1 for the new line character.
+  base64Decode((uint8_t*)encoded_big_text, size_encoded_big_text - 1, decoded);
   assert(memcmp(decoded_big_text, decoded, my_size_decoded_big_text) == 0);
 
   delete[] decoded;

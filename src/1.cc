@@ -26,7 +26,7 @@
 using namespace std;
 
 string base64 =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 void hexDecode(const char* input, uint8_t* out) {
   /** Parse an hex string to an array of intergers. */
@@ -132,8 +132,18 @@ uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
 }
 
 void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
-  // for (int i=0;i<size ;i++)
-  //   assert( input[i]
+  // Check input is a base64 string.
+  for (int i = 0; i < size; i++) {
+    if (base64.find((char)input[i]) == string::npos) {
+      cout << "\n=========================================================\n"
+           << "Non base64 character:\t input[ " << i << " ] = (uint8_t) "
+           << unsigned(input[i])
+           << "\n=========================================================\n"
+           << endl;
+      cout << "Exit " << EXIT_FAILURE << endl;
+      exit(EXIT_FAILURE);
+    }
+  }
 
   uint8_t a, b, c, d;
   // Get Padding
@@ -142,8 +152,9 @@ void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
 
   uint64_t output_position = 0;  // track the position in the output array.
 
-  for (int i = 0; i < size - 4; i += 4) {
-    assert(i < size);
+  int i = 0;
+  for (i = 0; i < (size - 4); i += 4) {
+    assert(i < (size - 4));
     a = base64.find((char)input[i]);
     b = base64.find((char)input[i + 1]);
     c = base64.find((char)input[i + 2]);
@@ -156,7 +167,7 @@ void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
 
   // Treat the end of the string when 2 characters remain.
   if (padding == 2) {
-    int i = size - 4;
+    i = size - 4;
     a = base64.find((char)input[i]);
     b = base64.find((char)input[i + 1]);
 
@@ -165,7 +176,7 @@ void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
 
   // Treat the end when 1 character remain.
   if (padding == 1) {
-    int i = size - 4;
+    i = size - 4;
     a = base64.find((char)input[i]);
     b = base64.find((char)input[i + 1]);
     c = base64.find((char)input[i + 2]);
@@ -175,7 +186,7 @@ void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
   }
 
   if (padding == 0) {
-    int i = size - 4;
+    i = size - 4;
     a = base64.find((char)input[i]);
     b = base64.find((char)input[i + 1]);
     c = base64.find((char)input[i + 2]);
