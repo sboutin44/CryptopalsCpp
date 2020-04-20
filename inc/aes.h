@@ -9,12 +9,13 @@ typedef unsigned char byte;
 
 void expandKey();
 
+// AES functions
 void addRoundKey(byte* state, byte* round_key);
 void shiftRows();
 void mixColumns(byte* state);
-void subBytes();
+void subBytes(byte* state);
 
-void invAddRoundKey();
+// invAES functions
 void invShiftRows();
 void invMixColumns();
 void invSubBytes();

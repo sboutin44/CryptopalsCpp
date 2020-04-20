@@ -58,15 +58,32 @@ void mixColumns(byte* state)
 
 }
 
-void subBytes()
+void subBytes(byte* state)
 {
+  for (int i = 0 ; i < 4*Nb ; i++)
+    state[i] = Sbox[state[i]];
 }
 
+
+void invShiftRows(){
+
+}
+
+void invMixColumns(byte* state)
+{
+
+}
+
+void invSubBytes(byte* state)
+{
+  for (int i = 0 ; i < 4*Nb ; i++)
+    state[i] = invSbox[state[i]];
+}
 
 void printState()
 {
   for (int i = 0 ; i < 4*Nb ; i++)
-    printf("%0x ", state[i]);
+    printf("%02x ", state[i]);
 }
 
 int main()
@@ -81,6 +98,8 @@ int main()
   state = new byte[4*Nb];
   memcpy(state,input,4*Nb);
   addRoundKey(state,key);
+  subBytes(state);
+  invSubBytes(state);
 
   printState();
 return 0;
