@@ -64,7 +64,6 @@ byte invSbox[] = {
 };
 
 int Nb = 128/32;
-// int Nr;
 byte* state;
 
 byte xtime(byte b){
@@ -203,6 +202,79 @@ void testXtime()
   assert (xtime(0x8e) == 0x07);
 }
 
+void rotWord(byte* word)
+{
+  byte tmp = word[0];
+
+  word[0] = word[1];
+  word[1] = word[2];
+  word[2] = word[3];
+  word[3] = tmp;
+}
+
+// void KeyExpansion(byte* key, byte* w, int Nk) {
+//   i=0;
+//
+//   // Set first blob with the key
+//   while (i < Nk) {
+//     for (int j=0 ; j< 4 ; j++)
+//       w[4*i + j] = key[4*i + j];
+//     i = i+1;
+//   }
+//   i = Nk;
+//
+//   // Remaining...
+//   while (i < Nb * (Nr+1)] {
+//
+//     // Store w[i-1] (notation in FIPS-197)
+//     byte* temp = new byte[4];
+//     for (int i = 0 ; i < 4*Nb ; i++)
+//       temp[j] = w[4*(i-1) + j];
+//
+//     // Compute the next blocks at w[i]
+//     if ( i % Nk == 0) {
+//       temp = SubWord(RotWord(temp)) xor Rcon[i/Nk];
+//     }
+//     else if (Nk > 6 and i mod Nk = 4) {
+//              temp = SubWord(temp);
+//    }
+//     w[i] = w[i-Nk] xor temp;
+//     i=i+1;
+//   }
+// }
+
+void testRotWord()
+{
+  byte word[] = {0x09,0xcf,0x4f,0x3c};
+
+  printf("Before\n");
+  for (int i = 0 ; i < 4 ; i++)
+    printf("%02x ", word[i]);
+  printf("\n");
+
+  rotWord(word);
+
+  printf("After\n");
+  for (int i = 0 ; i < 4 ; i++)
+    printf("%02x ", word[i]);
+  printf("\n");
+}
+
+void testKeyExpansion()
+{
+  // AES 128: Nk = 4   Nb = 4  Nr = 10
+  int Nr = 9;
+  byte* w = new byte[Nb*(Nr+1)];
+
+  byte key[] ={0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+
+  // AES 192: Nk = 6   Nb = 4  Nr = 12
+
+  // AES 256: Nk = 8   Nb = 4  Nr = 14
+
+
+}
+
 void testMult() {
   assert( GF8Mul(0x57 , 0x13) == 0xfe ) ;
 }
@@ -226,12 +298,16 @@ int main()
   state = new byte[4*Nb];
   memcpy(state,input,4*Nb);
 
-  addRoundKey(state,key);
-  subBytes(state);
-  shiftRows(state);
-  mixColumns(state);
-  printState();
-  invMixColumns(state);
+  // addRoundKey(state,key);
+  // subBytes(state);
+  // shiftRows(state);
+  // mixColumns(state);
+  // printState();
+  // invMixColumns(state);
+
+
+  // testKeyExpansion();
+testRotWord();
 
   printState();
 

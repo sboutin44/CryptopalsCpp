@@ -1,10 +1,5 @@
-#include "lib.h"
 #include "aes.h"
+#include "lib.h"
 using namespace std;
 
-
-
-
-void challenge_7() {
-
-}
+void challenge_7() {}

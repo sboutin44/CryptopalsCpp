@@ -46,4 +46,7 @@ void invMixColumns(byte* state);
 void invShiftRows(byte* state);
 void invSubBytes(byte* state);
 
+// KeyExpansion
+void rotWord(byte* word);
+
 #endif //CRYPTOPALS_INC_AES_H_

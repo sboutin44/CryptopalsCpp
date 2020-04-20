@@ -84,7 +84,7 @@ void displayProgramUsage() {
   std::cerr << std::endl;
 }
 
-void testFunction() {testAES();}
+void testFunction() { testAES(); }
 
 int main(int argc, char* argv[]) {
   /** The program can be run in two modes.
