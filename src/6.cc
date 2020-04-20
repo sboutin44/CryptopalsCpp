@@ -226,6 +226,21 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize) {
   return -1;
 }
 
+void testChallenge6() {
+  int l_encoded_ciphertext;
+  int l;
+  uint8_t* ciphertext = (uint8_t*)read_base64_file("resources/6.txt", &l);
+
+  char* _6_decoded =
+      read_text_file("resources/6_decoded.txt", &l_encoded_ciphertext);
+
+  cout << l << endl;
+  cout << l_encoded_ciphertext << endl;
+  // for (int i = 0; i < l; i++) {
+  //   if (_6_decoded[i] != ciphertext[i]) cout << i << endl;
+  // }
+}
+
 void challenge_6() {
   /** 6. Break repeating-key XOR
    *
@@ -238,16 +253,21 @@ void challenge_6() {
   cout << "------------------------------------\n" << endl;
 
   // TestHammingDistance();
-  //  int l_ciphertext;  // lenght of the cipher.
-  int l;
-  uint8_t* ciphertext = (uint8_t*)read_text_file("resources/6_decoded.txt", &l);
+  int l;  // lenght of the cipher.
+  int l_6_decoded;
+  uint8_t* ciphertext_ =
+      (uint8_t*)read_text_file("resources/6_decoded.txt", &l_6_decoded);
 
-  //  char* base64ed_encrypted_text =
-  //      read_text_file("resources/6.txt", &l_ciphertext);
-  //      uint8_t* ciphertext = base64Decode(base64ed_encrypted_text,
-  //      l_ciphertext);
-  //  uint8_t* ciphertext = base64Decode(base64ed_encrypted_text, l_ciphertext,
-  //  &l);
+  uint8_t* ciphertext = read_base64_file("resources/6.txt", &l);
+
+  cout << l << endl;
+  cout << l_6_decoded << endl;
+  for (int i = 0; i < l; i++) {
+    if (ciphertext[i] != ciphertext_[i]) cout << i << endl;
+  }
+
+  // return;
+  //
 
   // 1) Find the key
   int maxKeysizeTried = 40;
@@ -294,14 +314,12 @@ void challenge_6() {
   // terminator X: Bring the noise
 
   // Test the reconstituted key.
-  const char* repeatedkey = "terminator X: Bring the noise";
+  const char* repeatedkey = "Terminator X: Bring the noise";
   char* output = new char[l];
 
   // repeatedKeyXor
   for (int i = 0; i < l; i++)
     output[i] = ciphertext[i] ^ repeatedkey[i % strlen(repeatedkey)];
-
-  // repeatedKeyXor((char*)ciphertext, (char*)repeatedkey, output);
 
   // Display decrypted text:
   putchar('\n');

@@ -274,11 +274,69 @@ void testBase64Decode() {
       "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
   int size_expected = strlen(expected);
   int size_challenge = sizeof(challenge);
+  int size_decoded_challenge =
+      getDecodedTextSize((uint8_t*)expected, size_expected);
 
+  assert(size_decoded_challenge == size_challenge);
   uint8_t* challenge_decoded =
       new uint8_t[getDecodedTextSize((uint8_t*)expected, size_expected)];
   base64Decode((uint8_t*)expected, size_expected, challenge_decoded);
   assert(memcmp(challenge_decoded, challenge, size_challenge) == 0);
+
+  // Test on bigger texts:
+  int size_encoded_big_text;
+  char* encoded_big_text = read_text_file("resources/encoded_united_states.txt",
+                                          &size_encoded_big_text);
+
+  int size_decoded_big_text;
+  char* decoded_big_text =
+      read_text_file("resources/united_states.txt", &size_decoded_big_text);
+
+  int my_size_decoded_big_text =
+      getDecodedTextSize((uint8_t*)encoded_big_text, size_encoded_big_text);
+
+  assert(my_size_decoded_big_text != 0);
+  assert(my_size_decoded_big_text == size_decoded_big_text);
+
+  decoded = new uint8_t[my_size_decoded_big_text];
+  base64Decode((uint8_t*)encoded_big_text, size_encoded_big_text, decoded);
+  assert(memcmp(decoded_big_text, decoded, my_size_decoded_big_text) == 0);
+
+  delete[] decoded;
+  delete[] encoded_big_text;
+  delete[] decoded_big_text;
+
+  // Test on bigger texts:
+  char* encoded_big_text_ = read_text_file(
+      "resources/encoded_aliceadventures.txt", &size_encoded_big_text);
+
+  // Discard the last \n character, to end the string by =
+  size_encoded_big_text -= 1;
+  encoded_big_text = new char[size_encoded_big_text];
+  memcpy(encoded_big_text, encoded_big_text_, size_encoded_big_text);
+
+  decoded_big_text =
+      read_text_file("resources/aliceadventures.txt", &size_decoded_big_text);
+
+  my_size_decoded_big_text =
+      getDecodedTextSize((uint8_t*)encoded_big_text, size_encoded_big_text);
+
+  assert(my_size_decoded_big_text != 0);
+  // assert(my_size_decoded_big_text == size_decoded_big_text);
+
+  decoded = new uint8_t[my_size_decoded_big_text];
+  base64Decode((uint8_t*)encoded_big_text, size_encoded_big_text, decoded);
+  assert(memcmp(decoded_big_text, decoded, my_size_decoded_big_text) == 0);
+
+  // for (int i = 0; i < my_size_decoded_big_text; i++) printf("%d ",
+  // decoded[i]);
+
+  cout << my_size_decoded_big_text << endl;
+  cout << size_decoded_big_text << endl;
+
+  delete[] decoded;
+  delete[] encoded_big_text;
+  delete[] decoded_big_text;
 
   cout << "testBase64Decode passed" << endl;
 }
@@ -385,12 +443,6 @@ void testFindKeyLength() {
     ciphertext4[i] = plaintext[i] ^ key4[i % strlen(key4)];
   for (int i = 0; i < l_ciphertext - 1; i++)
     ciphertext5[i] = plaintext[i] ^ key5[i % strlen(key5)];
-
-  // repeatedKeyXor((char*)plaintext, key1, (char*)ciphertext1);
-  // repeatedKeyXor((char*)plaintext, key2, (char*)ciphertext2);
-  // repeatedKeyXor((char*)plaintext, key3, (char*)ciphertext3);
-  // repeatedKeyXor((char*)plaintext, key4, (char*)ciphertext4);
-  // repeatedKeyXor((char*)plaintext, key5, (char*)ciphertext5);
 
   // Find the keys, default max key length defined in findKeyLength
   int maxKeysizeTried = 100;

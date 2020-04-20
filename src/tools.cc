@@ -25,6 +25,73 @@
 #include "lib.h"
 using namespace std;
 
+uint8_t* read_base64_file(const char* filename, int* length) {
+  ifstream file;
+  uint8_t* out;
+
+  try {
+    file.open(filename);
+
+    if (file.fail()) throw file.rdstate();
+
+    // get length of file:
+    file.seekg(0, file.end);
+    *length = file.tellg();
+    file.seekg(0, file.beg);
+
+    // Count lines
+    int f = 0;
+    uint64_t sizeDecoded = 0;
+    uint64_t sizeLineDecoded = 0;
+
+    for (std::string line; std::getline(file, line);) {
+      sizeLineDecoded =
+          getDecodedTextSize((uint8_t*)line.c_str(), strlen(line.c_str()));
+      // cout << sizeLineDecoded << endl;
+      sizeDecoded += sizeLineDecoded;
+      // getDecodedTextSize((uint8_t*)line.c_str(), strlen(line.c_str()));
+    }
+    file.seekg(0, file.beg);
+    file.close();
+    file.open(filename);
+
+    *length = sizeDecoded;
+    out = new uint8_t[sizeDecoded];
+    assert(out != NULL);
+
+    // Read the file line by line, and remove line endings.
+    int pos = 0;  // position in out
+    for (std::string line; std::getline(file, line);) {
+      sizeLineDecoded =
+          getDecodedTextSize((uint8_t*)line.c_str(), strlen(line.c_str()));
+
+      int line_len = strlen(line.c_str());
+      // memcpy(&out[pos], line.c_str(), line_len);
+      base64Decode((uint8_t*)line.c_str(), line_len, &out[pos]);
+
+      // cout << line << endl;
+      // for (int i = 0; i < strlen(line.c_str()); i++)
+      //   printf("%s", &out[pos + i]);
+      // cout << endl;
+
+      pos += sizeLineDecoded;
+    }
+    cout << "pos: " << pos << endl;
+
+  } catch (ios::iostate filestate) {
+    if (filestate == ios::failbit) {
+      cerr << "failbit" << endl;
+    }
+
+    if (filestate == ios::badbit) {
+      cerr << "badbit" << endl;
+    }
+    cerr << "Failed to open file '" << filename << "'" << endl;
+    exit(EXIT_FAILURE);
+  }
+  return out;
+}
+
 char* read_text_file(const char* filename, int* length) {
   /** Return a text read from a file as well as its length.
    *
@@ -51,6 +118,14 @@ char* read_text_file(const char* filename, int* length) {
 
     out = (char*)malloc(sizeof(char) * (*length));
     assert(out != NULL);
+
+    // // Read the file line by line, and remove line endings.
+    // int pos = 0;  // position in out
+    // for (std::string line; std::getline(file, line);) {
+    //   int line_len = strlen(line.c_str());
+    //   memcpy(&out[pos], line.c_str(), line_len);
+    //   pos += line_len;
+    // }
 
     file.read(out, *length);
   } catch (ios::iostate filestate) {

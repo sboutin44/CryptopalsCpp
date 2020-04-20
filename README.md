@@ -1,8 +1,10 @@
-# CryptopalsCpp
+# Cryptopals
 
-# Message pour Corentin:
+This is my solution of the Matasan Crypto Challenges:
+https://cryptopals.com/
 
-Pour le nommage de mes variables j'utilise la convention proposé par Google:
-https://google.github.io/styleguide/cppguide.html#Header_Files
+## Build
+```$ make```
 
-Ce n'est en rien obligatoire, c'est pour avoir un code un peu plus propre et pour prendre de bonnes habitudes.
+## Launch
+<!-- ```$ make``` -->

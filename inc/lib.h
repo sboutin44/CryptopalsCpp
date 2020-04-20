@@ -29,6 +29,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -62,6 +63,7 @@ void singlebyteXORattackWithFrequencyScore(uint8_t* ciphertext, int size,
 void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size);
 char* read_text_file(const char* filename, int* length);
+uint8_t* read_base64_file(const char* filename, int* length);
 int hammingDistance(uint8_t* a, uint8_t* b, int n);
 int occurence(const char* s, char myChar);
 int occurence(uint8_t* s, char myChar, int length);

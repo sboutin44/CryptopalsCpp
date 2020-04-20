@@ -122,17 +122,19 @@ uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding) {
   }
 
   // Set the output size
-  uint64_t output_length = 0;
+  uint64_t output_length = ((size - *padding) / 4) * 3;
   if (*padding == 1)
-    output_length = ((size - *padding) / 4) * 3 + 2;
+    output_length += 2;
   else if (*padding == 2)
-    output_length = ((size - *padding) / 4) * 3 + 1;
-  else
-    output_length = ((size - *padding) / 4) * 3;
+    output_length += 1;
+
   return output_length;
 }
 
 void base64Decode(uint8_t* input, uint64_t size, uint8_t* output) {
+  // for (int i=0;i<size ;i++)
+  //   assert( input[i]
+
   uint8_t a, b, c, d;
   // Get Padding
   int padding = 0;

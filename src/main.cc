@@ -82,7 +82,7 @@ void displayProgramUsage() {
   std::cerr << std::endl;
 }
 
-void testFunction() {}
+void testFunction() { testChallenge6(); }
 
 int main(int argc, char* argv[]) {
   /** The program can be run in two modes.
