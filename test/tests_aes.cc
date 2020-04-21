@@ -23,6 +23,7 @@
 // use or other dealings in this Software without prior written authorization.
 
 #include "aes.h"
+using namespace std;
 
 void testRotWord() {
   byte word[] = {0x09, 0xcf, 0x4f, 0x3c};
@@ -64,6 +65,8 @@ void testKeyExpansion() {
   byte key[] = {0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6,
                 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c};
   KeyExpansion(key, w, Nk);
+
+  delete[] w;
 }
 
 void testMult() { assert(GF8Mul(0x57, 0x13) == 0xfe); }
@@ -102,4 +105,6 @@ void testAES128() {
   invAES128(to_decrypt, out3, key2);
   assert(memcmp(out3, in2, 4 * Nb) == 0);
   delete[] out3;
+
+  cout << "testAES128 \t\tpassed" << endl;
 }

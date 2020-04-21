@@ -162,6 +162,8 @@ void mixColumns_(byte* state, byte* matrix) {
     }
     memcpy(&state[col], word, 4);
   }
+
+  delete[] word;
 }
 
 void subBytes(byte* state) {
@@ -210,9 +212,11 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
   int i = 0;
   byte* temp = new byte[4];
 
-  // Set first key block with the initial key
+  // Set first key 4*4 block with the initial key
   while (i < Nk) {
-    for (int j = 0; j < 4; j++) w[4 * i + j] = key[4 * i + j];
+    for (int j = 0; j < 4; j++) {
+      w[4 * i + j] = key[4 * i + j];
+    }
     i = i + 1;
   }
   i = Nk;
@@ -220,7 +224,9 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
   // Remaining blocks
   while (i < Nb * (Nr + 1)) {
     // Store w[i-1] (notation in FIPS-197)
-    for (int j = 0; j < 4; j++) temp[j] = w[4 * (i - 1) + j];
+    for (int j = 0; j < 4; j++) {
+      temp[j] = w[4 * (i - 1) + j];
+    }
 
     // Case when i = 0 mod 4]
     if (i % Nk == 0) {
@@ -229,12 +235,12 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
       temp[0] ^= Rcon(i / Nk);
     } else if (Nk > 6 && i % Nk == 4) {
       subWord(temp);
-      printWord(temp);
     }
 
     // XOR
-    for (int j = 0; j < 4; j++) w[4 * i + j] = w[4 * (i - Nk) + j] ^ temp[j];
-
+    for (int j = 0; j < 4; j++) {
+      w[4 * i + j] = w[4 * (i - Nk) + j] ^ temp[j];
+    }
     i = i + 1;
   }
   // delete[] temp;
@@ -258,7 +264,6 @@ void cipher(byte* in, byte* out, byte* w, int Nr) {
   subBytes(state);
   shiftRows(state);
   addRoundKey(state, &w[4 * Nr * Nb]);
-  // printState();
 
   memcpy(out, state, 4 * Nb);
 
@@ -271,27 +276,17 @@ void invCipher(byte* in, byte* out, byte* w, int Nr) {
   memset(state, 0x00, 4 * Nb);  // TODO: remove when all tests passed.
   memcpy(state, in, 4 * Nb);
 
-  // addRoundKey(state, w[Nr*Nb, (Nr+1)*Nb-1]);
   addRoundKey(state, &w[4 * Nr * Nb]);
-  printState();
 
   for (int round = Nr - 1; round >= 1; round--) {
     invShiftRows(state);
-    printState();
     invSubBytes(state);
-    printState();
-    cout << "after addRoundKey:" << endl;
     addRoundKey(state, &w[4 * round * Nb]);
-    printState();
     invMixColumns(state);
-    printState();
   }
   invShiftRows(state);
-  printState();
   invSubBytes(state);
   addRoundKey(state, &w[0]);
-
-  printState();
 
   memcpy(out, state, 4 * Nb);
 
@@ -310,8 +305,7 @@ void AES128(byte* in, byte* out, byte* key) {
   cipher(in, out, w, Nr);
 
   // Cleaning
-  // delete[] w;
-  // delete[] out;
+  delete[] w;
 }
 
 void invAES128(byte* in, byte* out, byte* key) {
