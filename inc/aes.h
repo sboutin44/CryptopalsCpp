@@ -25,6 +25,7 @@
 #ifndef CRYPTOPALS_INC_AES_H_
 #define CRYPTOPALS_INC_AES_H_
 
+#include <cassert>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
