@@ -273,6 +273,8 @@ void cipher(byte* in, byte* out, byte* w, int Nr) {
 }
 
 void invCipher(byte* in, byte* out, byte* w, int Nr) {
+  // Allocate memory for the global varibale 'state'
+  state = new byte[4 * Nb];
   memset(state, 0x00, 4 * Nb);  // TODO: remove when all tests passed.
   memcpy(state, in, 4 * Nb);
 
@@ -316,6 +318,8 @@ void invAES128(byte* in, byte* out, byte* key) {
 
   KeyExpansion(key, w, Nk);
   invCipher(in, out, w, Nr);
+
+  delete[] w;
 }
 
 // tools
