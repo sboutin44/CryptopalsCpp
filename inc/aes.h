@@ -31,8 +31,6 @@
 
 typedef unsigned char byte;
 
-void expandKey();
-
 void mixColumns_(byte* state, byte* matrix);
 
 // AES functions
@@ -48,5 +46,10 @@ void invSubBytes(byte* state);
 
 // KeyExpansion
 void rotWord(byte* word);
+byte Rcon(int i);
+void subWord(byte* word);
+
+// Miscellaneous
+void printWord(byte* word);
 
 #endif //CRYPTOPALS_INC_AES_H_

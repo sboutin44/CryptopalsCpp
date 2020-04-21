@@ -216,38 +216,72 @@ void subWord(byte* word){
     word[i] = Sbox[word[i]];
 }
 
+byte Rcon(int i){
+  byte x = 2;
 
-//
-// void KeyExpansion(byte* key, byte* w, int Nk) {
-//   i=0;
-//
-//   // Set first blob with the key
-//   while (i < Nk) {
-//     for (int j=0 ; j< 4 ; j++)
-//       w[4*i + j] = key[4*i + j];
-//     i = i+1;
-//   }
-//   i = Nk;
-//
-//   // Remaining...
-//   while (i < Nb * (Nr+1)] {
-//
-//     // Store w[i-1] (notation in FIPS-197)
-//     byte* temp = new byte[4];
-//     for (int i = 0 ; i < 4*Nb ; i++)
-//       temp[j] = w[4*(i-1) + j];
-//
-//     // Compute the next blocks at w[i]
-//     if ( i % Nk == 0) {
-//       temp = SubWord(RotWord(temp)) xor Rcon[i/Nk];
-//     }
-//     else if (Nk > 6 and i mod Nk = 4) {
-//              temp = SubWord(temp);
-//    }
-//     w[i] = w[i-Nk] xor temp;
-//     i=i+1;
-//   }
-// }
+  if (i==1)
+    return 0x01;
+
+  for (int j = 1 ; j < i-1 ; j++)
+      x = xtime(x);
+  return x;
+  // word[0] ^= rcon_i;
+}
+
+
+void KeyExpansion(byte* key, byte* w, int Nk) {
+  int Nr;
+  if (Nk == 4) Nr = 10;
+  if (Nk == 6) Nr = 12;
+  if (Nk == 8) Nr = 14;
+
+  int i=0;
+
+  // Set first key block with the initial key
+  while (i < Nk) {
+    for (int j=0 ; j< 4 ; j++)
+      w[4*i + j] = key[4*i + j];
+    i = i+1;
+  }
+  i = Nk;
+
+  // Remaining blocks
+  while (i < Nb * (Nr+1)) {
+    // Store w[i-1] (notation in FIPS-197)
+    byte* temp = new byte[4];
+    for (int j = 0 ; j < 4*Nb ; j++)
+      temp[j] = w[4*(i-1) + j];
+
+    cout << "temp" << endl;
+    printWord(temp);
+
+    // Case when i = 0 mod 4]
+    if ( i % Nk == 0) {
+      rotWord(temp);
+      cout << "After Rotword" << endl;
+      printWord(temp);
+
+
+      subWord(temp);
+      cout << "After SubWord" << endl;
+      printWord(temp);
+
+      temp[0] ^= Rcon(i/Nk);
+      printf("%02x \n", Rcon(i/Nk));
+      cout << "XOR with Rcon" << endl;
+      printWord(temp);
+
+    } else if (Nk > 6 && i % Nk == 4) {
+      subWord(temp);
+   }
+
+   // XOR
+   for (int j = 0 ; j < 4 ; j++)
+      w[4*i + j] = w[4*(i-Nk) + j] ^ temp[j];
+
+    i=i+1;
+  }
+}
 
 void testRotWord()
 {
@@ -276,13 +310,28 @@ void testSubWord(){
   assert (memcmp(expected,word,4) == 0);
 }
 
+void testRcon(){
+  byte r = 0;
+  int Nr = 10;
+ for (int i = 1 ; i < Nr ; i++) {
+   r = Rcon(i);
+   printf("%02x \n", r);
+ }
+}
+
 void testKeyExpansion()
 {
   // AES 128: Nk = 4   Nb = 4  Nr = 10
-  int Nr = 9;
+  int Nr = 10;
+  int Nk = 4;
   byte* w = new byte[Nb*(Nr+1)];
 
   byte key[] ={0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+
+  KeyExpansion(key, w, Nk);
+
+  // for (int j = 0 ; j < Nb*(Nr+1) ; j++)
+  //    printf("%02x \n", w[j]);
 
   // AES 192: Nk = 6   Nb = 4  Nr = 12
 
@@ -293,6 +342,12 @@ void testKeyExpansion()
 
 void testMult() {
   assert( GF8Mul(0x57 , 0x13) == 0xfe ) ;
+}
+
+void printWord(byte* word){
+  for (int i = 0 ; i < 4 ; i++)
+    printf("%02x ", word[i]);
+  printf("\n");
 }
 
 void printState()
@@ -321,10 +376,9 @@ int main()
   // printState();
   // invMixColumns(state);
 
+// testRcon();
+  testKeyExpansion();
 
-  // testKeyExpansion();
-  testRotWord();
-  testSubWord();
   printState();
 
 return 0;
