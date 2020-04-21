@@ -241,6 +241,8 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
 }
 
 void cipher(byte* in, byte* out, byte* w, int Nr) {
+  // Allocate memory for the global varibale 'state'
+  state = new byte[4 * Nb];
   memset(state, 0x00, 4 * Nb);  // TODO: remove when all tests passed.
   memcpy(state, in, 4 * Nb);
 
