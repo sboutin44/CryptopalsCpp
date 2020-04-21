@@ -244,23 +244,23 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
     for (int j = 0 ; j < 4 ; j++)
       temp[j] = w[4*(i-1) + j];
 
-    cout << "temp --------------------" << endl;
-    printWord(temp);
+    // cout << "temp --------------------" << endl;
+    // printWord(temp);
 
     // Case when i = 0 mod 4]
     if ( i % Nk == 0) {
       rotWord(temp);
-      cout << "After Rotword" << endl;
-      printWord(temp);
+      // cout << "After Rotword" << endl;
+      // printWord(temp);
 
       subWord(temp);
-      cout << "After SubWord" << endl;
-      printWord(temp);
+      // cout << "After SubWord" << endl;
+      // printWord(temp);
 
       temp[0] ^= Rcon(i/Nk);
-      printf("%02x \n", Rcon(i/Nk));
-      cout << "XOR with Rcon" << endl;
-      printWord(temp);
+      // printf("%02x \n", Rcon(i/Nk));
+      // cout << "XOR with Rcon" << endl;
+      // printWord(temp);
 
     } else if (Nk > 6 && i % Nk == 4) {
       subWord(temp);
@@ -279,35 +279,17 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
 void cipher (byte* in, byte* out, byte* w, int Nr) {
   memcpy (state,in,4*Nb);
 
-  // printState();
-  print16BytesBlock(&w[0]);
   addRoundKey(state, &w[0]);
-  // printState();
 
   for (int round = 1; round < Nr ; round++ ) {
     subBytes(state);
-    // printState();
-
     shiftRows(state);
-    // printState();
-
     mixColumns(state);
-    // printState();
-
-    // print rond key
-    print16BytesBlock(&w[4*round*Nb]);
-    // printf("%02x \n", &w[round*Nb]);
     addRoundKey(state, &w[4*round*Nb]);
-    // printState();
   }
 
   subBytes(state);
-  // printState();
-
   shiftRows(state);
-  // printState();
-
-  print16BytesBlock(&w[4*Nr*Nb]);
   addRoundKey(state, &w[4*Nr*Nb]);
   printState();
 
@@ -325,6 +307,8 @@ void aes128 (byte* in, byte* out,byte* key){
 
   cipher(in, out, w, Nr);
 
+  memcpy (out,state,4*Nb);
+
   // Cleaning
   // delete[] w;
   // delete[] out;
@@ -333,11 +317,22 @@ void aes128 (byte* in, byte* out,byte* key){
 void testAES128(){
   byte in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
   byte key[] =  {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+  byte expected[] = {0x39,0x25,0x84,0x1d,0x02,0xdc,0x09,0xfb,0xdc,0x11,0x85,0x97,0x19,0x6a,0x0b,0x32};
   byte* out = new byte[4*Nb];
 
   aes128 ( in,  out, key);
-
+  assert ( memcmp(expected,out,4*Nb) == 0 );
   delete[] out;
+
+    byte in2[] = {0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xaa,0xbb,0xcc,0xdd,0xee,0xff};
+    byte key2[] =  {0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a,0x0b,0x0c,0x0d,0x0e,0x0f};
+    byte expected2[] = {0x69,0xc4,0xe0,0xd8,0x6a,0x7b,0x04,0x30,0xd8,0xcd,0xb7,0x80,0x70,0xb4,0xc5,0x5a};
+    byte* out2 = new byte[4*Nb];
+
+    aes128 ( in2,  out2, key2);
+    assert ( memcmp(expected2,out2,4*Nb) == 0 );
+    delete[] out2;
+
 }
 
 void testRotWord()
