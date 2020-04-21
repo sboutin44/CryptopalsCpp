@@ -293,9 +293,34 @@ void cipher (byte* in, byte* out, byte* w, int Nr) {
   addRoundKey(state, &w[4*Nr*Nb]);
   printState();
 
+  memcpy (out,state,4*Nb);
+
   // Cleaning
+  memset (state,0x00,4*Nb); // TODO: remove when all tests passed.
   delete[] state;
 }
+
+// void InvCipher(byte* in, byte* out, byte* w) {
+//   memcpy (state,in,4*Nb);
+//
+//   addRoundKey(state, w[Nr*Nb, (Nr+1)*Nb-1]);
+//   for (int round = Nr-1 step -1 downto 1) {
+//     invShiftRows(state);
+//     invSubBytes(state);
+//     addRoundKey(state, w[round*Nb, (round+1)*Nb-1]);
+//     invMixColumns(state);
+// }
+//   invShiftRows(state) ;
+//   invSubBytes(state) ;
+//   addRoundKey(state, w[0, Nb-1]);
+//
+//   printState();
+//
+//   // Cleaning
+//   delete[] state;
+// }
+
+
 
 void aes128 (byte* in, byte* out,byte* key){
   // AES 128: Nk = 4   Nb = 4  Nr = 10
@@ -307,7 +332,7 @@ void aes128 (byte* in, byte* out,byte* key){
 
   cipher(in, out, w, Nr);
 
-  memcpy (out,state,4*Nb);
+  // memcpy (out,state,4*Nb);
 
   // Cleaning
   // delete[] w;
