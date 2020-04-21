@@ -22,18 +22,9 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
-
 #ifndef CRYPTOPALS_INC_TESTS_AES_H_
 #define CRYPTOPALS_INC_TESTS_AES_H_
 
 #include "lib.h"
-
-void testAES128();
-void testMult();
-void testKeyExpansion();
-void testXtime();
-void testRcon();
-void testSubWord();
-void testRotWord();
 
 #endif

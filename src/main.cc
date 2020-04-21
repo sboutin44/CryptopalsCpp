@@ -22,9 +22,9 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
+#include "aes.h"
 #include "lib.h"
 #include "tests.h"
-#include "aes.h"
 #include "tests_aes.h"
 
 using namespace std;
@@ -87,7 +87,7 @@ void displayProgramUsage() {
   std::cerr << std::endl;
 }
 
-void testFunction() { }
+void testFunction() {}
 
 int main(int argc, char* argv[]) {
   /** The program can be run in two modes.

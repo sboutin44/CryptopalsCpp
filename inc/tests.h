@@ -35,5 +35,13 @@ void testFindKeyLength();
 void testBase64Encode();
 void testBase64Decode();
 
+// AES128
+void testAES128();
+void testMult();
+void testKeyExpansion();
+void testXtime();
+void testRcon();
+void testSubWord();
+void testRotWord();
 
-#endif 
+#endif
