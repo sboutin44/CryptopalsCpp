@@ -51,5 +51,7 @@ void subWord(byte* word);
 
 // Miscellaneous
 void printWord(byte* word);
+void printState();
+void print16BytesBlock(byte* block);
 
 #endif //CRYPTOPALS_INC_AES_H_

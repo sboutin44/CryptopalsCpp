@@ -193,14 +193,6 @@ void invSubBytes(byte* state)
     state[i] = invSbox[state[i]];
 }
 
-// tests
-void testXtime()
-{
-  assert (xtime(0x57) == 0xae);
-  assert (xtime(0xae) == 0x47);
-  assert (xtime(0x47) == 0x8e);
-  assert (xtime(0x8e) == 0x07);
-}
 
 void rotWord(byte* word){
   byte tmp = word[0];
@@ -236,6 +228,7 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
   if (Nk == 8) Nr = 14;
 
   int i=0;
+  byte* temp = new byte[4];
 
   // Set first key block with the initial key
   while (i < Nk) {
@@ -248,11 +241,10 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
   // Remaining blocks
   while (i < Nb * (Nr+1)) {
     // Store w[i-1] (notation in FIPS-197)
-    byte* temp = new byte[4];
-    for (int j = 0 ; j < 4*Nb ; j++)
+    for (int j = 0 ; j < 4 ; j++)
       temp[j] = w[4*(i-1) + j];
 
-    cout << "temp" << endl;
+    cout << "temp --------------------" << endl;
     printWord(temp);
 
     // Case when i = 0 mod 4]
@@ -260,7 +252,6 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
       rotWord(temp);
       cout << "After Rotword" << endl;
       printWord(temp);
-
 
       subWord(temp);
       cout << "After SubWord" << endl;
@@ -273,6 +264,7 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
 
     } else if (Nk > 6 && i % Nk == 4) {
       subWord(temp);
+      printWord(temp);
    }
 
    // XOR
@@ -281,26 +273,78 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
 
     i=i+1;
   }
+  delete[] temp;
+}
+
+void cipher (byte* in, byte* out, byte* w, int Nr) {
+  memcpy (state,in,4*Nb);
+
+  // printState();
+  print16BytesBlock(&w[0]);
+  addRoundKey(state, &w[0]);
+  // printState();
+
+  for (int round = 1; round < Nr-1 ; round++ ) {
+    subBytes(state);
+    // printState();
+
+    shiftRows(state);
+    // printState();
+
+    mixColumns(state);
+    // printState();
+
+    // print rond key
+    print16BytesBlock(&w[4*round*Nb]);
+    // printf("%02x \n", &w[round*Nb]);
+    addRoundKey(state, &w[round*Nb]);
+    // printState();
+  }
+
+  subBytes(state);
+  // printState();
+
+  shiftRows(state);
+  // printState();
+
+  addRoundKey(state, &w[Nr*Nb]);
+  // printState();
+
+  // Cleaning
+  delete[] state;
+}
+
+void aes128 (byte* in, byte* out,byte* key){
+  // AES 128: Nk = 4   Nb = 4  Nr = 10
+  int Nr = 10;
+  int Nk = 4;
+  byte* w = new byte[4*Nb*(Nr+1)];
+
+ KeyExpansion(key, w, Nk);
+
+  cipher(in, out, w, Nr);
+
+  // Cleaning
+  delete[] w;
+  delete[] out;
+}
+
+void testAES128(){
+  byte in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
+  byte key[] =  {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
+  byte* out = new byte[4*Nb];
+
+  aes128 ( in,  out, key);
+
+  delete[] out;
 }
 
 void testRotWord()
 {
   byte word[] = {0x09,0xcf,0x4f,0x3c};
-
-  // printf("Before\n");
-  // for (int i = 0 ; i < 4 ; i++)
-  //   printf("%02x ", word[i]);
-  // printf("\n");
-
   rotWord(word);
-
   byte expected[] = {0xcf,0x4f,0x3c,0x09};
   assert (memcmp(expected,word,4) == 0);
-
-  // printf("After\n");
-  // for (int i = 0 ; i < 4 ; i++)
-  //   printf("%02x ", word[i]);
-  // printf("\n");
 }
 
 void testSubWord(){
@@ -319,25 +363,23 @@ void testRcon(){
  }
 }
 
+// tests
+void testXtime()
+{
+  assert (xtime(0x57) == 0xae);
+  assert (xtime(0xae) == 0x47);
+  assert (xtime(0x47) == 0x8e);
+  assert (xtime(0x8e) == 0x07);
+}
+
 void testKeyExpansion()
 {
   // AES 128: Nk = 4   Nb = 4  Nr = 10
   int Nr = 10;
   int Nk = 4;
   byte* w = new byte[Nb*(Nr+1)];
-
   byte key[] ={0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
-
   KeyExpansion(key, w, Nk);
-
-  // for (int j = 0 ; j < Nb*(Nr+1) ; j++)
-  //    printf("%02x \n", w[j]);
-
-  // AES 192: Nk = 6   Nb = 4  Nr = 12
-
-  // AES 256: Nk = 8   Nb = 4  Nr = 14
-
-
 }
 
 void testMult() {
@@ -347,6 +389,13 @@ void testMult() {
 void printWord(byte* word){
   for (int i = 0 ; i < 4 ; i++)
     printf("%02x ", word[i]);
+  printf("\n");
+}
+
+void print16BytesBlock(byte* block)
+{
+  for (int i = 0 ; i < 4*Nb ; i++)
+    printf("%02x ", block[i]);
   printf("\n");
 }
 
@@ -369,35 +418,9 @@ int main()
   state = new byte[4*Nb];
   memcpy(state,input,4*Nb);
 
-  // addRoundKey(state,key);
-  // subBytes(state);
-  // shiftRows(state);
-  // mixColumns(state);
-  // printState();
-  // invMixColumns(state);
+ testAES128();
 
-// testRcon();
-  testKeyExpansion();
-
-  printState();
+  // testKeyExpansion();
 
 return 0;
 }
-
-
-// cipher(uint8_t* in, uint8_t* out, word w[Nb*(Nr+1)]) {
-//   byte state[4,Nb]
-//   state = in
-//   addRoundKey(state, w[0, Nb-1])
-//
-//   for round = 1 step 1 to Nr–1 {
-//     subBytes(state)
-//     shiftRows(state)
-//     mixColumns(state)
-//     addRoundKey(state, w[round*Nb, (round+1)*Nb-1])
-//   }
-//
-//   subBytes(state)
-//   shiftRows(state)
-//   addRoundKey(state, w[Nr*Nb, (Nr+1)*Nb-1])
-// }
