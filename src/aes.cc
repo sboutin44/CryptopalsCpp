@@ -277,6 +277,7 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
 }
 
 void cipher (byte* in, byte* out, byte* w, int Nr) {
+  memset (state,0x00,4*Nb); // TODO: remove when all tests passed.
   memcpy (state,in,4*Nb);
 
   addRoundKey(state, &w[0]);
@@ -291,6 +292,39 @@ void cipher (byte* in, byte* out, byte* w, int Nr) {
   subBytes(state);
   shiftRows(state);
   addRoundKey(state, &w[4*Nr*Nb]);
+  // printState();
+
+  memcpy (out,state,4*Nb);
+
+  // Cleaning
+  memset (state,0x00,4*Nb); // TODO: remove when all tests passed.
+  delete[] state;
+}
+
+void invCipher(byte* in, byte* out, byte* w,int Nr ) {
+  memset (state,0x00,4*Nb); // TODO: remove when all tests passed.
+  memcpy (state,in,4*Nb);
+
+  // addRoundKey(state, w[Nr*Nb, (Nr+1)*Nb-1]);
+  addRoundKey(state, &w[4*Nr*Nb]);
+  printState();
+
+  for (int round = Nr-1 ; round >= 1; round--) {
+    invShiftRows(state);
+    printState();
+    invSubBytes(state);
+    printState();
+    cout << "after addRoundKey:" << endl;
+    addRoundKey(state, &w[4*round*Nb]);
+    printState();
+    invMixColumns(state);
+    printState();
+}
+  invShiftRows(state) ;
+  printState();
+  invSubBytes(state) ;
+  addRoundKey(state, &w[0]);
+
   printState();
 
   memcpy (out,state,4*Nb);
@@ -300,52 +334,39 @@ void cipher (byte* in, byte* out, byte* w, int Nr) {
   delete[] state;
 }
 
-// void InvCipher(byte* in, byte* out, byte* w) {
-//   memcpy (state,in,4*Nb);
-//
-//   addRoundKey(state, w[Nr*Nb, (Nr+1)*Nb-1]);
-//   for (int round = Nr-1 step -1 downto 1) {
-//     invShiftRows(state);
-//     invSubBytes(state);
-//     addRoundKey(state, w[round*Nb, (round+1)*Nb-1]);
-//     invMixColumns(state);
-// }
-//   invShiftRows(state) ;
-//   invSubBytes(state) ;
-//   addRoundKey(state, w[0, Nb-1]);
-//
-//   printState();
-//
-//   // Cleaning
-//   delete[] state;
-// }
-
-
-
-void aes128 (byte* in, byte* out,byte* key){
+void AES128 (byte* in, byte* out,byte* key){
   // AES 128: Nk = 4   Nb = 4  Nr = 10
   int Nr = 10;
   int Nk = 4;
   byte* w = new byte[4*Nb*(Nr+1)];
 
  KeyExpansion(key, w, Nk);
-
   cipher(in, out, w, Nr);
-
-  // memcpy (out,state,4*Nb);
 
   // Cleaning
   // delete[] w;
   // delete[] out;
 }
 
+void invAES128 (byte* in, byte* out,byte* key){
+  // AES 128: Nk = 4   Nb = 4  Nr = 10
+  int Nr = 10;
+  int Nk = 4;
+  byte* w = new byte[4*Nb*(Nr+1)];
+
+ KeyExpansion(key, w, Nk);
+  invCipher(in, out, w, Nr);
+}
+
 void testAES128(){
+
+  // Encryptions
   byte in[] = {0x32,0x43,0xf6,0xa8,0x88,0x5a,0x30,0x8d,0x31,0x31,0x98,0xa2,0xe0,0x37,0x07,0x34};
   byte key[] =  {0x2b,0x7e,0x15,0x16,0x28,0xae,0xd2,0xa6,0xab,0xf7,0x15,0x88,0x09,0xcf,0x4f,0x3c};
   byte expected[] = {0x39,0x25,0x84,0x1d,0x02,0xdc,0x09,0xfb,0xdc,0x11,0x85,0x97,0x19,0x6a,0x0b,0x32};
   byte* out = new byte[4*Nb];
 
-  aes128 ( in,  out, key);
+  AES128 ( in,  out, key);
   assert ( memcmp(expected,out,4*Nb) == 0 );
   delete[] out;
 
@@ -354,9 +375,17 @@ void testAES128(){
     byte expected2[] = {0x69,0xc4,0xe0,0xd8,0x6a,0x7b,0x04,0x30,0xd8,0xcd,0xb7,0x80,0x70,0xb4,0xc5,0x5a};
     byte* out2 = new byte[4*Nb];
 
-    aes128 ( in2,  out2, key2);
+    AES128 ( in2,  out2, key2);
     assert ( memcmp(expected2,out2,4*Nb) == 0 );
     delete[] out2;
+
+    // Decryptions
+    byte* to_decrypt = expected2;
+    byte* out3 = new byte[4*Nb];
+
+    invAES128 ( to_decrypt,  out3, key2);
+    assert ( memcmp(out3,in2,4*Nb) == 0 );
+    delete[] out3;
 
 }
 

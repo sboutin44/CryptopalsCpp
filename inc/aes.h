@@ -33,7 +33,13 @@ typedef unsigned char byte;
 
 void mixColumns_(byte* state, byte* matrix);
 
-// AES functions
+// AES
+void AES128 (byte* in, byte* out,byte* key);
+void invAES128 (byte* in, byte* out,byte* key);
+void cipher (byte* in, byte* out, byte* w, int Nr);
+void invCipher(byte* in, byte* out, byte* w,int Nr ) ;
+
+// AES internal functions
 void addRoundKey(byte* state, byte* round_key);
 void subBytes(byte* state);
 void shiftRows(byte* state);
