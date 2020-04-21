@@ -22,45 +22,18 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
-#ifndef CRYPTOPALS_INC_AES_H_
-#define CRYPTOPALS_INC_AES_H_
 
-#include <iostream>
-#include <cstdlib>
-#include <cstring>
+#ifndef CRYPTOPALS_INC_TESTS_AES_H_
+#define CRYPTOPALS_INC_TESTS_AES_H_
 
-typedef unsigned char byte;
+#include "lib.h"
 
-byte xtime(byte b);
-byte GF8Mul(byte a, byte b) ;
-void mixColumns_(byte* state, byte* matrix);
+void testAES128();
+void testMult();
+void testKeyExpansion();
+void testXtime();
+void testRcon();
+void testSubWord();
+void testRotWord();
 
-// AES
-void AES128 (byte* in, byte* out,byte* key);
-void invAES128 (byte* in, byte* out,byte* key);
-void cipher (byte* in, byte* out, byte* w, int Nr);
-void invCipher(byte* in, byte* out, byte* w,int Nr ) ;
-void KeyExpansion(byte* key, byte* w, int Nk);
-
-// AES internal functions
-void addRoundKey(byte* state, byte* round_key);
-void subBytes(byte* state);
-void shiftRows(byte* state);
-void mixColumns(byte* state);
-
-// invAES functions
-void invMixColumns(byte* state);
-void invShiftRows(byte* state);
-void invSubBytes(byte* state);
-
-// KeyExpansion
-void rotWord(byte* word);
-byte Rcon(int i);
-void subWord(byte* word);
-
-// Miscellaneous
-void printWord(byte* word);
-void printState();
-void print16BytesBlock(byte* block);
-
-#endif //CRYPTOPALS_INC_AES_H_
+#endif

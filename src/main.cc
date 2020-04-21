@@ -24,6 +24,8 @@
 
 #include "lib.h"
 #include "tests.h"
+#include "aes.h"
+#include "tests_aes.h"
 
 using namespace std;
 
@@ -65,6 +67,7 @@ void runTests() {
   testInsertionSort();
   testHistogram();
   testFindKeyLength();
+  testAES128();
 }
 
 void displayProgramUsage() {
@@ -84,7 +87,7 @@ void displayProgramUsage() {
   std::cerr << std::endl;
 }
 
-void testFunction() { testAES(); }
+void testFunction() { }
 
 int main(int argc, char* argv[]) {
   /** The program can be run in two modes.
