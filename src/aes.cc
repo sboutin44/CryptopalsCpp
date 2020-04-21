@@ -273,7 +273,7 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
 
     i=i+1;
   }
-  delete[] temp;
+  // delete[] temp;
 }
 
 void cipher (byte* in, byte* out, byte* w, int Nr) {
@@ -284,7 +284,7 @@ void cipher (byte* in, byte* out, byte* w, int Nr) {
   addRoundKey(state, &w[0]);
   // printState();
 
-  for (int round = 1; round < Nr-1 ; round++ ) {
+  for (int round = 1; round < Nr ; round++ ) {
     subBytes(state);
     // printState();
 
@@ -297,7 +297,7 @@ void cipher (byte* in, byte* out, byte* w, int Nr) {
     // print rond key
     print16BytesBlock(&w[4*round*Nb]);
     // printf("%02x \n", &w[round*Nb]);
-    addRoundKey(state, &w[round*Nb]);
+    addRoundKey(state, &w[4*round*Nb]);
     // printState();
   }
 
@@ -307,8 +307,9 @@ void cipher (byte* in, byte* out, byte* w, int Nr) {
   shiftRows(state);
   // printState();
 
-  addRoundKey(state, &w[Nr*Nb]);
-  // printState();
+  print16BytesBlock(&w[4*Nr*Nb]);
+  addRoundKey(state, &w[4*Nr*Nb]);
+  printState();
 
   // Cleaning
   delete[] state;
@@ -325,8 +326,8 @@ void aes128 (byte* in, byte* out,byte* key){
   cipher(in, out, w, Nr);
 
   // Cleaning
-  delete[] w;
-  delete[] out;
+  // delete[] w;
+  // delete[] out;
 }
 
 void testAES128(){
