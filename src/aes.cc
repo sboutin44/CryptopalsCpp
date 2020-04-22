@@ -243,7 +243,7 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
     }
     i = i + 1;
   }
-  // delete[] temp;
+  delete[] temp;
 }
 
 void cipher(byte* in, byte* out, byte* w, int Nr) {
@@ -264,7 +264,7 @@ void cipher(byte* in, byte* out, byte* w, int Nr) {
   subBytes(state);
   shiftRows(state);
   addRoundKey(state, &w[4 * Nr * Nb]);
-
+  printState();
   memcpy(out, state, 4 * Nb);
 
   // Cleaning
