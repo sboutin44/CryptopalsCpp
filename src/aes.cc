@@ -297,7 +297,7 @@ void invCipher(byte* in, byte* out, byte* w, int Nr) {
   delete[] state;
 }
 
-void AES128(byte* in, byte* out, byte* key) {
+void AES128(byte* in, byte* key, byte* out) {
   // AES 128: Nk = 4   Nb = 4  Nr = 10
   int Nr = 10;
   int Nk = 4;
@@ -310,7 +310,7 @@ void AES128(byte* in, byte* out, byte* key) {
   delete[] w;
 }
 
-void invAES128(byte* in, byte* out, byte* key) {
+void invAES128(byte* in, byte* key, byte* out) {
   // AES 128: Nk = 4   Nb = 4  Nr = 10
   int Nr = 10;
   int Nk = 4;

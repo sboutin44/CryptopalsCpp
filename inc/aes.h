@@ -37,8 +37,8 @@ byte GF8Mul(byte a, byte b);
 void mixColumns_(byte* state, byte* matrix);
 
 // AES
-void AES128(byte* in, byte* out, byte* key);
-void invAES128(byte* in, byte* out, byte* key);
+void AES128(byte* in, byte* key, byte* out);
+void invAES128(byte* in, byte* key, byte* out);
 void cipher(byte* in, byte* out, byte* w, int Nr);
 void invCipher(byte* in, byte* out, byte* w, int Nr);
 void KeyExpansion(byte* key, byte* w, int Nk);

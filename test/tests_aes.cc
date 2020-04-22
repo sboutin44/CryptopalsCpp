@@ -85,7 +85,7 @@ void testAES128() {
                      0xdc, 0x11, 0x85, 0x97, 0x19, 0x6a, 0x0b, 0x32};
   byte* out = new byte[4 * Nb];
 
-  AES128(in, out, key1);
+  AES128(in, key1, out);
   assert(memcmp(expected, out, 4 * Nb) == 0);
   delete[] out;
 
@@ -97,7 +97,7 @@ void testAES128() {
                       0xd8, 0xcd, 0xb7, 0x80, 0x70, 0xb4, 0xc5, 0x5a};
   byte* out2 = new byte[4 * Nb];
 
-  AES128(in2, out2, key2);
+  AES128(in2, key2, out2);
   assert(memcmp(expected2, out2, 4 * Nb) == 0);
   delete[] out2;
 
@@ -121,11 +121,11 @@ void testAES128() {
   hexDecode(CIPHERTEXT, ciphertext);
 
   // Encrypt
-  AES128(plaintext, my_ciphertext, key);
+  AES128(plaintext, key, my_ciphertext);
   assert(memcmp(ciphertext, my_ciphertext, 4 * Nb) == 0);
 
   // Decrypt
-  invAES128(ciphertext, my_plaintext, key);
+  invAES128(ciphertext, key, my_plaintext);
   assert(memcmp(plaintext, my_plaintext, 4 * Nb) == 0);
 
   //--------------------------------------------------------------------
@@ -152,11 +152,11 @@ void testAES128() {
   hexDecode(CIPHERTEXT, ciphertext);
 
   // Encrypt
-  AES128(plaintext, my_ciphertext, key);
+  AES128(plaintext, key, my_ciphertext);
   assert(memcmp(ciphertext, my_ciphertext, 4 * Nb) == 0);
 
   // Decrypt
-  invAES128(ciphertext, my_plaintext, key);
+  invAES128(ciphertext, key, my_plaintext);
   assert(memcmp(plaintext, my_plaintext, 4 * Nb) == 0);
 
   // [ENCRYPT]
@@ -223,7 +223,7 @@ void testAES128() {
   byte* to_decrypt = expected2;
   byte* out3 = new byte[4 * Nb];
 
-  invAES128(to_decrypt, out3, key2);
+  invAES128(to_decrypt, key2, out3);
   assert(memcmp(out3, in2, 4 * Nb) == 0);
   delete[] out3;
 
