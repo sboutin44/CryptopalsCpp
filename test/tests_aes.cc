@@ -101,6 +101,9 @@ void testAES128() {
   assert(memcmp(expected2, out2, 4 * Nb) == 0);
   delete[] out2;
 
+  //--------------------------------------------------------------------
+  // Sample test 1
+  //--------------------------------------------------------------------
   const char* KEY = "00000000000000000000000000000000";
   const char* PLAINTEXT = "f34481ec3cc627bacd5dc3fb08f273e6";
   const char* CIPHERTEXT = "0336763e966d92595a567cc9ce537f5e";
@@ -108,14 +111,113 @@ void testAES128() {
   byte* plaintext = new byte[4 * Nb];
   byte* key = new byte[4 * Nb];
   byte* ciphertext = new byte[4 * Nb];
-  byte* output = new byte[4 * Nb];
+  byte* my_ciphertext = new byte[4 * Nb];
+  byte* my_plaintext = new byte[4 * Nb];
 
+  // Parse the string into hex array:
+  // "ABCDEF" becomes {0xAB, 0xDC, 0xEF}
   hexDecode(PLAINTEXT, plaintext);
   hexDecode(KEY, key);
   hexDecode(CIPHERTEXT, ciphertext);
 
-  AES128(plaintext, output, key);
-  assert(memcmp(ciphertext, output, 4 * Nb) == 0);
+  // Encrypt
+  AES128(plaintext, my_ciphertext, key);
+  assert(memcmp(ciphertext, my_ciphertext, 4 * Nb) == 0);
+
+  // Decrypt
+  invAES128(ciphertext, my_plaintext, key);
+  assert(memcmp(plaintext, my_plaintext, 4 * Nb) == 0);
+
+  //--------------------------------------------------------------------
+  // Sample test 2
+  //--------------------------------------------------------------------
+
+  // [ENCRYPT]
+
+  KEY = "00000000000000000000000000000000";
+  PLAINTEXT = "f34481ec3cc627bacd5dc3fb08f273e6";
+  CIPHERTEXT = "0336763e966d92595a567cc9ce537f5e";
+
+  // Cleaning
+  memset(plaintext, 0, 4 * Nb);
+  memset(key, 0, 4 * Nb);
+  memset(ciphertext, 0, 4 * Nb);
+  memset(my_ciphertext, 0, 4 * Nb);
+  memset(my_plaintext, 0, 4 * Nb);
+
+  // Parse the string into hex array:
+  // "ABCDEF" becomes {0xAB, 0xDC, 0xEF}
+  hexDecode(PLAINTEXT, plaintext);
+  hexDecode(KEY, key);
+  hexDecode(CIPHERTEXT, ciphertext);
+
+  // Encrypt
+  AES128(plaintext, my_ciphertext, key);
+  assert(memcmp(ciphertext, my_ciphertext, 4 * Nb) == 0);
+
+  // Decrypt
+  invAES128(ciphertext, my_plaintext, key);
+  assert(memcmp(plaintext, my_plaintext, 4 * Nb) == 0);
+
+  // [ENCRYPT]
+  //
+  // KEY = "00000000000000000000000000000000";
+  // PLAINTEXT = "f34481ec3cc627bacd5dc3fb08f273e6";
+  // CIPHERTEXT = "0336763e966d92595a567cc9ce537f5e";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // PLAINTEXT = "9798c4640bad75c7c3227db910174e72";
+  // CIPHERTEXT = "a9a1631bf4996954ebc093957b234589";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // PLAINTEXT = "96ab5c2ff612d9dfaae8c31f30c42168";
+  // CIPHERTEXT = "ff4f8391a6a40ca5b25d23bedd44a597";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // PLAINTEXT = "6a118a874519e64e9963798a503f1d35";
+  // CIPHERTEXT = "dc43be40be0e53712f7e2bf5ca707209";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // PLAINTEXT = "cb9fceec81286ca3e989bd979b0cb284";
+  // CIPHERTEXT = "92beedab1895a94faa69b632e5cc47ce";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // PLAINTEXT = "b26aeb1874e47ca8358ff22378f09144";
+  // CIPHERTEXT = "459264f4798f6a78bacb89c15ed3d601";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // PLAINTEXT = "58c8e00b2631686d54eab84b91f0aca1";
+  // CIPHERTEXT = "08a4e2efec8a8e3312ca7460b9040bbf";
+  //
+  // [DECRYPT]";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // CIPHERTEXT = "0336763e966d92595a567cc9ce537f5e";
+  // PLAINTEXT = "f34481ec3cc627bacd5dc3fb08f273e6";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // CIPHERTEXT = "a9a1631bf4996954ebc093957b234589";
+  // PLAINTEXT = "9798c4640bad75c7c3227db910174e72";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // CIPHERTEXT = "ff4f8391a6a40ca5b25d23bedd44a597";
+  // PLAINTEXT = "96ab5c2ff612d9dfaae8c31f30c42168";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // CIPHERTEXT = "dc43be40be0e53712f7e2bf5ca707209";
+  // PLAINTEXT = "6a118a874519e64e9963798a503f1d35";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // CIPHERTEXT = "92beedab1895a94faa69b632e5cc47ce";
+  // PLAINTEXT = "cb9fceec81286ca3e989bd979b0cb284";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // CIPHERTEXT = "459264f4798f6a78bacb89c15ed3d601";
+  // PLAINTEXT = "b26aeb1874e47ca8358ff22378f09144";
+  //
+  // KEY = "00000000000000000000000000000000";
+  // CIPHERTEXT = "08a4e2efec8a8e3312ca7460b9040bbf";
+  // PLAINTEXT = "58c8e00b2631686d54eab84b91f0aca1";
 
   // Decryptions
   byte* to_decrypt = expected2;
@@ -128,7 +230,8 @@ void testAES128() {
   delete[] plaintext;
   delete[] key;
   delete[] ciphertext;
-  delete[] output;
+  delete[] my_plaintext;
+  delete[] my_ciphertext;
 
   cout << "testAES128 \t\tpassed" << endl;
 }
