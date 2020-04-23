@@ -64,6 +64,7 @@ void runChallenge(int challenge) {
 }
 
 void runTests() {
+  testCountLines();
   testBase64Encode();
   testBase64Decode();
   testHammingDistance();

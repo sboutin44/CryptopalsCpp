@@ -25,6 +25,21 @@
 #include "lib.h"
 using namespace std;
 
+void testCountLines() {
+  int n1 = countLines("resources/aliceadventures.txt");
+  int n1 = countLines("resources/.txt");
+  int n6 = countLines("resources/6.txt");
+  int n7 = countLines("resources/7.txt");
+  int n8 = countLines("resources/8.txt");
+
+  assert(n1 == 1703);
+  assert(n6 == 64);
+  assert(n7 == 64);
+  assert(n8 == 204);
+
+  cout << "testCountLines \t\tpassed" << endl;
+}
+
 void testBase64Encode() {
   // Sources of the inputs:
   // https://en.wikipedia.org/wiki/Base64

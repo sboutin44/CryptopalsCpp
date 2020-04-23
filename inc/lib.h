@@ -86,6 +86,8 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 // Challenge 7
 void testAES();
 
+// Challenge 8
+
 // Tests functions:
 
 // The challenges
@@ -98,7 +100,8 @@ void challenge_6();
 void challenge_7();
 void challenge_8();
 
-// Functions in tools.h
+// tools.cc
+int countLines(const char* filename);
 
 template <typename T>
 T max(T* array, int len) {

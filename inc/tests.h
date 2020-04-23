@@ -27,6 +27,7 @@
 
 #include "lib.h"
 
+void testCountLines();
 void testHammingDistance();
 void testInsertionSort();
 void testIndexOfCoincidence();

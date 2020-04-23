@@ -9,7 +9,11 @@ void challenge_8() {
   cout << "------------------------------------\n" << endl;
 
   int len = 0;
-  byte* ciphertext = read_base64_file("resources/8.txt", &len);
+  const char* hex_ciphertext = read_text_file("resources/8.txt", &len);
+  byte* ciphertext = new byte[len / 2];
+  hexDecode(hex_ciphertext, ciphertext);
+
+  // for (int )
 
   delete[] ciphertext;
 }

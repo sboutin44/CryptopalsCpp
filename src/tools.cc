@@ -25,6 +25,32 @@
 #include "lib.h"
 using namespace std;
 
+int countLines(const char* filename) {
+  ifstream file;
+  uint8_t* out;
+  int nb_lines = 0;
+
+  try {
+    file.open(filename);
+
+    if (file.fail()) throw file.rdstate();
+    nb_lines = 0;
+    for (std::string line; std::getline(file, line);) nb_lines++;
+
+  } catch (ios::iostate filestate) {
+    if (filestate == ios::failbit) {
+      cerr << "failbit" << endl;
+    }
+
+    if (filestate == ios::badbit) {
+      cerr << "badbit" << endl;
+    }
+    cerr << "Failed to open file '" << filename << "'" << endl;
+    exit(EXIT_FAILURE);
+  }
+  return nb_lines;
+}
+
 uint8_t* read_base64_file(const char* filename, int* length) {
   /** Read line by line a base64 encoded file.
    *
