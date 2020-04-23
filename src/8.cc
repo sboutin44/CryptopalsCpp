@@ -2,8 +2,7 @@
 #include "lib.h"
 using namespace std;
 
-void challenge_8()
-{
+void challenge_8() {
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 1" << endl;
   cout << "8. Detect AES in ECB mode" << endl;

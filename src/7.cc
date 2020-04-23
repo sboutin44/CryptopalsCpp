@@ -24,7 +24,8 @@ void challenge_7() {
   const char* key = "YELLOW SUBMARINE";
 
   AES128_ECB_decrypt(ciphertext, (byte*)key, len, plaintext);
-  cout << plaintext << endl;
+  for (int j = 0; j < len; j++) printf("%c", plaintext[j]);
+  // cout << plaintext << endl;
 
   delete[] plaintext;
   delete[] ciphertext;
