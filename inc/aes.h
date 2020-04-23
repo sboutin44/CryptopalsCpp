@@ -30,7 +30,7 @@
 #include <cstring>
 #include <iostream>
 
-typedef unsigned char byte;
+typedef uint8_t byte;
 
 byte xtime(byte b);
 byte GF8Mul(byte a, byte b);

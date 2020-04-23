@@ -247,6 +247,16 @@ void KeyExpansion(byte* key, byte* w, int Nk) {
 }
 
 void cipher(byte* in, byte* out, byte* w, int Nr) {
+  /** Encryption cipher of the Advanced Encryption Standard.
+   *
+   * The calling function must allocate 16-bytes arrays for each parameters.
+   *
+   * @param in  Pre-allocated 16- bytes array with the plaintext.
+   * @param out Pre-allocated 16-bytes for the ciphertext.
+   * @param w   Vector pointing to the session keys.
+   * @param Nr  Number of rounds.
+   */
+
   // Allocate memory for the global varibale 'state'
   state = new byte[4 * Nb];
   memset(state, 0x00, 4 * Nb);  // TODO: remove when all tests passed.
@@ -273,6 +283,16 @@ void cipher(byte* in, byte* out, byte* w, int Nr) {
 }
 
 void invCipher(byte* in, byte* out, byte* w, int Nr) {
+  /** Decryption cipher of the Advanced Encryption Standard.
+   *
+   * The calling function must allocate 16-bytes arrays for each parameters.
+   *
+   * @param in  Pre-allocated 16- bytes array with the plaintext.
+   * @param out Pre-allocated 16-bytes for the ciphertext.
+   * @param w   Vector pointing to the session keys.
+   * @param Nr  Number of rounds.
+   */
+
   // Allocate memory for the global varibale 'state'
   state = new byte[4 * Nb];
   memset(state, 0x00, 4 * Nb);  // TODO: remove when all tests passed.
@@ -298,6 +318,15 @@ void invCipher(byte* in, byte* out, byte* w, int Nr) {
 }
 
 void AES128(byte* in, byte* key, byte* out) {
+  /** Advanced Encryption Standard encryption primitive.
+   *
+   * The calling function must allocate 16-bytes arrays for each parameters.
+   *
+   * @param in  Pre-allocated 16-bytes array with the plaintext.
+   * @param key Pre-allocated 16-bytes array containing the key.
+   * @param out Pre-allocated 16-bytes for the ciphertext.
+   */
+
   // AES 128: Nk = 4   Nb = 4  Nr = 10
   int Nr = 10;
   int Nk = 4;
@@ -311,6 +340,15 @@ void AES128(byte* in, byte* key, byte* out) {
 }
 
 void invAES128(byte* in, byte* key, byte* out) {
+  /** Advanced Encryption Standard decryption primitive.
+   *
+   * The calling function must allocate 16-bytes arrays for each parameters.
+   *
+   * @param in  Pre-allocated 16-bytes array with the plaintext.
+   * @param key Pre-allocated 16-bytes array containing the key.
+   * @param out Pre-allocated 16-bytes for the ciphertext.
+   */
+
   // AES 128: Nk = 4   Nb = 4  Nr = 10
   int Nr = 10;
   int Nk = 4;

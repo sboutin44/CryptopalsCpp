@@ -26,6 +26,12 @@
 using namespace std;
 
 uint8_t* read_base64_file(const char* filename, int* length) {
+  /** Read line by line a base64 encoded file.
+   *
+   * @param filename A base64 encoded file.
+   * @param length Pointer to return the length of the file.
+   */
+
   ifstream file;
   uint8_t* out;
 
