@@ -27,7 +27,6 @@ using namespace std;
 
 void testCountLines() {
   int n1 = countLines("resources/aliceadventures.txt");
-  int n1 = countLines("resources/.txt");
   int n6 = countLines("resources/6.txt");
   int n7 = countLines("resources/7.txt");
   int n8 = countLines("resources/8.txt");
