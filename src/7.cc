@@ -3,12 +3,9 @@
 using namespace std;
 
 void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext) {
-  /** Decrypt an AES encrypted bytes string with ECB mode.
-   *
-   */
+  /** Decrypt an AES encrypted bytes string with ECB mode. */
 
   int block_size = 16;
-  // byte* block = new byte[16];
 
   for (int i = 0; i < len; i += block_size) {
     invAES128(&ciphertext[i], key, &plaintext[i]);
@@ -27,6 +24,5 @@ void challenge_7() {
   const char* key = "YELLOW SUBMARINE";
 
   AES128_ECB_decrypt(ciphertext, (byte*)key, len, plaintext);
-  // for (int j = 0; j < len; j++) printf("%c", plaintext[j]);
   cout << plaintext << endl;
 }
