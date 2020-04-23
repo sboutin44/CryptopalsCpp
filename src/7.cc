@@ -25,4 +25,7 @@ void challenge_7() {
 
   AES128_ECB_decrypt(ciphertext, (byte*)key, len, plaintext);
   cout << plaintext << endl;
+
+  delete[] plaintext;
+  delete[] ciphertext;
 }
