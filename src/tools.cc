@@ -27,7 +27,6 @@ using namespace std;
 
 int countLines(const char* filename) {
   ifstream file;
-  uint8_t* out;
   int nb_lines = 0;
 
   try {

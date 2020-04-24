@@ -65,7 +65,7 @@ void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size);
 char* read_text_file(const char* filename, int* length);
 uint8_t* read_base64_file(const char* filename, int* length);
-int hammingDistance(uint8_t* a, uint8_t* b, int n);
+uint64_t hammingDistance(uint8_t* a, uint8_t* b, int n);
 int occurence(const char* s, char myChar);
 int occurence(uint8_t* s, char myChar, int length);
 int occurence_byte(uint8_t* s, uint8_t myChar, int length);
@@ -85,6 +85,7 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 
 // Challenge 7
 void testAES();
+void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
 
 // Challenge 8
 

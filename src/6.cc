@@ -25,7 +25,7 @@
 #include "lib.h"
 using namespace std;
 
-int hammingDistance(uint8_t* a, uint8_t* b, int n) {
+uint64_t hammingDistance(uint8_t* a, uint8_t* b, int n) {
   /** Returns the edit distance of two byte strings.
    *
    * @param a A byte string
@@ -34,7 +34,7 @@ int hammingDistance(uint8_t* a, uint8_t* b, int n) {
    */
 
   uint8_t byte;
-  int distance = 0;
+  uint64_t distance = 0;
 
   for (int i = 0; i < n; i++) {
     byte = a[i] ^ b[i];
