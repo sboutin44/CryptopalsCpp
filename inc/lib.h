@@ -100,6 +100,7 @@ void challenge_5();
 void challenge_6();
 void challenge_7();
 void challenge_8();
+void challenge_9();
 
 // tools.cc
 int countLines(const char* filename);
