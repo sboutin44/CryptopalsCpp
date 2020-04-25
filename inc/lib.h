@@ -86,10 +86,10 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 // Challenge 7
 void testAES();
 void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
+void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext);
 
-// Challenge 8
-
-// Tests functions:
+// Challenge 9
+void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
 
 // The challenges
 void challenge_1();
@@ -101,6 +101,7 @@ void challenge_6();
 void challenge_7();
 void challenge_8();
 void challenge_9();
+void challenge_10();
 
 // tools.cc
 int countLines(const char* filename);

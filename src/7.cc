@@ -12,6 +12,16 @@ void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext) {
   }
 }
 
+void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext) {
+  /** Decrypt an AES encrypted bytes string with ECB mode. */
+
+  int block_size = 16;
+
+  for (int i = 0; i < len; i += block_size) {
+    AES128(&plaintext[i], key, &ciphertext[i]);
+  }
+}
+
 void challenge_7() {
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 1" << endl;

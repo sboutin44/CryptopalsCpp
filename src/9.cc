@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize) {
+void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize) {
   /** Add padding to a pre-allocated array. */
 
   int pad_len = blocksize - lenIn % blocksize;

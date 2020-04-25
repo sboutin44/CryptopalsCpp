@@ -58,6 +58,9 @@ void runChallenge(int challenge) {
     case 9:
       challenge_9();
       break;
+    case 10:
+      challenge_10();
+      break;
 
     default:
       std::cerr << "Challenge " << unsigned(challenge) << " not solved yet!"
