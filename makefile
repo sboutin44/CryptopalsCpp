@@ -40,6 +40,8 @@ TST_OBJS        = $(subst test/,$(BUILD_DIR)/, $(subst .cc,.o, $(TST_SRC_LIST)) 
 HEADERS_LIST    := $(wildcard inc/*.h)
 HEADERS         := $(HEADERS_LIST)
 
+all: $(BUILD_DIR)/cryptopals
+
 # Creates object files from sources in $(BUILD_DIR)
 $(BUILD_DIR)/%.o : src/%.cc $(HEADERS_LIST)
 	mkdir -p $(@D)
