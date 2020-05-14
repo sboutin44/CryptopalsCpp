@@ -34,12 +34,17 @@ void challenge_12() {
 
   srand(time(NULL));
 
-  const char* my_string =
-      "You can go in thYou can go in thYou can go in thYou can go in thYou can "
-      "go in thYou can go in thYou can go in thYou can go in thYou can go in "
-      "thYou can go in thYou can go in thYou can go in thYou can go in thYou "
-      "can go in thYou can go in thYou can go in thYou can go in thYou can go "
-      "in thYou can go in thYou can go in thYou can go in thYou can go in th";
+  const char* my_string = "A";
+  string s0(my_string);
+  for (int i = 0; i < 2; i++) s0 += "A";
+
+  //      "You can go in thYou can go in thYou can go in thYou can go in thYou
+  //      can "
+  //      "go in thYou can go in thYou can go in thYou can go in thYou can go in
+  //      " "thYou can go in thYou can go in thYou can go in thYou can go in
+  //      thYou " "can go in thYou can go in thYou can go in thYou can go in
+  //      thYou can go " "in thYou can go in thYou can go in thYou can go in
+  //      thYou can go in th";
 
   const char* unknown_string_b64 =
       "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg"
@@ -55,7 +60,8 @@ void challenge_12() {
   base64Decode((byte*)unknown_string_b64, size_encoded, unknown_string);
 
   // Bricolage to concatenate 2 strings
-  string s1(my_string);
+  //  string s1(my_string);
+  string s1(s0);
   char* unknown_string_c_str = new char[unknown_string_len];
   memcpy(unknown_string_c_str, unknown_string, unknown_string_len);
   unknown_string_c_str[unknown_string_len] = '\0';
@@ -80,9 +86,15 @@ void challenge_12() {
   int len_out = len + pad_len;
   byte* buffer = new byte[len_out];
   byte* ciphertext_ECB = new byte[len_out];
+
   PKCS7_padding((byte*)input, len, buffer, blocksize);
   AES128_ECB_encrypt(buffer, key, len_out, ciphertext_ECB);
 
-  for (int i = 0; i < nbEntries; i++)
-    oracle.encryption_oracle((byte*)input, l_input);
+  // 1. Detect the block size:
+  int maxKeysizeTried = 200;
+  int guess_key = findKeyLength(ciphertext_ECB, l_input, maxKeysizeTried);
+  cout << guess_key << endl;
+
+  //  for (int i = 0; i < nbEntries; i++)
+  //    oracle.encryption_oracle((byte*)input, l_input);
 }
