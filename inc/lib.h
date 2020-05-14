@@ -116,7 +116,7 @@ class Oracle {
   std::vector<int> enc_mode_order;
   void addEntry(bytearray_t input);
   void encryption_oracle(byte* input, int l_input);
-  void encryption_oracle_(bytearray_t input);
+  void encryption_oracle(byte* input, int l_input, byte* key);
   int getNbEntries();
   int getEntryDataLen(int pos);
   void getEntryData(int pos, byte* dst);
@@ -136,6 +136,7 @@ void challenge_8();
 void challenge_9();
 void challenge_10();
 void challenge_11();
+void challenge_12();
 
 // tools.cc
 int countLines(const char* filename);

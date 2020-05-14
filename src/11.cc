@@ -23,6 +23,7 @@
 // use or other dealings in this Software without prior written authorization.
 
 #include "lib.h"
+#include "tests.h"
 
 using namespace std;
 
@@ -113,7 +114,10 @@ void Oracle::encryption_oracle(byte* input, int l_input) {
   // 1. Generate a random key
   byte* key = new byte[16];
   randomAES128key(key);
+  encryption_oracle(input, l_input, key);
+}
 
+void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
   // 2. padd before and after 5-10 bytes randomly
   // choose how many byte to pad
   int l_before = rand() % 6 + 5;
@@ -170,26 +174,6 @@ void challenge_11() {
   cout << "11. An ECB/CBC detection oracle" << endl;
   cout << "------------------------------------\n" << endl;
 
-  srand(time(NULL));
-
-  const char* input =
-      "You can go in thYou can go in thYou can go in thYou can go in thYou can "
-      "go in thYou can go in thYou can go in thYou can go in thYou can go in "
-      "thYou can go in thYou can go in thYou can go in thYou can go in thYou "
-      "can go in thYou can go in thYou can go in thYou can go in thYou can go "
-      "in thYou can go in thYou can go in thYou can go in thYou can go in th";
-
-  int l_input = strlen(input);
-
-  Oracle oracle;
-  //  oracle.printEntries();
-  for (int i = 0; i < 50; i++) {
-    oracle.encryption_oracle((byte*)input, l_input);
-  }
-
-  byte* entry = new byte[oracle.getEntryDataLen(0)];
-  oracle.getEntryData(0, entry);
-  cout << isAES128_ECB(entry, oracle.getEntryDataLen(0)) << endl;
-
-  //  oracle.printEntries();
+  // See test/tests_set2.cc
+  testGuessEncryptionMode();
 }
