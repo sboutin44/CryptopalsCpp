@@ -127,10 +127,9 @@ void challenge_12() {
   }
 
   cout << "Probable blocksize: " << map_dist_to_size.begin()->second << endl;
-  //  for (auto it = map_dist_to_size.begin(); it != map_dist_to_size.end();
-  //  it++) {
-  //    cout << "key: " << it->first << endl;
-  //    cout << "blocksize: " << it->second << endl;
-  //    cout << endl;
-  //  }
+
+  // 2. Detect the encryption mode:
+  cout << std::boolalpha;
+  cout << "isAES128_CBC: " << isAES128_CBC(ciphertext_ECB, len_out) << endl;
+  cout << "isAES128_ECB: " << isAES128_ECB(ciphertext_ECB, len_out) << endl;
 }
