@@ -101,6 +101,9 @@ ENCRYPTION_MODE guessEncryptionMode(byte* input, int l);
 bool isAES128_CBC(byte* input, int l);
 bool isAES128_ECB(byte* input, int l);
 
+// Challenge 12
+float similarBlocksDistanceRatio(byte* input, int l, int block_size);
+
 /*-------------------------- Struct & Classes----------------------*/
 
 typedef struct bytearray_t {

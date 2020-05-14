@@ -26,6 +26,25 @@
 
 using namespace std;
 
+float similarBlocksDistanceRatio(byte* input, int l, int block_size) {
+  /** Returns a ratio of Hamming distances computed between all 128-bit blocks.
+   *
+   * Ratio should be around 50% for an AES128-CBC encrypted input, and
+   * significantly less if AES128-ECB encrypted.	 *
+   */
+
+  int hamming_distance = 0;
+  int total_passes = 0;
+
+  for (int j = 0; j < l; j += block_size) {
+    for (int k = j + block_size; k < l; k += block_size) {
+      hamming_distance += hammingDistance(&input[j], &input[k], block_size);
+      total_passes++;
+    }
+  }
+  return ((float)hamming_distance) / (float)(total_passes * 128);
+}
+
 void challenge_12() {
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 2" << endl;
@@ -34,17 +53,23 @@ void challenge_12() {
 
   srand(time(NULL));
 
-  const char* my_string = "A";
-  string s0(my_string);
-  for (int i = 0; i < 2; i++) s0 += "A";
+  //  int l_plaintext;
+  //  const char* filename = "resources/united_states.txt";
+  //  uint8_t* my_string = (uint8_t*)read_text_file(filename, &l_plaintext);
 
+  const char* my_string =
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
   //      "You can go in thYou can go in thYou can go in thYou can go in thYou
-  //      can "
-  //      "go in thYou can go in thYou can go in thYou can go in thYou can go in
-  //      " "thYou can go in thYou can go in thYou can go in thYou can go in
-  //      thYou " "can go in thYou can go in thYou can go in thYou can go in
-  //      thYou can go " "in thYou can go in thYou can go in thYou can go in
-  //      thYou can go in th";
+  //      can go in thYou can go in thYou can go in thYou can go in thYou can go
+  //      in thYou can go in thYou can go in thYou can go in thYou can go in
+  //      thYou can go in thYou can go in thYou can go in thYou can go in thYou
+  //      can go in thYou can go in thYou can go in thYou can go in thYou can go
+  //      in thYou can go in thYou can go in thYou can go in thYou can go in
+  //      thYou can go in thYou can go in thYou can go in thYou can go in thYou
+  //      can go in thYou can go in thYou can go in thYou can go in thYou can go
+  //      in thYou can go in thYou can go in thYou can go in thYou can go in
+  //      thYou can go in thYou can go in thYou can go in thYou can go in thYou
+  //      can go in thYou can go in th";
 
   const char* unknown_string_b64 =
       "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg"
@@ -60,13 +85,15 @@ void challenge_12() {
   base64Decode((byte*)unknown_string_b64, size_encoded, unknown_string);
 
   // Bricolage to concatenate 2 strings
-  //  string s1(my_string);
-  string s1(s0);
+  string s1((char*)my_string);
   char* unknown_string_c_str = new char[unknown_string_len];
   memcpy(unknown_string_c_str, unknown_string, unknown_string_len);
   unknown_string_c_str[unknown_string_len] = '\0';
   string s2(unknown_string_c_str);
-  string s3 = s1 + s2;
+
+  // TODO: add again
+  //  string s3 = s1 + s2;
+  string s3(s1);
 
   const char* input = s3.c_str();
 
@@ -91,10 +118,19 @@ void challenge_12() {
   AES128_ECB_encrypt(buffer, key, len_out, ciphertext_ECB);
 
   // 1. Detect the block size:
-  int maxKeysizeTried = 200;
-  int guess_key = findKeyLength(ciphertext_ECB, l_input, maxKeysizeTried);
-  cout << guess_key << endl;
+  int maxBlocksize = 20;  // length in bytes
+  map<float, int> map_dist_to_size;
+  //  multimap<float, int> map_dist_to_size;
+  for (int blocksize = 10; blocksize < maxBlocksize; blocksize++) {
+    float r = similarBlocksDistanceRatio(ciphertext_ECB, len_out, blocksize);
+    map_dist_to_size[r] = blocksize;
+  }
 
-  //  for (int i = 0; i < nbEntries; i++)
-  //    oracle.encryption_oracle((byte*)input, l_input);
+  cout << "Probable blocksize: " << map_dist_to_size.begin()->second << endl;
+  //  for (auto it = map_dist_to_size.begin(); it != map_dist_to_size.end();
+  //  it++) {
+  //    cout << "key: " << it->first << endl;
+  //    cout << "blocksize: " << it->second << endl;
+  //    cout << endl;
+  //  }
 }
