@@ -25,6 +25,12 @@
 #include "lib.h"
 using namespace std;
 
+void printByteArray(byte* a, int l) {
+  printf("\n");
+  for (int i = 0; i < l; i++) printf("%02x ", a[i]);
+  printf("\n");
+}
+
 int countLines(const char* filename) {
   ifstream file;
   int nb_lines = 0;

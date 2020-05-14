@@ -3,18 +3,22 @@
 
 using namespace std;
 
-void AES128_CBC_encrypt(byte* plaintext, byte* key, byte* ciphertext, int len) {
+void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
+                        byte* ciphertext, int len) {
+  /**
+   *
+   * @param plaintext  Padded text to encrypt.
+   * @param ciphertext Encrypted plaintext.
+   * @param len Length of both ciphetext and plaintext
+   */
+
   int blocksize = 16;
   byte* buffer = new byte[len];
-
-  const byte IV[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
   // First block
   for (int j = 0; j < blocksize; j++) buffer[j] = IV[j] ^ plaintext[j];
   // for (int j = 0; j < len; j++) printf("%c ", buffer[j]);
   AES128(buffer, key, ciphertext);
-  printf("\n ");
-  // for (int j = 0; j < len; j++) printf("%02x ", ciphertext[j]);
 
   for (int i = blocksize; i < len; i += blocksize) {
     // XOR with previous block
@@ -26,11 +30,10 @@ void AES128_CBC_encrypt(byte* plaintext, byte* key, byte* ciphertext, int len) {
   delete[] buffer;
 }
 
-void AES128_CBC_decrypt(byte* ciphertext, byte* key, byte* plaintext, int len) {
+void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
+                        byte* plaintext, int len) {
   int blocksize = 16;
   byte* buffer = new byte[len];
-
-  const byte IV[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
   for (int i = len - blocksize; i >= blocksize; i -= blocksize) {
     invAES128(&ciphertext[i], key, &buffer[i]);
@@ -69,9 +72,12 @@ void challenge_10() {
 
   // test if CBC mode works
   printf("\n---------------\n");
-  AES128_CBC_encrypt((byte*)buffer, (byte*)key, ciphertext_CBC, len_out);
+  const byte IV[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-  AES128_CBC_decrypt((byte*)ciphertext_CBC, (byte*)key, my_plaintext, len_out);
+  AES128_CBC_encrypt((byte*)buffer, (byte*)key, IV, ciphertext_CBC, len_out);
+
+  AES128_CBC_decrypt((byte*)ciphertext_CBC, (byte*)key, IV, my_plaintext,
+                     len_out);
   for (int j = 0; j < len_out; j++) printf("%c", my_plaintext[j]);
   printf("\n---------------\n");
 
@@ -79,7 +85,7 @@ void challenge_10() {
   int l = 0;
   byte* ciphertext_10 = read_base64_file("resources/10.txt", &l);
   byte* plaintext_10 = new byte[l];
-  AES128_CBC_decrypt((byte*)ciphertext_10, (byte*)key, plaintext_10, l);
+  AES128_CBC_decrypt((byte*)ciphertext_10, (byte*)key, IV, plaintext_10, l);
   for (int j = 0; j < l; j++) printf("%c", plaintext_10[j]);
   printf("\n ");
 }

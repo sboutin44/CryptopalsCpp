@@ -41,7 +41,7 @@
 // C libraries
 #include <ctype.h>
 
-// My Functions
+/*--------------------------------- Functions ---------------------------*/
 #include "aes.h"
 
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn);
@@ -87,9 +87,42 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 void testAES();
 void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
 void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext);
-
-// Challenge 9
 void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
+void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
+                        byte* ciphertext, int len);
+void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
+                        byte* plaintext, int len);
+
+// Challenge 11
+enum ENCRYPTION_MODE { ECB, CBC };
+void randomAES128key(byte* empty_key);
+float similarBlocksDistanceRatio(byte* input, int l);
+ENCRYPTION_MODE guessEncryptionMode(byte* input, int l);
+bool isAES128_CBC(byte* input, int l);
+bool isAES128_ECB(byte* input, int l);
+
+/*-------------------------- Struct & Classes----------------------*/
+
+typedef struct bytearray_t {
+  int l;
+  byte* data_ptr;
+} bytearray_t;
+
+class Oracle {
+ private:
+  std::vector<bytearray_t> entries;
+
+ public:
+  std::vector<int> enc_mode_order;
+  void addEntry(bytearray_t input);
+  void encryption_oracle(byte* input, int l_input);
+  void encryption_oracle_(bytearray_t input);
+  int getNbEntries();
+  int getEntryDataLen(int pos);
+  void getEntryData(int pos, byte* dst);
+  void printEntries();
+  void printEntry(int);
+};
 
 // The challenges
 void challenge_1();
@@ -106,6 +139,7 @@ void challenge_11();
 
 // tools.cc
 int countLines(const char* filename);
+void printByteArray(byte* a, int l);
 
 template <typename T>
 T max(T* array, int len) {

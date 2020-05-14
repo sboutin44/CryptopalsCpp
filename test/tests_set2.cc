@@ -22,31 +22,39 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
-#ifndef CRYPTOPALS_INC_TESTS_H_
-#define CRYPTOPALS_INC_TESTS_H_
-
 #include "lib.h"
+using namespace std;
 
-// tests set 1
-void testCountLines();
-void testHammingDistance();
-void testInsertionSort();
-void testIndexOfCoincidence();
-void testHistogram();
-void testFindKeyLength();
-void testBase64Encode();
-void testBase64Decode();
+void testGuessEncryptionMode() {
+  srand(time(NULL));
 
-// AES128
-void testAES128();
-void testMult();
-void testKeyExpansion();
-void testXtime();
-void testRcon();
-void testSubWord();
-void testRotWord();
+  int nbEntries = 50;
+  byte* enc_mode[nbEntries];
 
-// tests set 2
-void testGuessEncryptionMode();
+  const char* input =
+      "You can go in thYou can go in thYou can go in thYou can go in thYou can "
+      "go in thYou can go in thYou can go in thYou can go in thYou can go in "
+      "thYou can go in thYou can go in thYou can go in thYou can go in thYou "
+      "can go in thYou can go in thYou can go in thYou can go in thYou can go "
+      "in thYou can go in thYou can go in thYou can go in thYou can go in th";
 
-#endif
+  int l_input = strlen(input);
+
+  Oracle oracle;
+
+  // Feed the oracle with encrypted texts with randoom keys.
+  for (int i = 0; i < nbEntries; i++)
+    oracle.encryption_oracle((byte*)input, l_input);
+
+  // Guess the encryption mode for each entries, and verify them to result
+  // computed during the creation of the ciphers.
+  for (int i = 0; i < nbEntries; i++) {
+    byte* entry = new byte[oracle.getEntryDataLen(i)];
+    oracle.getEntryData(i, entry);
+
+    bool real_mode = oracle.enc_mode_order[i];
+    bool guessed_mode = guessEncryptionMode(entry, oracle.getEntryDataLen(i));
+    assert(real_mode == guessed_mode);
+  }
+  cout << "testGuessEncryptionMode passed" << endl;
+}
