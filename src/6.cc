@@ -25,7 +25,7 @@
 #include "lib.h"
 using namespace std;
 
-uint64_t hammingDistance(uint8_t* a, uint8_t* b, int n) {
+uint64_t hammingDistance(const uint8_t* a, const uint8_t* b, int n) {
   /** Returns the edit distance of two byte strings.
    *
    * @param a A byte string

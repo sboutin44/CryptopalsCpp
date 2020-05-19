@@ -79,7 +79,7 @@ void randomAES128key(byte* empty_key) {
   }
 }
 
-float similarBlocksDistanceRatio(byte* input, int l) {
+float similarBlocksDistanceRatio(const byte* input, int l) {
   /** Returns a ratio of Hamming distances computed between all 128-bit blocks.
    *
    * Ratio should be around 50% for an AES128-CBC encrypted input, and
@@ -99,7 +99,7 @@ float similarBlocksDistanceRatio(byte* input, int l) {
   return ((float)hamming_distance) / (float)(total_passes * 128);
 }
 
-ENCRYPTION_MODE guessEncryptionMode(byte* input, int l) {
+ENCRYPTION_MODE guessEncryptionMode(const byte* input, int l) {
   float r = similarBlocksDistanceRatio(input, l);
   float thresold = 0.2;
 
@@ -116,7 +116,7 @@ bool isAES128_CBC(byte* input, int l) {
     return false;
 }
 
-bool isAES128_ECB(byte* input, int l) {
+bool isAES128_ECB(const byte* input, int l) {
   if (guessEncryptionMode(input, l) == ECB)
     return true;
   else

@@ -105,7 +105,7 @@ void hexDecode(const char* input, uint8_t* out);
 void singlebyteXORattack(uint8_t* ciphertext, int size);
 char* read_text_file(const char* filename, int* length);
 uint8_t* read_base64_file(const char* filename, int* length);
-uint64_t hammingDistance(uint8_t* a, uint8_t* b, int n);
+uint64_t hammingDistance(const uint8_t* a, const uint8_t* b, int n);
 int occurence(const char* s, char myChar);
 int occurence(uint8_t* s, char myChar, int length);
 int occurence_byte(uint8_t* s, uint8_t myChar, int length);
@@ -137,9 +137,9 @@ void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
 enum ENCRYPTION_MODE { ECB, CBC };
 void randomAES128key(byte* empty_key);
 float similarBlocksDistanceRatio(byte* input, int l);
-ENCRYPTION_MODE guessEncryptionMode(byte* input, int l);
+ENCRYPTION_MODE guessEncryptionMode(const byte* input, int l);
 bool isAES128_CBC(byte* input, int l);
-bool isAES128_ECB(byte* input, int l);
+bool isAES128_ECB(const byte* input, int l);
 
 // Challenge 12
 float similarBlocksDistanceRatio(byte* input, int l, int block_size);
