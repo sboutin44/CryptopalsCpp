@@ -110,10 +110,6 @@ void challenge_12() {
 
   srand(time(NULL));
 
-  //  int l_plaintext;
-  //  const char* filename = "resources/united_states.txt";
-  //  uint8_t* my_string = (uint8_t*)read_text_file(filename, &l_plaintext);
-
   const char* my_string =
       "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
@@ -139,8 +135,8 @@ void challenge_12() {
   string s2(unknown_string_c_str);
 
   // TODO: add again
-    string s3 = s1 + s2;
-//  string s3(s1);
+  string s3 = s1 + s2;
+  //  string s3(s1);
   const char* input = s3.c_str();
   int l_input = strlen(input);
   Oracle oracle;
@@ -182,40 +178,44 @@ void challenge_12() {
   // 3. Create plaintexts like AAAAAAAAAAAAAAAX, AAAAAAAAAAAAAAAX'...
   // where X, X', etc are letters in the
   string block0 = "AAAAAAAAAAAA";  // Populate the offset with meaningless 'A's.
-  string block1 =
-      "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
+  string block1 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
   string plaintext = block0 + block1 + unknown_string_cpp_s;
   oracle.clear();
   string decrypted = "";
 
-  // Encrypt AAAAA...A || unknown-string-byte || unknown-string, ensuring we encrypt with ECB.
+  // Encrypt AAAAA...A || unknown-string-byte || unknown-string, ensuring we
+  // encrypt with ECB.
   oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
   int last_elem_pos = 0;
-  const byte* unknown_string_enc = oracle.getEntryData(last_elem_pos);
-  while (!isAES128_ECB(unknown_string_enc,oracle.getEntryDataLen(last_elem_pos))) {
-	  oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-	  last_elem_pos = oracle.size()-1;
-	  unknown_string_enc = oracle.getEntryData(last_elem_pos);
-  }
+
+  std::cout << std::boolalpha;
+  cout << isAES128_ECB(oracle.getEntryData(last_elem_pos),
+                       oracle.getEntryDataLen(last_elem_pos))
+       << endl;
+
+  //while (!isAES128_ECB(oracle.getEntryData(last_elem_pos),
+                       //oracle.getEntryDataLen(last_elem_pos))) {
+    //oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
+    //last_elem_pos = oracle.size() - 1;
+  //}
 
   cout << "Display the encrypted AAAAA..AAAX: (look the 2nd block)";
   oracle.printEntries();
 
   // Encrypt all AAAAA.....AX to later compare the 2nd block to
-  for (int X = 0; X <= 0xFF; X++) {
-    string last(1, (char)X);
-    string to_encrypt = block0 + block1 + last;
-    oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
-    const byte* unknown_string_block = &oracle.getEntryData(0)[16];
-    const byte* my_block = &oracle.getEntryData(oracle.size() - 1)[16];
+  // for (int X = 0; X <= 0xFF; X++) {
+  // string last(1, (char)X);
+  // string to_encrypt = block0 + block1 + last;
+  // oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
+  // const byte* unknown_string_block = &oracle.getEntryData(0)[16];
+  // const byte* my_block = &oracle.getEntryData(oracle.size() - 1)[16];
 
-    //    cout << oracle.size() << endl;
-    if (memcmp(unknown_string_block, my_block, 16) == 0) {
-      cout << "That's a match !" << endl;
-      string x(1, (char)X);
-      decrypted += x;
-    };
-  }
-  cout << decrypted << endl;
-
+  //    cout << oracle.size() << endl;
+  // if (memcmp(unknown_string_block, my_block, 16) == 0) {
+  // cout << "That's a match !" << endl;
+  // string x(1, (char)X);
+  // decrypted += x;
+  //};
+  //}
+  // cout << decrypted << endl;
 }
