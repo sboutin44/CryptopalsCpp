@@ -27,11 +27,11 @@
 
 using namespace std;
 
-Oracle::Oracle(){
-	key = new byte[16]; // Allocate a default AES128 key.
-	randomAES128key(key);
-	offset.l = 0;
-	offset.data_ptr = nullptr;
+Oracle::Oracle() {
+  key = new byte[16];  // Allocate a default AES128 key.
+  randomAES128key(key);
+  offset.l = 0;
+  offset.data_ptr = nullptr;
 }
 
 void Oracle::addEntry(bytearray_t entry) { entries.push_back(entry); }
@@ -51,10 +51,7 @@ void Oracle::getEntryData(int pos, byte* dst) {
   memcpy(dst, entries[pos].data_ptr, entries[pos].l);
 }
 
-const byte* Oracle::getEntryData(int pos) {
-	return entries[pos].data_ptr;
-}
-
+const byte* Oracle::getEntryData(int pos) { return entries[pos].data_ptr; }
 
 void Oracle::printEntry(int pos) {
   if (pos < entries.size()) {
@@ -62,19 +59,15 @@ void Oracle::printEntry(int pos) {
     cout << "data: " << endl;
     for (int i = 0; i < entries.size(); i++)
       printf("%02x ", entries[pos].data_ptr[i]);
-      cout << endl;
+    cout << endl;
   } else {
     cout << "error: no entry at position " << pos << endl;
   }
 }
 
-void Oracle::setKey(byte* k, int len){
-	memcpy(key,k,len);
-}
+void Oracle::setKey(byte* k, int len) { memcpy(key, k, len); }
 
-const byte* Oracle::getKey(){
-	return key;
-}
+const byte* Oracle::getKey() { return key; }
 
 void randomAES128key(byte* empty_key) {
   int l = 16;
@@ -130,43 +123,35 @@ bool isAES128_ECB(byte* input, int l) {
     return false;
 }
 
-void Oracle::setOffsetType(OFFSET_TYPE ot){
-	offsetType = ot;
+void Oracle::setOffsetType(OFFSET_TYPE ot) { offsetType = ot; }
+
+std::vector<bytearray_t> Oracle::getEntries() { return entries; }
+
+void Oracle::clear() { entries.clear(); }
+
+void Oracle::setOffset(const char* s) {
+  offset.l = strlen(s);
+  if (offset.data_ptr != nullptr) delete[] offset.data_ptr;
+  offset.data_ptr = new byte[offset.l];
+
+  memcpy(offset.data_ptr, (byte*)s, offset.l);
 }
 
-std::vector<bytearray_t> Oracle::getEntries(){
-	return entries;
+void Oracle::printOffset() {
+  cout << "offset.l : " << offset.l << endl;
+  for (int i = 0; i < offset.l; i++) printf("%c", offset.data_ptr[i]);
+  printf("\n");
 }
 
-void Oracle::clear(){
-	entries.clear();
-}
-
-void Oracle::setOffset(const char* s){
-	offset.l = strlen(s);
-	if (offset.data_ptr != nullptr)
-		delete[] offset.data_ptr;
-	offset.data_ptr = new byte[offset.l];
-
-	memcpy(offset.data_ptr , (byte*)s , offset.l);
-}
-
-void Oracle::printOffset(){
-	cout << "offset.l : " << offset.l << endl;
-	for (int i=0;i<offset.l ;i++)
-		printf("%c",offset.data_ptr[i]);
-	printf("\n");
-}
-
-//void Oracle::encryption_oracle(byte* input, int l_input) {
+// void Oracle::encryption_oracle(byte* input, int l_input) {
 //  // 1. Generate a random key
 //  byte* key = new byte[16];
 //  randomAES128key(key);
 //  encryption_oracle(input, l_input, key);
 //}
 
-//void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
-	void Oracle::encryption_oracle(byte* input, int l_input) {
+// void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
+void Oracle::encryption_oracle(byte* input, int l_input) {
   int len;
   byte* input_padded;
 
@@ -183,15 +168,15 @@ void Oracle::printOffset(){
     memcpy(&input_padded[l_before], input, l_input);
     memset(&input_padded[l_before + l_input], rand() % 256, l_after);
   } else if (offsetType == FIXED) {
-	    // 2. pad with a fixed offset and fixed byte for tests purpose.
-	  int l_before = offset.l;
-	    len = l_before + l_input;
-	    input_padded = new byte[len];
+    // 2. pad with a fixed offset and fixed byte for tests purpose.
+    int l_before = offset.l;
+    len = l_before + l_input;
+    input_padded = new byte[len];
 
-	    // Copy plaintext and pad with 5-10 random bytes
-	    memcpy(&input_padded[0], offset.data_ptr, l_before);
-	    memcpy(&input_padded[l_before], input, l_input);
-	} else {
+    // Copy plaintext and pad with 5-10 random bytes
+    memcpy(&input_padded[0], offset.data_ptr, l_before);
+    memcpy(&input_padded[l_before], input, l_input);
+  } else {
     len = l_input;
     input_padded = input;
   }

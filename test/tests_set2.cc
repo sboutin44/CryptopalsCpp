@@ -26,11 +26,14 @@
 using namespace std;
 
 void testDetectBlockSize() {
-	  Oracle oracle;
-	  oracle.setOffsetType(FIXED);
-	  oracle.setOffset( "XXXX" );
-	  cout << detectBlockSize(oracle) << endl;
+  int AES128_blocksize = 16;
 
-	  cout << "testDetectBlockSize \tpassed" << endl;
+  Oracle oracle;
+  oracle.setOffsetType(FIXED);
+  oracle.setOffset("XXXX");
 
+  int blocksize = detectBlockSize(oracle);
+  assert(blocksize == AES128_blocksize);
+
+  cout << "testDetectBlockSize \tpassed" << endl;
 }

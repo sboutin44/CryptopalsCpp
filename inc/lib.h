@@ -43,8 +43,6 @@
 
 #include "aes.h"
 
-
-
 /*-------------------------- Oracle ----------------------*/
 
 typedef struct bytearray_t {
@@ -52,18 +50,14 @@ typedef struct bytearray_t {
   byte* data_ptr;
 } bytearray_t;
 
-enum OFFSET_TYPE {
-	NO_OFFSET,
-	RANDOM,
-	FIXED
-};
+enum OFFSET_TYPE { NO_OFFSET, RANDOM, FIXED };
 
 class Oracle {
  private:
   std::vector<bytearray_t> entries;
   OFFSET_TYPE offsetType = RANDOM;
   bytearray_t offset;
-  byte* key; // AES128 - 16 bytes long
+  byte* key;  // AES128 - 16 bytes long
 
  public:
   std::vector<int> enc_mode_order;
@@ -75,9 +69,9 @@ class Oracle {
   const byte* getKey();
   void addEntry(bytearray_t input);
   void encryption_oracle(byte* input, int l_input);
-//  void encryption_oracle(byte* input, int l_input, byte* key,
-//                         bool addRandomBytes = true);
-    void encryption_oracle(byte* input, int l_input, byte* key);
+  //  void encryption_oracle(byte* input, int l_input, byte* key,
+  //                         bool addRandomBytes = true);
+  void encryption_oracle(byte* input, int l_input, byte* key);
   int size();
   int getEntryDataLen(int pos);
   const byte* getEntryData(int pos);
