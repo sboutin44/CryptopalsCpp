@@ -41,8 +41,54 @@
 // C libraries
 #include <ctype.h>
 
-/*--------------------------------- Functions ---------------------------*/
 #include "aes.h"
+
+
+
+/*-------------------------- Oracle ----------------------*/
+
+typedef struct bytearray_t {
+  int l;
+  byte* data_ptr;
+} bytearray_t;
+
+enum OFFSET_TYPE {
+	NO_OFFSET,
+	RANDOM,
+	FIXED
+};
+
+class Oracle {
+ private:
+  std::vector<bytearray_t> entries;
+  OFFSET_TYPE offsetType = RANDOM;
+  bytearray_t offset;
+  byte* key; // AES128 - 16 bytes long
+
+ public:
+  std::vector<int> enc_mode_order;
+  Oracle();
+  void clear();
+  void setOffsetType(OFFSET_TYPE ot);
+  void setOffset(const char* s);
+  void setKey(byte* key, int len);
+  const byte* getKey();
+  void addEntry(bytearray_t input);
+  void encryption_oracle(byte* input, int l_input);
+//  void encryption_oracle(byte* input, int l_input, byte* key,
+//                         bool addRandomBytes = true);
+    void encryption_oracle(byte* input, int l_input, byte* key);
+  int size();
+  int getEntryDataLen(int pos);
+  const byte* getEntryData(int pos);
+  void getEntryData(int pos, byte* dst);
+  std::vector<bytearray_t> getEntries();
+  void printEntries();
+  void printEntry(int);
+  void printOffset();
+};
+
+/*--------------------------------- Functions ---------------------------*/
 
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn);
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size);
@@ -103,49 +149,7 @@ bool isAES128_ECB(byte* input, int l);
 
 // Challenge 12
 float similarBlocksDistanceRatio(byte* input, int l, int block_size);
-
-/*-------------------------- Oracle ----------------------*/
-
-typedef struct bytearray_t {
-  int l;
-  byte* data_ptr;
-} bytearray_t;
-
-enum OFFSET_TYPE {
-	NO_OFFSET,
-	RANDOM,
-	FIXED
-};
-
-class Oracle {
- private:
-  std::vector<bytearray_t> entries;
-  OFFSET_TYPE offsetType = RANDOM;
-  bytearray_t offset;
-  byte* key; // AES128 - 16 bytes long
-
- public:
-  std::vector<int> enc_mode_order;
-  Oracle();
-  void clear();
-  void setOffsetType(OFFSET_TYPE ot);
-  void setOffset(const char* s);
-  void setKey(byte* key, int len);
-  const byte* getKey();
-  void addEntry(bytearray_t input);
-  void encryption_oracle(byte* input, int l_input);
-//  void encryption_oracle(byte* input, int l_input, byte* key,
-//                         bool addRandomBytes = true);
-    void encryption_oracle(byte* input, int l_input, byte* key);
-  int size();
-  int getEntryDataLen(int pos);
-  const byte* getEntryData(int pos);
-  void getEntryData(int pos, byte* dst);
-  std::vector<bytearray_t> getEntries();
-  void printEntries();
-  void printEntry(int);
-  void printOffset();
-};
+int detectBlockSize(Oracle& oracle);
 
 // The challenges
 void challenge_1();

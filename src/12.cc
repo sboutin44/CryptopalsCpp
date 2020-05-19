@@ -83,6 +83,30 @@ void getOffset() {
 //}
 }
 
+int detectBlockSize(Oracle& oracle){
+  // 1. Detect the block size: when we feed the oracle with bigger strings
+  string test_string = "A";
+  oracle.encryption_oracle((byte*)test_string.c_str(), test_string.length());
+  int last_entry_pos = oracle.size();
+  int previous_len = oracle.getEntryDataLen(last_entry_pos - 1);
+  int new_len = previous_len;
+
+  while (previous_len == new_len) {
+	// Add 'A' at the end
+	string suffix(1, 'A');
+	test_string = test_string + suffix;
+	int l_input = test_string.length();
+
+	oracle.encryption_oracle((byte*)test_string.c_str(), l_input);
+	new_len = oracle.getEntryDataLen(oracle.size() - 1);
+  }
+//  oracle.printEntries();
+
+  int blocksize = abs(new_len - previous_len);  // Oracle
+  cout << blocksize << endl;
+
+}
+
 void challenge_12() {
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 2" << endl;

@@ -48,5 +48,6 @@ void testRotWord();
 
 // tests set 2
 void testGuessEncryptionMode();
+void testDetectBlockSize();
 
 #endif

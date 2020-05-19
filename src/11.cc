@@ -30,6 +30,8 @@ using namespace std;
 Oracle::Oracle(){
 	key = new byte[16]; // Allocate a default AES128 key.
 	randomAES128key(key);
+	offset.l = 0;
+	offset.data_ptr = nullptr;
 }
 
 void Oracle::addEntry(bytearray_t entry) { entries.push_back(entry); }

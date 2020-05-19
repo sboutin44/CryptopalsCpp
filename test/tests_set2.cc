@@ -24,3 +24,13 @@
 
 #include "lib.h"
 using namespace std;
+
+void testDetectBlockSize() {
+	  Oracle oracle;
+	  oracle.setOffsetType(FIXED);
+	  oracle.setOffset( "XXXX" );
+	  cout << detectBlockSize(oracle) << endl;
+
+	  cout << "testDetectBlockSize \tpassed" << endl;
+
+}

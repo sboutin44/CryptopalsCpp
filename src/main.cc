@@ -85,6 +85,7 @@ void runTests() {
   testFindKeyLength();
   testAES128();
   testGuessEncryptionMode();
+  testDetectBlockSize();
 }
 
 void displayProgramUsage() {
