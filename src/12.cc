@@ -183,18 +183,20 @@ void challenge_12() {
   // where X, X', etc are letters in the
   string block0 = "AAAAAAAAAAAA";  // Populate the offset with meaningless 'A's.
   string block1 =
-      "AAAAAAAAAAAAAAA";  // Will contain the secret byte at the end.
+      "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
   string plaintext = block0 + block1 + unknown_string_cpp_s;
   oracle.clear();
   string decrypted = "";
 
-  // Encrypt my string || unknown-string, ensuring we encrypt with ECB.
+  // Encrypt AAAAA...A || unknown-string-byte || unknown-string, ensuring we encrypt with ECB.
   oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
   int last_elem_pos = 0;
-  const byte* unknown_string_encrypted = oracle.getEntryData(last_elem_pos);
-
-  while (!isAES128_ECB(unknown_string_encrypted,oracle.getEntryDataLen(last_elem_pos)))
+  const byte* unknown_string_enc = oracle.getEntryData(last_elem_pos);
+  while (!isAES128_ECB(unknown_string_enc,oracle.getEntryDataLen(last_elem_pos))) {
 	  oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
+	  last_elem_pos = oracle.size()-1;
+	  unknown_string_enc = oracle.getEntryData(last_elem_pos);
+  }
 
   cout << "Display the encrypted AAAAA..AAAX: (look the 2nd block)";
   oracle.printEntries();
