@@ -27,7 +27,11 @@ using namespace std;
 
 void printByteArray(byte* a, int l) {
   printf("\n");
-  for (int i = 0; i < l; i++) printf("%02x ", a[i]);
+  for (int i = 0; i < l; i++) {
+  	if (i % 16 == 0)
+  		printf("| ");
+	  printf("%02x ", a[i]);
+  }
   printf("\n");
 }
 

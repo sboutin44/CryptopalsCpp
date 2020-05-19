@@ -24,36 +24,3 @@
 
 #include "lib.h"
 using namespace std;
-
-void testGuessEncryptionMode() {
-  srand(time(NULL));
-
-  int nbEntries = 50;
-
-  const char* input =
-      "You can go in thYou can go in thYou can go in thYou can go in thYou can "
-      "go in thYou can go in thYou can go in thYou can go in thYou can go in "
-      "thYou can go in thYou can go in thYou can go in thYou can go in thYou "
-      "can go in thYou can go in thYou can go in thYou can go in thYou can go "
-      "in thYou can go in thYou can go in thYou can go in thYou can go in th";
-
-  int l_input = strlen(input);
-
-  Oracle oracle;
-
-  // Feed the oracle with encrypted texts with randoom keys.
-  for (int i = 0; i < nbEntries; i++)
-    oracle.encryption_oracle((byte*)input, l_input);
-
-  // Guess the encryption mode used for each entries, and verify them to result
-  // computed during the call to encryption_oracle.
-  for (int i = 0; i < nbEntries; i++) {
-    byte* entry = new byte[oracle.getEntryDataLen(i)];
-    oracle.getEntryData(i, entry);
-
-    bool real_mode = oracle.enc_mode_order[i];
-    bool guessed_mode = guessEncryptionMode(entry, oracle.getEntryDataLen(i));
-    assert(real_mode == guessed_mode);
-  }
-  cout << "testGuessEncryptionMode passed" << endl;
-}

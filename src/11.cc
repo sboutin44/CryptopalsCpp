@@ -27,6 +27,11 @@
 
 using namespace std;
 
+Oracle::Oracle(){
+	key = new byte[16]; // Allocate a default AES128 key.
+	randomAES128key(key);
+}
+
 void Oracle::addEntry(bytearray_t entry) { entries.push_back(entry); }
 
 void Oracle::printEntries() {
@@ -36,7 +41,7 @@ void Oracle::printEntries() {
   }
 }
 
-int Oracle::getNbEntries() { return entries.size(); }
+int Oracle::size() { return entries.size(); }
 
 int Oracle::getEntryDataLen(int pos) { return entries[pos].l; }
 
@@ -44,16 +49,29 @@ void Oracle::getEntryData(int pos, byte* dst) {
   memcpy(dst, entries[pos].data_ptr, entries[pos].l);
 }
 
+const byte* Oracle::getEntryData(int pos) {
+	return entries[pos].data_ptr;
+}
+
+
 void Oracle::printEntry(int pos) {
   if (pos < entries.size()) {
     cout << "len: " << entries[pos].l << endl;
     cout << "data: " << endl;
     for (int i = 0; i < entries.size(); i++)
       printf("%02x ", entries[pos].data_ptr[i]);
-    cout << endl;
+      cout << endl;
   } else {
     cout << "error: no entry at position " << pos << endl;
   }
+}
+
+void Oracle::setKey(byte* k, int len){
+	memcpy(key,k,len);
+}
+
+const byte* Oracle::getKey(){
+	return key;
 }
 
 void randomAES128key(byte* empty_key) {
@@ -110,25 +128,71 @@ bool isAES128_ECB(byte* input, int l) {
     return false;
 }
 
-void Oracle::encryption_oracle(byte* input, int l_input) {
-  // 1. Generate a random key
-  byte* key = new byte[16];
-  randomAES128key(key);
-  encryption_oracle(input, l_input, key);
+void Oracle::setOffsetType(OFFSET_TYPE ot){
+	offsetType = ot;
 }
 
-void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
-  // 2. padd before and after 5-10 bytes randomly
-  // choose how many byte to pad
-  int l_before = rand() % 6 + 5;
-  int l_after = rand() % 6 + 5;
-  int len = l_before + l_input + l_after;
-  byte* input_padded = new byte[len];
+std::vector<bytearray_t> Oracle::getEntries(){
+	return entries;
+}
 
-  // Copy plaintext and pad with 5-10 random bytes
-  memset(&input_padded[0], rand() % 256, l_before);
-  memcpy(&input_padded[l_before], input, l_input);
-  memset(&input_padded[l_before + l_input], rand() % 256, l_after);
+void Oracle::clear(){
+	entries.clear();
+}
+
+void Oracle::setOffset(const char* s){
+	offset.l = strlen(s);
+	if (offset.data_ptr != nullptr)
+		delete[] offset.data_ptr;
+	offset.data_ptr = new byte[offset.l];
+
+	memcpy(offset.data_ptr , (byte*)s , offset.l);
+}
+
+void Oracle::printOffset(){
+	cout << "offset.l : " << offset.l << endl;
+	for (int i=0;i<offset.l ;i++)
+		printf("%c",offset.data_ptr[i]);
+	printf("\n");
+}
+
+//void Oracle::encryption_oracle(byte* input, int l_input) {
+//  // 1. Generate a random key
+//  byte* key = new byte[16];
+//  randomAES128key(key);
+//  encryption_oracle(input, l_input, key);
+//}
+
+//void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
+	void Oracle::encryption_oracle(byte* input, int l_input) {
+  int len;
+  byte* input_padded;
+
+  if (offsetType == RANDOM) {
+    // 2. padd before and after 5-10 bytes randomly
+    // choose how many byte to pad
+    int l_before = rand() % 6 + 5;
+    int l_after = rand() % 6 + 5;
+    len = l_before + l_input + l_after;
+    input_padded = new byte[len];
+
+    // Copy plaintext and pad with 5-10 random bytes
+    memset(&input_padded[0], rand() % 256, l_before);
+    memcpy(&input_padded[l_before], input, l_input);
+    memset(&input_padded[l_before + l_input], rand() % 256, l_after);
+  } else if (offsetType == FIXED) {
+	    // 2. pad with a fixed offset and fixed byte for tests purpose.
+	  int l_before = offset.l;
+	    len = l_before + l_input;
+	    input_padded = new byte[len];
+
+	    // Copy plaintext and pad with 5-10 random bytes
+	    memcpy(&input_padded[0], offset.data_ptr, l_before);
+	    memcpy(&input_padded[l_before], input, l_input);
+	} else {
+    len = l_input;
+    input_padded = input;
+  }
 
   // PKCS7 padding
   int blocksize = 16;
@@ -166,6 +230,39 @@ void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
     memcpy(entry.data_ptr, ciphertext_ECB, len_out);
     addEntry(entry);
   }
+}
+
+void testGuessEncryptionMode() {
+  srand(time(NULL));
+
+  int nbEntries = 50;
+
+  const char* input =
+      "You can go in thYou can go in thYou can go in thYou can go in thYou can "
+      "go in thYou can go in thYou can go in thYou can go in thYou can go in "
+      "thYou can go in thYou can go in thYou can go in thYou can go in thYou "
+      "can go in thYou can go in thYou can go in thYou can go in thYou can go "
+      "in thYou can go in thYou can go in thYou can go in thYou can go in th";
+
+  int l_input = strlen(input);
+
+  Oracle oracle;
+
+  // Feed the oracle with encrypted texts with randoom keys.
+  for (int i = 0; i < nbEntries; i++)
+    oracle.encryption_oracle((byte*)input, l_input);
+
+  // Guess the encryption mode used for each entries, and verify them to result
+  // computed during the call to encryption_oracle.
+  for (int i = 0; i < nbEntries; i++) {
+    byte* entry = new byte[oracle.getEntryDataLen(i)];
+    oracle.getEntryData(i, entry);
+
+    bool real_mode = oracle.enc_mode_order[i];
+    bool guessed_mode = guessEncryptionMode(entry, oracle.getEntryDataLen(i));
+    assert(real_mode == guessed_mode);
+  }
+  cout << "testGuessEncryptionMode passed" << endl;
 }
 
 void challenge_11() {
