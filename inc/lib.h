@@ -25,6 +25,7 @@
 #ifndef CRYPTOPALS_INC_LIB_H_
 #define CRYPTOPALS_INC_LIB_H_
 
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
@@ -56,19 +57,21 @@ enum OFFSET_TYPE { NO_OFFSET, RANDOM, FIXED };
 class Oracle {
  private:
   std::vector<bytearray_t> entries;
-  OFFSET_TYPE offsetType = RANDOM;
+  OFFSET_TYPE offsetType;
   bytearray_t offset;
   byte* key;  // AES128 - 16 bytes long
 
  public:
-  std::vector<int> enc_mode;
+  std::vector<ENCRYPTION_MODE> enc_mode;
   Oracle();
   void clear();
+  void insertAtBegin(byte* arr, int l);
   void setOffsetType(OFFSET_TYPE ot);
   void setOffset(const char* s);
   void setKey(byte* key, int len);
   const byte* getKey();
   void addEntry(bytearray_t input);
+  void removeEntry(int pos);
   void encryption_oracle(byte* input, int l_input);
   //  void encryption_oracle(byte* input, int l_input, byte* key,
   //                         bool addRandomBytes = true);

@@ -22,6 +22,7 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
+#include "Vector.h"
 #include "lib.h"
 
 using namespace std;
@@ -56,7 +57,7 @@ float similarBlocksDistanceRatio(byte* input, int l, int block_size) {
 //  cout << "Probable blocksize: " << map_dist_to_size.begin()->second <<
 //  endl;
 
-void getOffset() {
+void detectOffsetLength() {
   //	  // Guess the offset (which should not be known by the attacker
   // beforehand)
   ////  	byte* first_block_enc  = new byte[blocksize];
@@ -135,12 +136,6 @@ void challenge_12() {
   string unknown_string_cpp_s(unknown_string_c_str);
   string s2(unknown_string_c_str);
 
-  // TODO: add again
-//  string s3 = s1 + s2;
-//  //  string s3(s1);
-//  const char* input = s3.c_str();
-//  int l_input = strlen(input);
-
   /**************************************************************************
    * In the following section with break with the oracle the encrypted input,
    * and recover the unknown_string
@@ -152,60 +147,102 @@ void challenge_12() {
   oracle.setOffset("XXXX");
   oracle.printOffset();
 
+  Vector dict;
+  bytearray_t entry;
+
   // 1. Detect the block size: when we feed the oracle with bigger strings
   int blocksize = detectBlockSize(oracle);
   cout << "Detected blocksize: " << blocksize << endl;
 
   // 2. Detect the encryption mode:
+  bool char_found = false;
+  string decrypted = "";
 
   // 3. Create plaintexts like AAAAAAAAAAAAAAAX, AAAAAAAAAAAAAAAX'...
   // where X, X', etc are letters in the
-  string block0 = "AAAAAAAAAAAA";  // Populate the offset with meaningless 'A's.
-  string block1 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
+  string block0 =
+      "AAAAAAAAAAAA";  // Compensate the offset with meaningless 'A's.
+  string block1 = "";  // Additional blocks to detect ECB.
+  string block2 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
 
-  // Create a text long enough to detect ECB mode:
-  for (int i=0; i< 100; i++)
-	  block0 += block0;
+  int offset_len =
+      4;  // Should be discovered with the function detectOffsetLength.
+  assert(block0.length() == blocksize - offset_len);
+  //  assert(block1.length() == 16);
+  assert(block2.length() == 15);
 
-  string plaintext = block0 ;//+ block1 + unknown_string_cpp_s;
-  oracle.clear();
-  string decrypted = "";
+  int remainging_len = unknown_string_len;
 
-  // Encrypt AAAAA...A || unknown-string-byte || unknown-string, ensuring we
-  // encrypt with ECB.
-  oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-  int pos = 0;
+//  while (remainging_len > 0) {
+    // Create a 16*coef bytes long string, long enough to detect ECB mode:
+    int coef = 100;
+    for (int i = 0; i < (coef * 16 + 15); i++) {
+      string c(1, 'A');
+      block1 += c;
+    }
 
-//  bool isECB = isAES128_ECB(oracle.getEntryData(pos),oracle.getEntryDataLen(pos));
-//  bool isCBC = isAES128_CBC(oracle.getEntryData(pos),oracle.getEntryDataLen(pos));
+    string plaintext = block0 + block1 + unknown_string_cpp_s;
+    oracle.clear();
 
-  oracle.printRealMode(pos) ;
-  assert(oracle.enc_mode[pos] == guessEncryptionMode(oracle.getEntryData(pos),oracle.getEntryDataLen(pos)));
-//  cout << "isECB: " << isECB << endl;
-//  cout << "isCBC: " << isCBC << endl;
+    // Replace last bytes by the discovered onces, if any.
+    int count = decrypted.length();
+    for (int i = 0; i < count; i++) {
+      block1.pop_back();
+    }
+    block1 += decrypted;
 
-  while (!isAES128_ECB(oracle.getEntryData(pos),oracle.getEntryDataLen(pos))) {
+    // Encrypt, ensuring we encrypt with ECB.
     oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-    pos = oracle.size() - 1;
-  }
+    int pos = 0;
+    while (
+        !isAES128_ECB(oracle.getEntryData(pos), oracle.getEntryDataLen(pos))) {
+      oracle.removeEntry(pos);  // Remove the last entry since CBC.
+      oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
+      pos = oracle.size() - 1;
+    }
 
-  cout << "Display the encrypted AAAAA..AAAX: (look the 2nd block)";
-//  oracle.printEntries();
+    int unknown_char_pos = 16 + coef * 16;
 
-  // Encrypt all AAAAA.....AX to later compare the 2nd block to
-  // for (int X = 0; X <= 0xFF; X++) {
-  // string last(1, (char)X);
-  // string to_encrypt = block0 + block1 + last;
-  // oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
-  // const byte* unknown_string_block = &oracle.getEntryData(0)[16];
-  // const byte* my_block = &oracle.getEntryData(oracle.size() - 1)[16];
+    // Encrypt all possible AAAAAAAAAAAAAAAx
+    for (int X = 0; X <= 0xFF; X++) {
+    	string AAs = "AAAAAAAAAAAAAAAA";
+    	string BBs = "";
+    	for (int i=0;i<10;i++)
+    		BBs += "BBBBBBBBBBBBBBBB";
+//    		AAs += "AAAAAAAAAAAAAAAA";
+    	string last(1, (char)X);
+    	string to_encrypt = block0 + BBs + block2 + last;
+    	assert(to_encrypt.length() == 12+10*16+16);
+      // Encrypt, ensuring we encrypt with ECB.
+      oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
+      int pos = oracle.size()-1;
+      while (
+          !isAES128_ECB(oracle.getEntryData(pos), oracle.getEntryDataLen(pos))) {
+        oracle.removeEntry(pos);  // Remove the last entry since CBC.
+        oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
+        pos = oracle.size() - 1;
+      }
 
-  //    cout << oracle.size() << endl;
-  // if (memcmp(unknown_string_block, my_block, 16) == 0) {
-  // cout << "That's a match !" << endl;
-  // string x(1, (char)X);
-  // decrypted += x;
-  //};
-  //}
-  // cout << decrypted << endl;
+      // Save the output to our dictionary.
+      dict.push_back(
+          oracle.getEntryData(oracle.size() - 1),
+          oracle.getEntryDataLen(oracle.size() - 1));  // Copies the array.
+      const byte* unknown_string_block =
+          &oracle.getEntryData(0)[unknown_char_pos];
+      const byte* my_block = &oracle.getEntryData(oracle.size() - 1)[11*16];
+
+//      cout << oracle.size() << endl;
+      if (memcmp(unknown_string_block, my_block, 16) == 0) {
+        char_found = true;
+        cout << "That's a match !" << endl;
+        string x(1, (char)X);
+        decrypted += x;
+        remainging_len--;
+      } else {
+
+      }
+      // Shift the string from 1 char to the left;
+    }
+//  }
+  cout << decrypted << endl;
 }
