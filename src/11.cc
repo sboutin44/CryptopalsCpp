@@ -153,13 +153,6 @@ void Oracle::printRealMode(int pos){
 		cout << "Mode error" << endl;
 }
 
-// void Oracle::encryption_oracle(byte* input, int l_input) {
-//  // 1. Generate a random key
-//  byte* key = new byte[16];
-//  randomAES128key(key);
-//  encryption_oracle(input, l_input, key);
-//}
-
 // void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
 void Oracle::encryption_oracle(byte* input, int l_input) {
   int len;
@@ -208,7 +201,6 @@ void Oracle::encryption_oracle(byte* input, int l_input) {
 
   // 3. Choose ECB or CBC randomly
   int choice = rand() % 2;
-  cout << choice << endl;
 
   // 4. Encrypt
   if (choice == 0) {
