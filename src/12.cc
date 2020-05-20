@@ -179,28 +179,36 @@ void challenge_12() {
   // where X, X', etc are letters in the
   string block0 = "AAAAAAAAAAAA";  // Populate the offset with meaningless 'A's.
   string block1 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
-  string plaintext = block0 + block1 + unknown_string_cpp_s;
+
+  // Create a text long enough to detect ECB mode:
+  for (int i=0; i< 5; i++)
+	  block0 += block0;
+
+  string plaintext = block0 ;//+ block1 + unknown_string_cpp_s;
   oracle.clear();
   string decrypted = "";
 
   // Encrypt AAAAA...A || unknown-string-byte || unknown-string, ensuring we
   // encrypt with ECB.
   oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-  int last_elem_pos = 0;
-
+  int pos = 0;
+  oracle.printEntries();
   std::cout << std::boolalpha;
-  cout << isAES128_ECB(oracle.getEntryData(last_elem_pos),
-                       oracle.getEntryDataLen(last_elem_pos))
-       << endl;
 
-  //while (!isAES128_ECB(oracle.getEntryData(last_elem_pos),
-                       //oracle.getEntryDataLen(last_elem_pos))) {
-    //oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-    //last_elem_pos = oracle.size() - 1;
-  //}
+  bool isECB = isAES128_ECB(oracle.getEntryData(pos),oracle.getEntryDataLen(pos));
+  bool isCBC = isAES128_CBC(oracle.getEntryData(pos),oracle.getEntryDataLen(pos));
+
+  oracle.printRealMode(pos) ;
+  cout << "isECB: " << isECB << endl;
+  cout << "isCBC: " << isCBC << endl;
+
+  while (!isAES128_ECB(oracle.getEntryData(pos),oracle.getEntryDataLen(pos))) {
+    oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
+    pos = oracle.size() - 1;
+  }
 
   cout << "Display the encrypted AAAAA..AAAX: (look the 2nd block)";
-  oracle.printEntries();
+//  oracle.printEntries();
 
   // Encrypt all AAAAA.....AX to later compare the 2nd block to
   // for (int X = 0; X <= 0xFF; X++) {

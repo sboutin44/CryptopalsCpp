@@ -109,7 +109,7 @@ ENCRYPTION_MODE guessEncryptionMode(const byte* input, int l) {
     return ECB;
 }
 
-bool isAES128_CBC(byte* input, int l) {
+bool isAES128_CBC(const byte* input, int l) {
   if (guessEncryptionMode(input, l) == CBC)
     return true;
   else
@@ -141,6 +141,16 @@ void Oracle::printOffset() {
   cout << "offset.l : " << offset.l << endl;
   for (int i = 0; i < offset.l; i++) printf("%c", offset.data_ptr[i]);
   printf("\n");
+}
+
+void Oracle::printRealMode(int pos){
+	assert(pos < this->size());
+	if (enc_mode[pos] == ECB )
+		cout  << "Real Mode: ECB" << endl;
+	else if (enc_mode[pos] == CBC )
+		cout  << "Real Mode: CBC" << endl;
+	else
+		cout << "Mode error" << endl;
 }
 
 // void Oracle::encryption_oracle(byte* input, int l_input) {
@@ -198,10 +208,11 @@ void Oracle::encryption_oracle(byte* input, int l_input) {
 
   // 3. Choose ECB or CBC randomly
   int choice = rand() % 2;
+  cout << choice << endl;
 
   // 4. Encrypt
   if (choice == 0) {
-    enc_mode_order.push_back(CBC);  // Keep track of the operation
+    enc_mode.push_back(CBC);  // Keep track of the operation
 
     byte IV[16];
     randomAES128key(IV);
@@ -210,7 +221,7 @@ void Oracle::encryption_oracle(byte* input, int l_input) {
     memcpy(entry.data_ptr, ciphertext_CBC, len_out);
     addEntry(entry);
   } else {
-    enc_mode_order.push_back(ECB);  // Keep track of the operation
+    enc_mode.push_back(ECB);  // Keep track of the operation
 
     AES128_ECB_encrypt(buffer, key, len_out, ciphertext_ECB);
 
@@ -222,7 +233,7 @@ void Oracle::encryption_oracle(byte* input, int l_input) {
 void testGuessEncryptionMode() {
   srand(time(NULL));
 
-  int nbEntries = 50;
+  int nbEntries = 500;
 
   const char* input =
       "You can go in thYou can go in thYou can go in thYou can go in thYou can "
@@ -245,9 +256,17 @@ void testGuessEncryptionMode() {
     byte* entry = new byte[oracle.getEntryDataLen(i)];
     oracle.getEntryData(i, entry);
 
-    bool real_mode = oracle.enc_mode_order[i];
+    bool real_mode = oracle.enc_mode[i];
     bool guessed_mode = guessEncryptionMode(entry, oracle.getEntryDataLen(i));
     assert(real_mode == guessed_mode);
+
+    if (real_mode == ECB) {
+    	assert( isAES128_CBC(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == false);
+    	assert( isAES128_ECB(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == true);
+    } else if (real_mode == CBC) {
+    	assert( isAES128_CBC(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == true);
+    	assert( isAES128_ECB(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == false);
+    }
   }
   cout << "testGuessEncryptionMode passed" << endl;
 }

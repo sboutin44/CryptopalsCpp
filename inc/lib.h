@@ -50,6 +50,7 @@ typedef struct bytearray_t {
   byte* data_ptr;
 } bytearray_t;
 
+enum ENCRYPTION_MODE { ECB, CBC };
 enum OFFSET_TYPE { NO_OFFSET, RANDOM, FIXED };
 
 class Oracle {
@@ -60,7 +61,7 @@ class Oracle {
   byte* key;  // AES128 - 16 bytes long
 
  public:
-  std::vector<int> enc_mode_order;
+  std::vector<int> enc_mode;
   Oracle();
   void clear();
   void setOffsetType(OFFSET_TYPE ot);
@@ -80,6 +81,7 @@ class Oracle {
   void printEntries();
   void printEntry(int);
   void printOffset();
+  void printRealMode(int pos);
 };
 
 /*--------------------------------- Functions ---------------------------*/
@@ -134,11 +136,10 @@ void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
                         byte* plaintext, int len);
 
 // Challenge 11
-enum ENCRYPTION_MODE { ECB, CBC };
 void randomAES128key(byte* empty_key);
 float similarBlocksDistanceRatio(byte* input, int l);
 ENCRYPTION_MODE guessEncryptionMode(const byte* input, int l);
-bool isAES128_CBC(byte* input, int l);
+bool isAES128_CBC(const byte* input, int l);
 bool isAES128_ECB(const byte* input, int l);
 
 // Challenge 12

@@ -86,6 +86,7 @@ void runTests() {
   testAES128();
   testGuessEncryptionMode();
   testDetectBlockSize();
+  testGuessEncryptionMode();
 }
 
 void displayProgramUsage() {
