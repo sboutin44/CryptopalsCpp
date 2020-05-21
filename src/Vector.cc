@@ -3,6 +3,8 @@
 Vector::Vector() {}
 
 void Vector::push_back(bytearray_t arr) {
+  // Hard copy of an array in the private vector of the class.
+
   bytearray_t heap_cpy;
   heap_cpy.l = arr.l;
   memcpy(heap_cpy.data_ptr, arr.data_ptr, arr.l);
@@ -10,6 +12,8 @@ void Vector::push_back(bytearray_t arr) {
 }
 
 void Vector::push_back(const byte* arr, int l) {
+  // Hard copy of an array in the private vector of the class.
+
   bytearray_t heap_cpy;
   heap_cpy.l = l;
   heap_cpy.data_ptr = new byte[l];

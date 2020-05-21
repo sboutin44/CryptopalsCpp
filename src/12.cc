@@ -169,6 +169,8 @@ void challenge_12() {
 
   int remainging_len = unknown_string_len;
 
+  bytearray_t target;
+
   while (remainging_len > 0) {
     // Create a 16*coef bytes long string, long enough to detect ECB mode:
     block1 = "";
@@ -182,11 +184,14 @@ void challenge_12() {
         block0 + block1 +
         unknown_string_cpp_s.substr(unknown_string_len - remainging_len,
                                     unknown_string_len);
+
+    // TODO: remove once using an external dictionary.
     oracle.clear();
 
     // Encrypt, ensuring we encrypt with ECB.
     oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-    int pos = 0;
+    int pos = oracle.debug_size() - 1;
+
     while (
         !isAES128_ECB(oracle.getEntryData(pos), oracle.getEntryDataLen(pos))) {
       oracle.removeEntry(pos);  // Remove the last entry since CBC.
@@ -194,7 +199,13 @@ void challenge_12() {
       pos = oracle.debug_size() - 1;
     }
 
-    int unknown_char_pos = 16 + coef * 16;
+    // TODO: remove pos
+    // Save the encrypted text, this is our target for matches.
+    target.l = oracle.getEntryDataLen(pos);
+    target.data_ptr = new byte[target.l];
+    memcpy(target.data_ptr, oracle.getEntryData(pos), target.l);
+
+    int unknown_char_pos = 16 + coef * 16;  // Pos of x in AAAAAAAAAAAAAAAx
 
     // Encrypt all possible AAAAAAAAAAAAAAAx
     for (int X = 0; X <= 0xFF; X++) {
@@ -206,6 +217,7 @@ void challenge_12() {
 
       // Encrypt, ensuring we encrypt with ECB.
       oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
+
       int pos = oracle.debug_size() - 1;
       while (!isAES128_ECB(oracle.getEntryData(pos),
                            oracle.getEntryDataLen(pos))) {
@@ -215,20 +227,23 @@ void challenge_12() {
         pos = oracle.debug_size() - 1;
       }
 
-      const byte* unknown_block = &oracle.getEntryData(0)[unknown_char_pos];
-      const byte* my_block =
-          &oracle.getEntryData(oracle.debug_size() - 1)[11 * 16];
+      // Save the encrypted text, this is our target for matches.
+      bytearray_t to_match;
+      to_match.l = oracle.getEntryDataLen(pos);
+      to_match.data_ptr = new byte[to_match.l];
+      memcpy(to_match.data_ptr, oracle.getEntryData(pos), to_match.l);
 
-      //      cout << oracle.size() << endl;
-      if (memcmp(unknown_block, my_block, 16) == 0) {
+      const byte* unknown_block = &target.data_ptr[unknown_char_pos];
+      const byte* block_to_match = &to_match.data_ptr[11 * 16];
+
+      if (memcmp(unknown_block, block_to_match, 16) == 0) {
         char_found = true;
-        //        cout << "That's a match !" << endl;
         string x(1, (char)X);
         cout << x << endl;
         decrypted += x;
         remainging_len--;
-        //        break; // Exit for loop
       } else {
+        // Nespresso, what else ?
       }
     }
   }

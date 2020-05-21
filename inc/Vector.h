@@ -4,7 +4,7 @@
 #include "lib.h"
 
 class Vector {
-  /* Container for arrays with dynamic size. */
+  /* Wrapper for std::vector to easily work with vectors of arrays. */
 
  private:
   std::vector<bytearray_t> entries;
