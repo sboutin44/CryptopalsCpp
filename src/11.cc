@@ -27,8 +27,6 @@
 
 using namespace std;
 
-
-
 void testGuessEncryptionMode() {
   srand(time(NULL));
 

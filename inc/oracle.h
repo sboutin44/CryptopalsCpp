@@ -75,5 +75,4 @@ class Oracle {
   void debug_printRealMode(int pos);
 };
 
-
-#endif //CRYPTOPALS_INC_ORACLE_H_
+#endif  // CRYPTOPALS_INC_ORACLE_H_

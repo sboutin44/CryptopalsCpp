@@ -214,7 +214,7 @@ void Oracle::encryption_oracle(byte* input, int l_input) {
   // 4. Encrypt
   if (choice == 0) {
     debug_enc_mode.push_back(CBC);  // Keep track of the operation
-//cout << "CBC" << endl;
+                                    // cout << "CBC" << endl;
     byte IV[16];
     randomAES128key(IV);
 
@@ -223,7 +223,7 @@ void Oracle::encryption_oracle(byte* input, int l_input) {
     addEntry(entry);
   } else {
     debug_enc_mode.push_back(ECB);  // Keep track of the operation
-//    cout << "ECB" << endl;
+                                    //    cout << "ECB" << endl;
 
     AES128_ECB_encrypt(buffer, key, len_out, ciphertext_ECB);
 
