@@ -43,49 +43,7 @@
 #include <ctype.h>
 
 #include "aes.h"
-
-/*-------------------------- Oracle ----------------------*/
-
-typedef struct bytearray_t {
-  int l;
-  byte* data_ptr;
-} bytearray_t;
-
-enum ENCRYPTION_MODE { ECB, CBC };
-enum OFFSET_TYPE { NO_OFFSET, RANDOM, FIXED };
-
-class Oracle {
- private:
-  std::vector<bytearray_t> entries;
-  OFFSET_TYPE offsetType;
-  bytearray_t offset;
-  byte* key;  // AES128 - 16 bytes long
-
- public:
-  std::vector<ENCRYPTION_MODE> enc_mode;
-  Oracle();
-  void clear();
-  void insertAtBegin(byte* arr, int l);
-  void setOffsetType(OFFSET_TYPE ot);
-  void setOffset(const char* s);
-  void setKey(byte* key, int len);
-  const byte* getKey();
-  void addEntry(bytearray_t input);
-  void removeEntry(int pos);
-  void encryption_oracle(byte* input, int l_input);
-  //  void encryption_oracle(byte* input, int l_input, byte* key,
-  //                         bool addRandomBytes = true);
-  void encryption_oracle(byte* input, int l_input, byte* key);
-  int size();
-  int getEntryDataLen(int pos);
-  const byte* getEntryData(int pos);
-  void getEntryData(int pos, byte* dst);
-  std::vector<bytearray_t> getEntries();
-  void printEntries();
-  void printEntry(int);
-  void printOffset();
-  void printRealMode(int pos);
-};
+#include "oracle.h"
 
 /*--------------------------------- Functions ---------------------------*/
 

@@ -85,7 +85,7 @@ int detectBlockSize(Oracle& oracle) {
   // 1. Detect the block size: when we feed the oracle with bigger strings
   string test_string = "A";
   oracle.encryption_oracle((byte*)test_string.c_str(), test_string.length());
-  int last_entry_pos = oracle.size();
+  int last_entry_pos = oracle.debug_size();
   int previous_len = oracle.getEntryDataLen(last_entry_pos - 1);
   int new_len = previous_len;
 
@@ -96,7 +96,7 @@ int detectBlockSize(Oracle& oracle) {
     int l_input = test_string.length();
 
     oracle.encryption_oracle((byte*)test_string.c_str(), l_input);
-    new_len = oracle.getEntryDataLen(oracle.size() - 1);
+    new_len = oracle.getEntryDataLen(oracle.debug_size() - 1);
   }
 
   int blocksize = abs(new_len - previous_len);
@@ -145,7 +145,7 @@ void challenge_12() {
   Oracle oracle;
   oracle.setOffsetType(FIXED);
   oracle.setOffset("XXXX");
-  oracle.printOffset();
+  oracle.debug_printOffset();
 
   Vector dict;
   bytearray_t entry;
@@ -200,7 +200,7 @@ void challenge_12() {
         !isAES128_ECB(oracle.getEntryData(pos), oracle.getEntryDataLen(pos))) {
       oracle.removeEntry(pos);  // Remove the last entry since CBC.
       oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-      pos = oracle.size() - 1;
+      pos = oracle.debug_size() - 1;
     }
 
     int unknown_char_pos = 16 + coef * 16;
@@ -216,21 +216,21 @@ void challenge_12() {
 
     	// Encrypt, ensuring we encrypt with ECB.
       oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
-      int pos = oracle.size()-1;
+      int pos = oracle.debug_size()-1;
       while (
           !isAES128_ECB(oracle.getEntryData(pos), oracle.getEntryDataLen(pos))) {
         oracle.removeEntry(pos);  // Remove the last entry since CBC.
         oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
-        pos = oracle.size() - 1;
+        pos = oracle.debug_size() - 1;
       }
 
       // Save the output to our dictionary.
       dict.push_back(
-          oracle.getEntryData(oracle.size() - 1),
-          oracle.getEntryDataLen(oracle.size() - 1));  // Copies the array.
+          oracle.getEntryData(oracle.debug_size() - 1),
+          oracle.getEntryDataLen(oracle.debug_size() - 1));  // Copies the array.
       const byte* unknown_string_block =
           &oracle.getEntryData(0)[unknown_char_pos];
-      const byte* my_block = &oracle.getEntryData(oracle.size() - 1)[11*16];
+      const byte* my_block = &oracle.getEntryData(oracle.debug_size() - 1)[11*16];
 
 //      cout << oracle.size() << endl;
       if (memcmp(unknown_string_block, my_block, 16) == 0) {
