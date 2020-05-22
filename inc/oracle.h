@@ -39,6 +39,7 @@ enum OFFSET_TYPE { NO_OFFSET, RANDOM, FIXED };
 
 class Oracle {
  private:
+  bytearray_t ciphertext;
   std::vector<bytearray_t> entries;
   OFFSET_TYPE offsetType;
   bytearray_t offset;
@@ -55,6 +56,7 @@ class Oracle {
   int getEntryDataLen(int pos);
   const byte* getEntryData(int pos);
   void getEntryData(int pos, byte* dst);
+  const bytearray_t* getCiphertext();
 
   // Oracle customization
   void setOffsetType(OFFSET_TYPE ot);

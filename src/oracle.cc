@@ -27,6 +27,9 @@
 using namespace std;
 
 Oracle::Oracle() {
+  ciphertext.l = 0;
+  ciphertext.data_ptr = new byte[0];
+
   key = new byte[16];  // Allocate a default AES128 key.
   randomAES128key(key);
   offset.l = 0;
@@ -34,12 +37,23 @@ Oracle::Oracle() {
   offsetType = RANDOM;
 }
 
-void Oracle::addEntry(bytearray_t entry) { entries.push_back(entry); }
+void Oracle::addEntry(bytearray_t entry) {
+  // For internal use
+  entries.push_back(entry);
+
+  // Copy ciphertext for the Oracle external functions.
+  delete[] ciphertext.data_ptr;  // Avoid issues.
+  ciphertext.l = entry.l;
+  ciphertext.data_ptr = new byte[ciphertext.l];
+  memcpy(ciphertext.data_ptr, entry.data_ptr, ciphertext.l);
+}
 
 void Oracle::removeEntry(int pos) {
   entries.pop_back();
   debug_enc_mode.pop_back();
 }
+
+const bytearray_t* Oracle::getCiphertext() { return &ciphertext; }
 
 void Oracle::debug_printEntries() {
   for (auto it = entries.begin(); it != entries.end(); it++) {
@@ -162,7 +176,6 @@ void Oracle::debug_printRealMode(int pos) {
     cout << "Mode error" << endl;
 }
 
-// void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
 void Oracle::encryption_oracle(byte* input, int l_input) {
   int len;
   byte* input_padded;

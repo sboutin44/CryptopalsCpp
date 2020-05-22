@@ -201,9 +201,17 @@ void challenge_12() {
 
     // TODO: remove pos
     // Save the encrypted text, this is our target for matches.
-    target.l = oracle.getEntryDataLen(pos);
+
+    target.l = oracle.getCiphertext()->l;
     target.data_ptr = new byte[target.l];
-    memcpy(target.data_ptr, oracle.getEntryData(pos), target.l);
+    memcpy(target.data_ptr, oracle.getCiphertext()->data_ptr, target.l);
+
+    //    target.data_ptr = new byte[target.l];
+    //    memcpy(target.data_ptr, oracle.getEntryData(pos), target.l);
+
+    //    target.l = oracle.getEntryDataLen(pos);
+    //    target.data_ptr = new byte[target.l];
+    //    memcpy(target.data_ptr, oracle.getEntryData(pos), target.l);
 
     int unknown_char_pos = 16 + coef * 16;  // Pos of x in AAAAAAAAAAAAAAAx
 
@@ -229,9 +237,9 @@ void challenge_12() {
 
       // Save the encrypted text, this is our target for matches.
       bytearray_t to_match;
-      to_match.l = oracle.getEntryDataLen(pos);
+      to_match.l = oracle.getCiphertext()->l;
       to_match.data_ptr = new byte[to_match.l];
-      memcpy(to_match.data_ptr, oracle.getEntryData(pos), to_match.l);
+      memcpy(to_match.data_ptr, oracle.getCiphertext()->data_ptr, to_match.l);
 
       const byte* unknown_block = &target.data_ptr[unknown_char_pos];
       const byte* block_to_match = &to_match.data_ptr[11 * 16];
