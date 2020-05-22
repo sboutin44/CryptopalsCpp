@@ -192,26 +192,15 @@ void challenge_12() {
     oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
     int pos = oracle.debug_size() - 1;
 
-    while (
-        !isAES128_ECB(oracle.getEntryData(pos), oracle.getEntryDataLen(pos))) {
-      oracle.removeEntry(pos);  // Remove the last entry since CBC.
+    while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
+                         oracle.getCiphertext()->l)) {
       oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-      pos = oracle.debug_size() - 1;
     }
 
-    // TODO: remove pos
     // Save the encrypted text, this is our target for matches.
-
     target.l = oracle.getCiphertext()->l;
     target.data_ptr = new byte[target.l];
     memcpy(target.data_ptr, oracle.getCiphertext()->data_ptr, target.l);
-
-    //    target.data_ptr = new byte[target.l];
-    //    memcpy(target.data_ptr, oracle.getEntryData(pos), target.l);
-
-    //    target.l = oracle.getEntryDataLen(pos);
-    //    target.data_ptr = new byte[target.l];
-    //    memcpy(target.data_ptr, oracle.getEntryData(pos), target.l);
 
     int unknown_char_pos = 16 + coef * 16;  // Pos of x in AAAAAAAAAAAAAAAx
 
@@ -227,12 +216,10 @@ void challenge_12() {
       oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
 
       int pos = oracle.debug_size() - 1;
-      while (!isAES128_ECB(oracle.getEntryData(pos),
-                           oracle.getEntryDataLen(pos))) {
-        oracle.removeEntry(pos);  // Remove the last entry since CBC.
+      while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
+                           oracle.getCiphertext()->l)) {
         oracle.encryption_oracle((byte*)to_encrypt.c_str(),
                                  to_encrypt.length());
-        pos = oracle.debug_size() - 1;
       }
 
       // Save the encrypted text, this is our target for matches.
