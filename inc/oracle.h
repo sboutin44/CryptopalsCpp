@@ -50,7 +50,6 @@ class Oracle {
   Oracle();
 
   // Oracle interface
-  const byte* getKey();
   void encryption_oracle(byte* input, int l_input);
   void encryption_oracle(byte* input, int l_input, byte* key);
   int getEntryDataLen(int pos);
@@ -64,6 +63,7 @@ class Oracle {
   void setKey(byte* key, int len);
 
   // For debug purpose
+  const byte* getKey();
   void addEntry(bytearray_t input);
   void removeEntry(int pos);
   void insertAtBegin(byte* arr, int l);

@@ -37,3 +37,15 @@ void testDetectBlockSize() {
 
   cout << "testDetectBlockSize \tpassed" << endl;
 }
+
+void testDetectOffsetLength() {
+  Oracle oracle;
+  oracle.setOffsetType(FIXED);
+  oracle.setOffset("XXXX");
+  oracle.debug_printOffset();
+  int blocksize = 16;
+
+  int offset_len = detectOffsetLength(oracle,blocksize);
+  cout << offset_len << endl;
+  assert ( 4 == offset_len);
+}

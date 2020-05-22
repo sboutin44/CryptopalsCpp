@@ -106,6 +106,7 @@ bool isAES128_ECB(const byte* input, int l);
 // Challenge 12
 float similarBlocksDistanceRatio(byte* input, int l, int block_size);
 int detectBlockSize(Oracle& oracle);
+int detectOffsetLength(Oracle oracle, int blocksize);
 
 // The challenges
 void challenge_1();

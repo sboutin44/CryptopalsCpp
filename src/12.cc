@@ -57,28 +57,80 @@ float similarBlocksDistanceRatio(byte* input, int l, int block_size) {
 //  cout << "Probable blocksize: " << map_dist_to_size.begin()->second <<
 //  endl;
 
-void detectOffsetLength() {
-  //	  // Guess the offset (which should not be known by the attacker
-  // beforehand)
-  ////  	byte* first_block_enc  = new byte[blocksize];
-  // oracle.setOffsetType(FIXED);
-  // oracle.setOffset( "XXXX" );
-  // oracle.printOffset();
-  //	  string bl = "AAAAAAAAAAAAAAAA";
-  //	  string middle = bl + bl + bl;
-  //	  oracle.clear();
-  //	oracle.encryption_oracle((byte*)middle.c_str(), middle.length(), key);
-  //
-  //	const byte* b1 = &oracle.getEntryData(oracle.size()-1)[16];
-  //	const byte* b2 = &oracle.getEntryData(oracle.size()-1)[32];
-  //	int is_eq = memcmp(b1,b2,16);
-  ////	while(is_eq != 0) {
-  //		for (int i=0;i<13;i++) {
-  //		oracle.encryption_oracle((byte*)middle.c_str(), middle.length(),
-  // key); 		string prefix(1, 'B'); 		middle = prefix +
-  // middle; cout << middle << endl; 		new_len =
-  // oracle.getEntryDataLen(oracle.size() - 1);
-  //}
+int detectOffsetLength(Oracle oracle, int blocksize) {
+  /* Detect the size of the offset added by the oracle.
+   *
+   * Let's take an 8 bytes block size, in ECB mode if we encrypt 2 blocks of As,
+   * and prefix it by Bs, at some point the As string will aligned with 2
+   * blocks.
+   *
+   * plain:  	XXXXAAAA AAAAAAAA AAAApadd
+   * cipher: 	fdslfkjd asfddsar fdksajfs (not real values)
+   * ...
+   *
+   * plain:	XXXXBBBBB AAAAAAAA AAAAAAAA padding_
+   * cipher:	fsagwgefg samethin samethin fsdrege
+   * */
+
+  //  	byte* first_block_enc  = new byte[blocksize];
+
+//  string bl = ;
+
+string middle = "AAAAAAAAAAAAAAAA" "AAAAAAAAAAAAAAAA" "CCCCCCCCCCCCCCCC" "CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC";
+  oracle.clear();
+  int is_eq = 1;
+  int len = 0;
+  do {
+	  len++;
+    string prefix(1, 'B');
+    middle = prefix + middle;
+    cout << middle << endl;
+
+
+    // Encrypt, ensuring we encrypt with ECB.
+    oracle.encryption_oracle((byte*)middle.c_str(), middle.length());
+
+//    int pos = oracle.debug_size() - 1;
+//    while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
+//                         oracle.getCiphertext()->l)) {
+//        printByteArray(oracle.getCiphertext()->data_ptr, oracle.getCiphertext()->l);
+//    	int pos = oracle.debug_size() - 1;
+//    	oracle.debug_printRealMode(pos);
+//    	oracle.encryption_oracle((byte*)middle.c_str(),
+//    		  middle.length());
+//    	cout  << isAES128_ECB(oracle.getCiphertext()->data_ptr,
+//    	                         oracle.getCiphertext()->l)    	<< endl;    }
+      do {
+    	  oracle.encryption_oracle((byte*)middle.c_str(), middle.length());
+      }   while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
+            oracle.getCiphertext()->l));
+//    oracle.encryption_oracle((byte*)middle.c_str(), middle.length());
+
+    bytearray_t ciphertext;
+    ciphertext.l = oracle.getCiphertext()->l;
+    ciphertext.data_ptr = new byte[ciphertext.l];
+    memcpy(ciphertext.data_ptr, oracle.getCiphertext()->data_ptr, ciphertext.l);
+
+
+    printByteArray(ciphertext.data_ptr, ciphertext.l);
+
+    const byte* b1 = &ciphertext.data_ptr[blocksize];
+    const byte* b2 = &ciphertext.data_ptr[2*blocksize];
+    //  	const byte* b1 =
+    //  &oracle.getEntryData(oracle.debug_size()-1)[16]; 	const byte* b2 =
+    //  &oracle.getEntryData(oracle.debug_size()-1)[32];
+    is_eq = memcmp(b1, b2, blocksize);
+
+  } while (is_eq != 0);
+  ////  		for (int i=0;i<13;i++) {
+  //  		oracle.encryption_oracle((byte*)middle.c_str(),
+  //  middle.length()); 		string prefix(1, 'B'); 		middle = prefix +   middle;
+  //  		//cout << middle << endl;
+  //  		int new_len = oracle.getEntryDataLen(oracle.debug_size() - 1);
+  //  }
+  //  	cout << middle << endl;
+
+  return len;
 }
 
 int detectBlockSize(Oracle& oracle) {
@@ -96,7 +148,7 @@ int detectBlockSize(Oracle& oracle) {
     int l_input = test_string.length();
 
     oracle.encryption_oracle((byte*)test_string.c_str(), l_input);
-    new_len = oracle.getEntryDataLen(oracle.debug_size() - 1);
+    new_len = oracle.getCiphertext()->l;
   }
 
   int blocksize = abs(new_len - previous_len);
@@ -161,6 +213,9 @@ void challenge_12() {
   string block1 = "";                 // Additional blocks to detect ECB.
   string block2 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
 
+//  cout << "Offset: ";
+//  cout << detectOffsetLength(oracle,blocksize) << endl;
+
   int offset_len =
       4;  // Should be discovered with the function detectOffsetLength.
   assert(block0.length() == blocksize - offset_len);
@@ -199,7 +254,8 @@ void challenge_12() {
     target.data_ptr = new byte[target.l];
     memcpy(target.data_ptr, oracle.getCiphertext()->data_ptr, target.l);
 
-    int unknown_char_pos = blocksize + target_nb_blocks * 16;  // Pos of x in AAAAAAAAAAAAAAAx
+    int unknown_char_pos =
+        blocksize + target_nb_blocks * 16;  // Pos of x in AAAAAAAAAAAAAAAx
 
     // Encrypt all possible AAAAAAAAAAAAAAAx
     for (int X = 0; X <= 0xFF; X++) {
@@ -213,7 +269,6 @@ void challenge_12() {
       // Encrypt, ensuring we encrypt with ECB.
       oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
 
-      int pos = oracle.debug_size() - 1;
       while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
                            oracle.getCiphertext()->l)) {
         oracle.encryption_oracle((byte*)to_encrypt.c_str(),
@@ -227,7 +282,8 @@ void challenge_12() {
       memcpy(to_match.data_ptr, oracle.getCiphertext()->data_ptr, to_match.l);
 
       const byte* unknown_block = &target.data_ptr[unknown_char_pos];
-      const byte* block_to_match = &to_match.data_ptr[(to_match_nb_blocks+1) * 16];
+      const byte* block_to_match =
+          &to_match.data_ptr[(to_match_nb_blocks + 1) * 16];
 
       if (memcmp(unknown_block, block_to_match, 16) == 0) {
         char_found = true;

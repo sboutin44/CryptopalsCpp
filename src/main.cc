@@ -87,6 +87,7 @@ void runTests() {
   testGuessEncryptionMode();
   testDetectBlockSize();
   testGuessEncryptionMode();
+  testDetectOffsetLength();
 }
 
 void displayProgramUsage() {
