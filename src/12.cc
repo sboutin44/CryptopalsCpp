@@ -164,18 +164,15 @@ void challenge_12() {
   int offset_len =
       4;  // Should be discovered with the function detectOffsetLength.
   assert(block0.length() == blocksize - offset_len);
-  //  assert(block1.length() == 16);
   assert(block2.length() == 15);
-
   int remainging_len = unknown_string_len;
-
   bytearray_t target;
 
   while (remainging_len > 0) {
     // Create a 16*coef bytes long string, long enough to detect ECB mode:
     block1 = "";
-    int coef = 100;
-    for (int i = 0; i < (coef * 16 + 15); i++) {
+    int target_nb_blocks = 100;
+    for (int i = 0; i < (target_nb_blocks * 16 + 15); i++) {
       string c(1, 'A');
       block1 += c;
     }
@@ -188,9 +185,10 @@ void challenge_12() {
     // TODO: remove once using an external dictionary.
     oracle.clear();
 
-    // Encrypt, ensuring we encrypt with ECB.
+    // Encrypt, first attempt to get ECB.
     oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
 
+    // Retry while not ECB
     while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
                          oracle.getCiphertext()->l)) {
       oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
@@ -201,12 +199,13 @@ void challenge_12() {
     target.data_ptr = new byte[target.l];
     memcpy(target.data_ptr, oracle.getCiphertext()->data_ptr, target.l);
 
-    int unknown_char_pos = 16 + coef * 16;  // Pos of x in AAAAAAAAAAAAAAAx
+    int unknown_char_pos = blocksize + target_nb_blocks * 16;  // Pos of x in AAAAAAAAAAAAAAAx
 
     // Encrypt all possible AAAAAAAAAAAAAAAx
     for (int X = 0; X <= 0xFF; X++) {
       string BBs = "";
-      for (int i = 0; i < 10; i++) BBs += "BBBBBBBBBBBBBBBB";
+      int to_match_nb_blocks = 10;
+      for (int i = 0; i < to_match_nb_blocks; i++) BBs += "BBBBBBBBBBBBBBBB";
       string last(1, (char)X);
       string to_encrypt = block0 + BBs + block2 + last;
       assert(to_encrypt.length() == 12 + 10 * 16 + 16);
@@ -228,7 +227,7 @@ void challenge_12() {
       memcpy(to_match.data_ptr, oracle.getCiphertext()->data_ptr, to_match.l);
 
       const byte* unknown_block = &target.data_ptr[unknown_char_pos];
-      const byte* block_to_match = &to_match.data_ptr[11 * 16];
+      const byte* block_to_match = &to_match.data_ptr[(to_match_nb_blocks+1) * 16];
 
       if (memcmp(unknown_block, block_to_match, 16) == 0) {
         char_found = true;
