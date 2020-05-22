@@ -190,7 +190,6 @@ void challenge_12() {
 
     // Encrypt, ensuring we encrypt with ECB.
     oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-    int pos = oracle.debug_size() - 1;
 
     while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
                          oracle.getCiphertext()->l)) {

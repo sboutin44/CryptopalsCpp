@@ -31,6 +31,7 @@ void testGuessEncryptionMode() {
   srand(time(NULL));
 
   int nbEntries = 500;
+  bytearray_t entry;
 
   const char* input =
       "You can go in thYou can go in thYou can go in thYou can go in thYou can "
@@ -44,30 +45,29 @@ void testGuessEncryptionMode() {
   Oracle oracle;
   oracle.setOffsetType(RANDOM);
 
-  // Feed the oracle with encrypted texts with random keys.
-  for (int i = 0; i < nbEntries; i++)
+  // Guess the encryption mode used for each entries, and verify them to
+  // result computed during the call to encryption_oracle.
+  for (int i = 0; i < nbEntries; i++) {
+    // Request the oracle to encrypt
     oracle.encryption_oracle((byte*)input, l_input);
 
-  // Guess the encryption mode used for each entries, and verify them to result
-  // computed during the call to encryption_oracle.
-  for (int i = 0; i < nbEntries; i++) {
-    byte* entry = new byte[oracle.getEntryDataLen(i)];
-    oracle.getEntryData(i, entry);
+    // Get the result
+    entry.l = oracle.getCiphertext()->l;
+    entry.data_ptr = new byte[entry.l];
+    memcpy(entry.data_ptr, oracle.getCiphertext()->data_ptr, entry.l);
 
+    // Try to guess the mode
     bool real_mode = oracle.debug_enc_mode[i];
-    bool guessed_mode = guessEncryptionMode(entry, oracle.getEntryDataLen(i));
+    bool guessed_mode = guessEncryptionMode(entry.data_ptr, entry.l);
     assert(real_mode == guessed_mode);
 
+    // Same, with other functions
     if (real_mode == ECB) {
-      assert(isAES128_CBC(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
-             false);
-      assert(isAES128_ECB(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
-             true);
+      assert(isAES128_CBC(entry.data_ptr, entry.l) == false);
+      assert(isAES128_ECB(entry.data_ptr, entry.l) == true);
     } else if (real_mode == CBC) {
-      assert(isAES128_CBC(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
-             true);
-      assert(isAES128_ECB(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
-             false);
+      assert(isAES128_CBC(entry.data_ptr, entry.l) == true);
+      assert(isAES128_ECB(entry.data_ptr, entry.l) == false);
     }
   }
   cout << "testGuessEncryptionMode passed" << endl;
