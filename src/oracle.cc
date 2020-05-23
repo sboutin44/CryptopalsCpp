@@ -42,7 +42,7 @@ void Oracle::addEntry(bytearray_t entry) {
   entries.push_back(entry);
 
   // Copy ciphertext for the Oracle external functions.
-  delete[] ciphertext.data_ptr;  // Avoid issues.
+  //  delete[] ciphertext.data_ptr;
   ciphertext.l = entry.l;
   ciphertext.data_ptr = new byte[ciphertext.l];
   memcpy(ciphertext.data_ptr, entry.data_ptr, ciphertext.l);
@@ -153,8 +153,8 @@ void Oracle::clear() {
 }
 
 void Oracle::setOffset(const char* s) {
-  offset.l = strlen(s);f
-//  if (offset.data_ptr != nullptr) delete[] offset.data_ptr;
+  offset.l = strlen(s);
+  //  if (offset.data_ptr != nullptr) delete[] offset.data_ptr;
   delete[] offset.data_ptr;
   offset.data_ptr = new byte[offset.l];
 
