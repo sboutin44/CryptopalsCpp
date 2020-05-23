@@ -153,8 +153,9 @@ void Oracle::clear() {
 }
 
 void Oracle::setOffset(const char* s) {
-  offset.l = strlen(s);
-  if (offset.data_ptr != nullptr) delete[] offset.data_ptr;
+  offset.l = strlen(s);f
+//  if (offset.data_ptr != nullptr) delete[] offset.data_ptr;
+  delete[] offset.data_ptr;
   offset.data_ptr = new byte[offset.l];
 
   memcpy(offset.data_ptr, (byte*)s, offset.l);

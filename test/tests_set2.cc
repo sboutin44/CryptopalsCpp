@@ -41,11 +41,20 @@ void testDetectBlockSize() {
 void testDetectOffsetLength() {
   Oracle oracle;
   oracle.setOffsetType(FIXED);
-  oracle.setOffset("XXXX");
-  oracle.debug_printOffset();
   int blocksize = 16;
 
-  int offset_len = detectOffsetLength(oracle,blocksize);
-  cout << offset_len << endl;
-  assert ( 4 == offset_len);
+  for (int i = 1; i < 10; i++) {
+    // Create a string of i bytes.
+	  string offset = "";
+	  for (int j = 0; j< i; j++) offset += "X";
+
+    cout << offset << endl;
+    //  oracle.setOffset("XXXX");
+    oracle.setOffset(offset.c_str());
+
+    oracle.debug_printOffset();
+
+    int offset_len = detectOffsetLength(oracle, blocksize);
+    assert(i == offset_len);
+  }
 }

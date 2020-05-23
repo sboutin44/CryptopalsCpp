@@ -74,63 +74,60 @@ int detectOffsetLength(Oracle oracle, int blocksize) {
 
   //  	byte* first_block_enc  = new byte[blocksize];
 
-//  string bl = ;
+  //  string bl = ;
 
-string middle = "AAAAAAAAAAAAAAAA" "AAAAAAAAAAAAAAAA" "CCCCCCCCCCCCCCCC" "CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC""CCCCCCCCCCCCCCCC";
+  string middle =
+      "AAAAAAAAAAAAAAAA"
+      "AAAAAAAAAAAAAAAA"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC";
   oracle.clear();
   int is_eq = 1;
   int len = 0;
   do {
-	  len++;
+    len++;
     string prefix(1, 'B');
     middle = prefix + middle;
-    cout << middle << endl;
-
 
     // Encrypt, ensuring we encrypt with ECB.
     oracle.encryption_oracle((byte*)middle.c_str(), middle.length());
-
-//    int pos = oracle.debug_size() - 1;
-//    while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
-//                         oracle.getCiphertext()->l)) {
-//        printByteArray(oracle.getCiphertext()->data_ptr, oracle.getCiphertext()->l);
-//    	int pos = oracle.debug_size() - 1;
-//    	oracle.debug_printRealMode(pos);
-//    	oracle.encryption_oracle((byte*)middle.c_str(),
-//    		  middle.length());
-//    	cout  << isAES128_ECB(oracle.getCiphertext()->data_ptr,
-//    	                         oracle.getCiphertext()->l)    	<< endl;    }
-      do {
-    	  oracle.encryption_oracle((byte*)middle.c_str(), middle.length());
-      }   while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
-            oracle.getCiphertext()->l));
-//    oracle.encryption_oracle((byte*)middle.c_str(), middle.length());
+    do {
+      oracle.encryption_oracle((byte*)middle.c_str(), middle.length());
+    } while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
+                           oracle.getCiphertext()->l));
 
     bytearray_t ciphertext;
     ciphertext.l = oracle.getCiphertext()->l;
     ciphertext.data_ptr = new byte[ciphertext.l];
     memcpy(ciphertext.data_ptr, oracle.getCiphertext()->data_ptr, ciphertext.l);
 
-
-    printByteArray(ciphertext.data_ptr, ciphertext.l);
-
     const byte* b1 = &ciphertext.data_ptr[blocksize];
-    const byte* b2 = &ciphertext.data_ptr[2*blocksize];
-    //  	const byte* b1 =
-    //  &oracle.getEntryData(oracle.debug_size()-1)[16]; 	const byte* b2 =
-    //  &oracle.getEntryData(oracle.debug_size()-1)[32];
+    const byte* b2 = &ciphertext.data_ptr[2 * blocksize];
     is_eq = memcmp(b1, b2, blocksize);
 
   } while (is_eq != 0);
-  ////  		for (int i=0;i<13;i++) {
-  //  		oracle.encryption_oracle((byte*)middle.c_str(),
-  //  middle.length()); 		string prefix(1, 'B'); 		middle = prefix +   middle;
-  //  		//cout << middle << endl;
-  //  		int new_len = oracle.getEntryDataLen(oracle.debug_size() - 1);
-  //  }
-  //  	cout << middle << endl;
 
-  return len;
+  return blocksize - len;
 }
 
 int detectBlockSize(Oracle& oracle) {
@@ -213,8 +210,8 @@ void challenge_12() {
   string block1 = "";                 // Additional blocks to detect ECB.
   string block2 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
 
-//  cout << "Offset: ";
-//  cout << detectOffsetLength(oracle,blocksize) << endl;
+  //  cout << "Offset: ";
+  //  cout << detectOffsetLength(oracle,blocksize) << endl;
 
   int offset_len =
       4;  // Should be discovered with the function detectOffsetLength.
