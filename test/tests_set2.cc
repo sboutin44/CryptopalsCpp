@@ -44,14 +44,14 @@ void testDetectOffsetLength() {
   int blocksize = 16;
 
   for (int i = 1; i < 10; i++) {
-    // Create a string of i bytes.
+
+	  // Create a string of i bytes.
     string offset = "";
     for (int j = 0; j < i; j++) offset += "X";
 
     oracle.setOffset(offset.c_str());
-    oracle.debug_printOffset();
-
     int offset_len = detectOffsetLength(oracle, blocksize);
     assert(i == offset_len);
   }
+  cout << "testDetectOffsetLength \tpassed" << endl;
 }
