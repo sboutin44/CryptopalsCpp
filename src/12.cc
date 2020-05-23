@@ -64,33 +64,18 @@ int detectOffsetLength(Oracle oracle, int blocksize) {
    * and prefix it by Bs, at some point the As string will aligned with 2
    * blocks.
    *
-   * plain:  	XXXXAAAA AAAAAAAA AAAApadd
-   * cipher: 	fdslfkjd asfddsar fdksajfs (not real values)
+   * plain:  	XXXXAAAA AAAAAAAA AAAACCCC
+   * cipher: 	fdslfkjd samethin fdksajfs (not real values)
    * ...
    *
-   * plain:	XXXXBBBBB AAAAAAAA AAAAAAAA padding_
-   * cipher:	fsagwgefg samethin samethin fsdrege
+   * plain:		XXXXBBBBB AAAAAAAA AAAAAAAA CCCCCC
+   * cipher:	fsagwgefg samethin samethin fsdreg
    * */
 
-  //  	byte* first_block_enc  = new byte[blocksize];
-
-  //  string bl = ;
-
+  // Create a string long enough to detect ECB.
   string middle =
       "AAAAAAAAAAAAAAAA"
       "AAAAAAAAAAAAAAAA"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
-      "CCCCCCCCCCCCCCCC"
       "CCCCCCCCCCCCCCCC"
       "CCCCCCCCCCCCCCCC"
       "CCCCCCCCCCCCCCCC"
