@@ -45,6 +45,7 @@
 #include "aes.h"
 #include "oracle.h"
 
+using namespace std;
 /*--------------------------------- Functions ---------------------------*/
 
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn);
@@ -108,6 +109,10 @@ float similarBlocksDistanceRatio(byte* input, int l, int block_size);
 int detectBlockSize(Oracle& oracle);
 int detectOffsetLength(Oracle oracle, int blocksize);
 
+// Challenge 13
+map<string, string> parse(string s);
+void printJsonStyle(map<string, string> m);
+
 // The challenges
 void challenge_1();
 void challenge_2();
@@ -121,6 +126,7 @@ void challenge_9();
 void challenge_10();
 void challenge_11();
 void challenge_12();
+void challenge_13();
 
 // tools.cc
 int countLines(const char* filename);
