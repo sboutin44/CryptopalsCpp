@@ -91,13 +91,6 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 
 // Challenge 7
 void testAES();
-void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
-void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext);
-// void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
-void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
-                        byte* ciphertext, int len);
-void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
-                        byte* plaintext, int len);
 
 // Challenge 11
 void randomAES128key(byte* empty_key);

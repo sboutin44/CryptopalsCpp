@@ -48,6 +48,7 @@ void testRotWord();
 
 // Block Ciphers
 void testPKCS7_padding();
+void testAES128_ECB_encrypt();
 
 // tests set 2
 void testGuessEncryptionMode();

@@ -28,8 +28,18 @@
 #include "aes.h"
 #include "types.h"
 
-void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
+int PKCS7_getSize(byte* input, int len);
+int AES128_ECB_getCiphertextSize(byte* input, int len);
+int AES128_CBC_getCiphertextSize(byte* input, int len);
 byte* AES128_ECB_allocate(byte* input, int len);
 byte* AES128_CBC_allocate(byte* input, int len);
+void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
+void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
+void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext);
+void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
+                        byte* ciphertext, int len);
+void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
+                        byte* plaintext, int len);
+
 
 #endif  // CRYPTOPALS_INC_BLOCK_CIPHERS_H_

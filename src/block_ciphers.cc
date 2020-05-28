@@ -28,6 +28,20 @@
 
 using namespace std;
 
+int PKCS7_getSize(byte* input, int len){
+	  int blocksize = AES128_BLOCKSIZE;
+	  int pad_len = blocksize - len % blocksize;
+	  return len + pad_len;
+}
+
+int AES128_ECB_getCiphertextSize(byte* input, int len) {
+	return PKCS7_getSize(input, len);
+}
+
+int AES128_CBC_getCiphertextSize(byte* input, int len) {
+	return PKCS7_getSize(input, len);
+}
+
 byte* AES128_ECB_allocate(byte* input, int len) {
   /* Allocate an array to contain the encrypted text of input */
 

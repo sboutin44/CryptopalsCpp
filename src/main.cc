@@ -94,6 +94,7 @@ void runTests() {
   testParse();
   testProfile_for();
   testPKCS7_padding();
+  testAES128_ECB_encrypt();
 }
 
 void displayProgramUsage() {
