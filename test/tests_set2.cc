@@ -66,5 +66,18 @@ void testParse(){
 	  assert( p.role == p2.role );
 	  assert( p.uid == p2.uid);
 
-	  cout << "testParse \tpassed" << endl;
+	  cout << "testParse \t\tpassed" << endl;
+}
+
+void testProfile_for (){
+	string s1 = "sebastien@usa.com";
+	string s2 = "email=sebastien@usa.com&uid=56&role=user";
+
+	string encoded_profile1 = profile_for(s1);
+	string encoded_profile2 = profile_for(s2);
+
+	assert (encoded_profile1 != "");
+	assert (encoded_profile2 == "");
+
+	cout << "testProfile_for \tpassed" << endl;
 }

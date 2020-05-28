@@ -118,6 +118,7 @@ typedef struct Profile{
 Profile parse(string s) ;
 map<string, string> parse2(string s);
 void printJsonStyle(map<string, string> m);
+string profile_for(string email);
 
 // The challenges
 void challenge_1();

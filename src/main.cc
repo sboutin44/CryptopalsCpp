@@ -92,6 +92,7 @@ void runTests() {
   testGuessEncryptionMode();
   testDetectOffsetLength();
   testParse();
+  testProfile_for();
 }
 
 void displayProgramUsage() {

@@ -113,18 +113,22 @@ map<string, string> parse2(string s) {
 }
 
 string profile_for(string email){
-	string role = "user";
-	int uid = rand() % 1000;
+	/* Returns an empty string if a character not allowed is detected. */
 
-//	Profile profile = { .email = email , .uid = uid , .role = role};
-
-	string encoded_profile = "email=" + email + "&uid=" + to_string(uid) + "&role=" + role;
-	return encoded_profile;
+	if (email.find_first_of("&=") == string::npos) {
+		string role = "user";
+		int uid = rand() % 1000;
+	//	Profile profile = { .email = email , .uid = uid , .role = role};
+		string encoded_profile = "email=" + email + "&uid=" + to_string(uid) + "&role=" + role;
+		return encoded_profile;
+	} else {
+//		cerr << "Characters not allowed : & or =" << endl;
+		string empty = "";
+		return empty;
+	}
 }
 
-string encode_as_k_eq_v (string email) {
 
-}
 
 void challenge_13() {
   cout << "\n------------------------------------" << endl;

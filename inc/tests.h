@@ -51,5 +51,7 @@ void testGuessEncryptionMode();
 void testDetectBlockSize();
 void testDetectOffsetLength();
 void testParse();
+void testProfile_for ();
+
 
 #endif
