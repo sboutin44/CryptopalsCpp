@@ -168,18 +168,16 @@ void challenge_12() {
   memcpy(unknown_string_c_str, unknown_string, unknown_string_len);
   unknown_string_c_str[unknown_string_len] = '\0';
   string unknown_string_cpp_s(unknown_string_c_str);
-  string s2(unknown_string_c_str);
 
   /**************************************************************************
    * In the following section with break with the oracle the encrypted input,
    * and recover the unknown_string
    *************************************************************************/
 
-  // 0. Set the oracle type, should be removed when every works at the end.
+  // 0. Set the oracle type.
   Oracle oracle;
   oracle.setOffsetType(FIXED);
   oracle.setOffset("XXXX");
-  oracle.debug_printOffset();
 
   // 1. Detect the block size: when we feed the oracle with bigger strings
   int blocksize = detectBlockSize(oracle);
@@ -190,18 +188,19 @@ void challenge_12() {
   string decrypted = "";
 
   // 3. Create plaintexts like AAAAAAAAAAAAAAAX, AAAAAAAAAAAAAAAX'...
-  // where X, X', etc are letters in the
+  // where X, X', etc are letters.
   string block0 = "AAAAAAAAAAAA";     // Compensate the offset with 'A's.
   string block1 = "";                 // Additional blocks to detect ECB.
   string block2 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
 
-  //  cout << "Offset: ";
-  //  cout << detectOffsetLength(oracle,blocksize) << endl;
+  int offset_len = detectOffsetLength(oracle,blocksize);
+  cout << "Offset: ";
+  cout << offset_len << endl;
 
-  int offset_len =
-      4;  // Should be discovered with the function detectOffsetLength.
+  // Check our values are correct:
   assert(block0.length() == blocksize - offset_len);
   assert(block2.length() == 15);
+
   int remainging_len = unknown_string_len;
   bytearray_t target;
 
@@ -219,9 +218,6 @@ void challenge_12() {
         unknown_string_cpp_s.substr(unknown_string_len - remainging_len,
                                     unknown_string_len);
 
-    // TODO: remove once using an external dictionary.
-    oracle.clear();
-
     // Encrypt, first attempt to get ECB.
     oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
 
@@ -231,7 +227,7 @@ void challenge_12() {
       oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
     }
 
-    // Save the encrypted text, this is our target for matches.
+    // Save the encrypted text, this is our target for the matching attempts.
     target.l = oracle.getCiphertext()->l;
     target.data_ptr = new byte[target.l];
     memcpy(target.data_ptr, oracle.getCiphertext()->data_ptr, target.l);
@@ -273,8 +269,6 @@ void challenge_12() {
         cout << x << endl;
         decrypted += x;
         remainging_len--;
-      } else {
-        // Nespresso, what else ?
       }
     }
   }
