@@ -77,20 +77,22 @@ void testPKCS7_padding() {
   cout << "testPKCS7_padding \tpassed" << endl;
 }
 
+void testAES128_ECB_encrypt() {
+  const char* plaintext = "YELLOW SUBMARINEYELLOW SUBMARINE";
+  const char* key = "YELLOW SUBMARINE";  // No need to pad.
+  const byte expected_enc[2 * AES128_BLOCKSIZE] = {
+      0xD1, 0xAA, 0x4F, 0x65, 0x78, 0x92, 0x65, 0x42, 0xFB, 0xB6, 0xDD,
+      0x87, 0x6C, 0xD2, 0x05, 0x08, 0xD1, 0xAA, 0x4F, 0x65, 0x78, 0x92,
+      0x65, 0x42, 0xFB, 0xB6, 0xDD, 0x87, 0x6C, 0xD2, 0x05, 0x08};
 
-void testAES128_ECB_encrypt(){
+  // Padded omitted .
+  int len_out = PKCS7_getSize((byte*)plaintext, strlen(plaintext));
+  assert(len_out == strlen(plaintext) + AES128_BLOCKSIZE);
+  byte* ciphertext_ECB = new byte[len_out];
 
-	const char* plaintext = "YELLOW SUBMARINEYELLOW SUBMARINE";
-	const char* key = "YELLOW SUBMARINE"; // No need to pad.
-	const byte expected_enc[2*AES128_BLOCKSIZE] = {0xD1,0xAA,0x4F,0x65,0x78,0x92,0x65,0x42,0xFB,0xB6,0xDD,0x87,0x6C,0xD2,0x05,0x08,0xD1,0xAA,0x4F,0x65,0x78,0x92,0x65,0x42,0xFB,0xB6,0xDD,0x87,0x6C,0xD2,0x05,0x08};
+  AES128_ECB_encrypt((byte*)plaintext, (byte*)key, len_out, ciphertext_ECB);
 
-	// Padded omitted .
-	int len_out = PKCS7_getSize((byte*)plaintext, strlen(plaintext));
-	assert (len_out == strlen(plaintext)+AES128_BLOCKSIZE);
-	byte* ciphertext_ECB = new byte[len_out];
+  assert(memcmp(expected_enc, ciphertext_ECB, 2 * AES128_BLOCKSIZE) == 0);
 
-	AES128_ECB_encrypt((byte*)plaintext, (byte*)key, len_out, ciphertext_ECB );
-
-	assert(memcmp(expected_enc,ciphertext_ECB,2*AES128_BLOCKSIZE) == 0);
+  cout << "testAES128_ECB_encrypt \tpassed" << endl;
 }
-
