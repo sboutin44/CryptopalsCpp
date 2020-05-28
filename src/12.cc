@@ -85,6 +85,8 @@ int detectOffsetLength(Oracle oracle, int blocksize) {
       "CCCCCCCCCCCCCCCC"
       "CCCCCCCCCCCCCCCC"
       "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
+      "CCCCCCCCCCCCCCCC"
       "CCCCCCCCCCCCCCCC";
   oracle.clear();
   int is_eq = 1;
