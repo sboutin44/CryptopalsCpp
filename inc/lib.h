@@ -42,7 +42,9 @@
 // C libraries
 #include <ctype.h>
 
+// Project headers.
 #include "aes.h"
+#include "block_ciphers.h"
 #include "oracle.h"
 
 using namespace std;
@@ -91,7 +93,7 @@ int findKeyLength(uint8_t* ciphertext, int len, int maxKeysize);
 void testAES();
 void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
 void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext);
-void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
+// void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
 void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
                         byte* ciphertext, int len);
 void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
@@ -110,12 +112,13 @@ int detectBlockSize(Oracle& oracle);
 int detectOffsetLength(Oracle oracle, int blocksize);
 
 // Challenge 13
-typedef struct Profile{
-	string email;
-	int uid;
-	string role;
-}Profile;
-Profile parse(string s) ;
+typedef struct Profile {
+  string email;
+  int uid;
+  string role;
+} Profile;
+
+Profile parse(string s);
 map<string, string> parse2(string s);
 void printJsonStyle(map<string, string> m);
 string profile_for(string email);

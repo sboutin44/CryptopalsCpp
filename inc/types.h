@@ -22,38 +22,12 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
-#ifndef CRYPTOPALS_INC_TESTS_H_
-#define CRYPTOPALS_INC_TESTS_H_
+#ifndef CRYPTOPALS_INC_TYPES_H_
+#define CRYPTOPALS_INC_TYPES_H_
 
-#include "lib.h"
+#include <cstdlib>
+#include <iostream>
 
-// tests set 1
-void testCountLines();
-void testHammingDistance();
-void testInsertionSort();
-void testIndexOfCoincidence();
-void testHistogram();
-void testFindKeyLength();
-void testBase64Encode();
-void testBase64Decode();
+typedef uint8_t byte;
 
-// AES128
-void testAES128();
-void testMult();
-void testKeyExpansion();
-void testXtime();
-void testRcon();
-void testSubWord();
-void testRotWord();
-
-// Block Ciphers
-void testPKCS7_padding();
-
-// tests set 2
-void testGuessEncryptionMode();
-void testDetectBlockSize();
-void testDetectOffsetLength();
-void testParse();
-void testProfile_for();
-
-#endif
+#endif  // CRYPTOPALS_INC_TYPES_H_

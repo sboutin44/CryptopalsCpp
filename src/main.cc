@@ -93,6 +93,7 @@ void runTests() {
   testDetectOffsetLength();
   testParse();
   testProfile_for();
+  testPKCS7_padding();
 }
 
 void displayProgramUsage() {

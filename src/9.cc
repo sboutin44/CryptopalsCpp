@@ -3,15 +3,16 @@
 
 using namespace std;
 
-void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize) {
-  /** Add padding to a pre-allocated array. */
-
-  int pad_len = blocksize - lenIn % blocksize;
-  byte pad_byte = pad_len;
-
-  memcpy(out, in, lenIn);
-  for (int i = 0; i < pad_len; i++) out[lenIn + i] = pad_byte;
-}
+// TODO: remove commented code.
+// void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize) {
+//  /** Add padding to a pre-allocated array. */
+//
+//  int pad_len = blocksize - lenIn % blocksize;
+//  byte pad_byte = pad_len;
+//
+//  memcpy(out, in, lenIn);
+//  for (int i = 0; i < pad_len; i++) out[lenIn + i] = pad_byte;
+//}
 
 void challenge_9() {
   cout << "\n------------------------------------" << endl;

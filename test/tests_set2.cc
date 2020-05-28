@@ -55,29 +55,29 @@ void testDetectOffsetLength() {
   cout << "testDetectOffsetLength \tpassed" << endl;
 }
 
-void testParse(){
-	  string s = "email=sebastien@usa.com&uid=56&role=user";
-	  Profile p2 = { .email = "sebastien@usa.com" , .uid = 56 , .role = "user"};
-	  Profile p;
+void testParse() {
+  string s = "email=sebastien@usa.com&uid=56&role=user";
+  Profile p2 = {.email = "sebastien@usa.com", .uid = 56, .role = "user"};
+  Profile p;
 
-	  p = parse(s);
+  p = parse(s);
 
-	  assert( p.email == p2.email );
-	  assert( p.role == p2.role );
-	  assert( p.uid == p2.uid);
+  assert(p.email == p2.email);
+  assert(p.role == p2.role);
+  assert(p.uid == p2.uid);
 
-	  cout << "testParse \t\tpassed" << endl;
+  cout << "testParse \t\tpassed" << endl;
 }
 
-void testProfile_for (){
-	string s1 = "sebastien@usa.com";
-	string s2 = "email=sebastien@usa.com&uid=56&role=user";
+void testProfile_for() {
+  string s1 = "sebastien@usa.com";
+  string s2 = "email=sebastien@usa.com&uid=56&role=user";
 
-	string encoded_profile1 = profile_for(s1);
-	string encoded_profile2 = profile_for(s2);
+  string encoded_profile1 = profile_for(s1);
+  string encoded_profile2 = profile_for(s2);
 
-	assert (encoded_profile1 != "");
-	assert (encoded_profile2 == "");
+  assert(encoded_profile1 != "");
+  assert(encoded_profile2 == "");
 
-	cout << "testProfile_for \tpassed" << endl;
+  cout << "testProfile_for \tpassed" << endl;
 }

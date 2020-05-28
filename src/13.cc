@@ -29,15 +29,21 @@ using namespace std;
 void printProfile(Profile m) {
   cout << "{" << endl;
 
-  cout << "  " << "email" << ": "
-         << "'" << m.email << "'"
-         << "," << endl;
-  cout << "  " << "uid" << ": "
-         << "'" << m.uid << "'"
-         << "," << endl;
-  cout << "  " << "role" << ": "
-         << "'" << m.role << "'"
-         << "," << endl;
+  cout << "  "
+       << "email"
+       << ": "
+       << "'" << m.email << "'"
+       << "," << endl;
+  cout << "  "
+       << "uid"
+       << ": "
+       << "'" << m.uid << "'"
+       << "," << endl;
+  cout << "  "
+       << "role"
+       << ": "
+       << "'" << m.role << "'"
+       << "," << endl;
   cout << "}" << endl;
   cout << endl;
 }
@@ -54,38 +60,35 @@ void printJsonStyle(map<string, string> m) {
 }
 
 Profile parse(string s) {
-	Profile profile;
+  Profile profile;
   int pos0 = 0;
   int pos1 = 0;
   int pos2 = 0;
   int nb_args = 0;
   int len = s.length();
 
-  while ( pos2 != -1) {
-	  // Find the first '='
-  pos0 = 0;
+  while (pos2 != -1) {
+    // Find the first '='
+    pos0 = 0;
     pos1 = s.find('=');
     pos2 = s.find('&');
     string key = s.substr(pos0, pos1 - pos0);
     string val = s.substr(pos1 + 1, pos2 - (pos1 + 1));
 
-    if (key == "email")
-    	profile.email = val;
+    if (key == "email") profile.email = val;
 
-    if (key == "uid")
-    	profile.uid = stoi(val);
+    if (key == "uid") profile.uid = stoi(val);
 
-    if (key == "role")
-    	profile.role = val;
+    if (key == "role") profile.role = val;
 
     // Set next position and redefine the substring we work on.
     pos0 = pos2 + 1;
-	s = s.substr(pos0, s.length());
+    s = s.substr(pos0, s.length());
 
     nb_args++;
   }
 
-  assert(nb_args==3); // Check we have only email, uid and role.
+  assert(nb_args == 3);  // Check we have only email, uid and role.
 
   return profile;
 }
@@ -112,23 +115,22 @@ map<string, string> parse2(string s) {
   return profile;
 }
 
-string profile_for(string email){
-	/* Returns an empty string if a character not allowed is detected. */
+string profile_for(string email) {
+  /* Returns an empty string if a character not allowed is detected. */
 
-	if (email.find_first_of("&=") == string::npos) {
-		string role = "user";
-		int uid = rand() % 1000;
-	//	Profile profile = { .email = email , .uid = uid , .role = role};
-		string encoded_profile = "email=" + email + "&uid=" + to_string(uid) + "&role=" + role;
-		return encoded_profile;
-	} else {
-//		cerr << "Characters not allowed : & or =" << endl;
-		string empty = "";
-		return empty;
-	}
+  if (email.find_first_of("&=") == string::npos) {
+    string role = "user";
+    int uid = rand() % 1000;
+    //	Profile profile = { .email = email , .uid = uid , .role = role};
+    string encoded_profile =
+        "email=" + email + "&uid=" + to_string(uid) + "&role=" + role;
+    return encoded_profile;
+  } else {
+    //		cerr << "Characters not allowed : & or =" << endl;
+    string empty = "";
+    return empty;
+  }
 }
-
-
 
 void challenge_13() {
   cout << "\n------------------------------------" << endl;
@@ -140,5 +142,5 @@ void challenge_13() {
 
   string s = profile_for("sebastien@usa.com");
 
-  cout << s<< endl;
+  cout << s << endl;
 }

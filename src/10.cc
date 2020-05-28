@@ -3,53 +3,54 @@
 
 using namespace std;
 
-void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
-                        byte* ciphertext, int len) {
-  /**
-   *
-   * @param plaintext  Padded text to encrypt.
-   * @param ciphertext Encrypted plaintext.
-   * @param len Length of both ciphetext and plaintext
-   */
-
-  int blocksize = 16;
-  byte* buffer = new byte[len];
-
-  // First block
-  for (int j = 0; j < blocksize; j++) buffer[j] = IV[j] ^ plaintext[j];
-  // for (int j = 0; j < len; j++) printf("%c ", buffer[j]);
-  AES128(buffer, key, ciphertext);
-
-  for (int i = blocksize; i < len; i += blocksize) {
-    // XOR with previous block
-    for (int j = 0; j < blocksize; j++)
-      buffer[i + j] = ciphertext[i - blocksize + j] ^ plaintext[i + j];
-
-    AES128(&buffer[i], key, &ciphertext[i]);
-  }
-  delete[] buffer;
-}
-
-void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
-                        byte* plaintext, int len) {
-  int blocksize = 16;
-  byte* buffer = new byte[len];
-
-  for (int i = len - blocksize; i >= blocksize; i -= blocksize) {
-    invAES128(&ciphertext[i], key, &buffer[i]);
-
-    // XOR with previous block
-    for (int j = 0; j < blocksize; j++)
-      plaintext[i + j] = ciphertext[i - blocksize + j] ^ buffer[i + j];
-  }
-
-  invAES128(ciphertext, key, buffer);
-
-  // First block
-  for (int j = 0; j < blocksize; j++) plaintext[j] = IV[j] ^ buffer[j];
-
-  delete[] buffer;
-}
+// TODO: remove commented code.
+// void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
+//                        byte* ciphertext, int len) {
+//  /**
+//   *
+//   * @param plaintext  Padded text to encrypt.
+//   * @param ciphertext Encrypted plaintext.
+//   * @param len Length of both ciphetext and plaintext
+//   */
+//
+//  int blocksize = 16;
+//  byte* buffer = new byte[len];
+//
+//  // First block
+//  for (int j = 0; j < blocksize; j++) buffer[j] = IV[j] ^ plaintext[j];
+//  // for (int j = 0; j < len; j++) printf("%c ", buffer[j]);
+//  AES128(buffer, key, ciphertext);
+//
+//  for (int i = blocksize; i < len; i += blocksize) {
+//    // XOR with previous block
+//    for (int j = 0; j < blocksize; j++)
+//      buffer[i + j] = ciphertext[i - blocksize + j] ^ plaintext[i + j];
+//
+//    AES128(&buffer[i], key, &ciphertext[i]);
+//  }
+//  delete[] buffer;
+//}
+//
+// void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
+//                        byte* plaintext, int len) {
+//  int blocksize = 16;
+//  byte* buffer = new byte[len];
+//
+//  for (int i = len - blocksize; i >= blocksize; i -= blocksize) {
+//    invAES128(&ciphertext[i], key, &buffer[i]);
+//
+//    // XOR with previous block
+//    for (int j = 0; j < blocksize; j++)
+//      plaintext[i + j] = ciphertext[i - blocksize + j] ^ buffer[i + j];
+//  }
+//
+//  invAES128(ciphertext, key, buffer);
+//
+//  // First block
+//  for (int j = 0; j < blocksize; j++) plaintext[j] = IV[j] ^ buffer[j];
+//
+//  delete[] buffer;
+//}
 
 void challenge_10() {
   cout << "\n------------------------------------" << endl;
@@ -65,8 +66,11 @@ void challenge_10() {
   int pad_len = blocksize - len % blocksize;
   int len_out = len + pad_len;  // Multiple of the AES block size.
   byte* my_plaintext = new byte[len_out];
-  byte* buffer = new byte[len_out];
-  byte* ciphertext_CBC = new byte[len_out];
+
+  //  byte* buffer = new byte[len_out];
+  //  byte* ciphertext_CBC = new byte[len_out];
+  byte* buffer = AES128_CBC_allocate((byte*)plaintext, len);
+  byte* ciphertext_CBC = AES128_CBC_allocate((byte*)plaintext, len);
 
   PKCS7_padding((byte*)plaintext, len, buffer, blocksize);
 
@@ -78,6 +82,7 @@ void challenge_10() {
 
   AES128_CBC_decrypt((byte*)ciphertext_CBC, (byte*)key, IV, my_plaintext,
                      len_out);
+
   for (int j = 0; j < len_out; j++) printf("%c", my_plaintext[j]);
   printf("\n---------------\n");
 

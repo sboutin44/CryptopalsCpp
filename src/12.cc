@@ -159,10 +159,10 @@ void challenge_12() {
   uint64_t size_encoded = strlen(unknown_string_b64);
   uint64_t unknown_string_len =
       getDecodedTextSize((byte*)unknown_string_b64, size_encoded);
-  byte* unknown_string = new byte[unknown_string_len+1]; // Add space for \0.
+  byte* unknown_string = new byte[unknown_string_len + 1];  // Add space for \0.
   base64Decode((byte*)unknown_string_b64, size_encoded, unknown_string);
-  unknown_string[unknown_string_len] = '\0'; //TODO: make this simpler.
-  string unknown_string_cpp_s( (char* ) unknown_string);
+  unknown_string[unknown_string_len] = '\0';  // TODO: make this simpler.
+  string unknown_string_cpp_s((char*)unknown_string);
 
   /**************************************************************************
    * In the following section with break with the oracle the encrypted input,
@@ -188,7 +188,7 @@ void challenge_12() {
   string block1 = "";                 // Additional blocks to detect ECB.
   string block2 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
 
-  int offset_len = detectOffsetLength(oracle,blocksize);
+  int offset_len = detectOffsetLength(oracle, blocksize);
   cout << "Offset: ";
   cout << offset_len << endl;
 

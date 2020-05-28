@@ -30,7 +30,9 @@
 #include <cstring>
 #include <iostream>
 
-typedef uint8_t byte;
+#include "types.h"
+
+#define AES128_BLOCKSIZE 16
 
 byte xtime(byte b);
 byte GF8Mul(byte a, byte b);
