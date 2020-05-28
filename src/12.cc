@@ -155,19 +155,14 @@ void challenge_12() {
       "dXN0IHRvIHNheSBoaQpEaWQgeW91IHN0b3A/IE5vLCBJIGp1c3QgZHJvdmUg"
       "YnkK";
 
-  // Base64 decode
+  // Decode the Base64 encoded string 'unknown_string_b64'.
   uint64_t size_encoded = strlen(unknown_string_b64);
   uint64_t unknown_string_len =
       getDecodedTextSize((byte*)unknown_string_b64, size_encoded);
-  byte* unknown_string = new byte[unknown_string_len];
+  byte* unknown_string = new byte[unknown_string_len+1]; // Add space for \0.
   base64Decode((byte*)unknown_string_b64, size_encoded, unknown_string);
-
-  // Bricolage to concatenate 2 strings
-  string s1((char*)my_string);
-  char* unknown_string_c_str = new char[unknown_string_len];
-  memcpy(unknown_string_c_str, unknown_string, unknown_string_len);
-  unknown_string_c_str[unknown_string_len] = '\0';
-  string unknown_string_cpp_s(unknown_string_c_str);
+  unknown_string[unknown_string_len] = '\0'; //TODO: make this simpler.
+  string unknown_string_cpp_s( (char* ) unknown_string);
 
   /**************************************************************************
    * In the following section with break with the oracle the encrypted input,
@@ -213,6 +208,7 @@ void challenge_12() {
       block1 += c;
     }
 
+    // The first char of unknown_string must be the last byte of a block.
     string plaintext =
         block0 + block1 +
         unknown_string_cpp_s.substr(unknown_string_len - remainging_len,
