@@ -50,5 +50,6 @@ void testRotWord();
 void testGuessEncryptionMode();
 void testDetectBlockSize();
 void testDetectOffsetLength();
+void testParse();
 
 #endif

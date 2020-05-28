@@ -26,6 +26,22 @@
 
 using namespace std;
 
+void printProfile(Profile m) {
+  cout << "{" << endl;
+
+  cout << "  " << "email" << ": "
+         << "'" << m.email << "'"
+         << "," << endl;
+  cout << "  " << "uid" << ": "
+         << "'" << m.uid << "'"
+         << "," << endl;
+  cout << "  " << "role" << ": "
+         << "'" << m.role << "'"
+         << "," << endl;
+  cout << "}" << endl;
+  cout << endl;
+}
+
 void printJsonStyle(map<string, string> m) {
   cout << "{" << endl;
   for (auto it = m.begin(); it != m.end(); it++) {
@@ -37,8 +53,45 @@ void printJsonStyle(map<string, string> m) {
   cout << endl;
 }
 
-map<string, string> parse(string s) {
-  map<string, string> json;
+Profile parse(string s) {
+	Profile profile;
+  int pos0 = 0;
+  int pos1 = 0;
+  int pos2 = 0;
+  int nb_args = 0;
+  int len = s.length();
+
+  while ( pos2 != -1) {
+	  // Find the first '='
+  pos0 = 0;
+    pos1 = s.find('=');
+    pos2 = s.find('&');
+    string key = s.substr(pos0, pos1 - pos0);
+    string val = s.substr(pos1 + 1, pos2 - (pos1 + 1));
+
+    if (key == "email")
+    	profile.email = val;
+
+    if (key == "uid")
+    	profile.uid = stoi(val);
+
+    if (key == "role")
+    	profile.role = val;
+
+    // Set next position and redefine the substring we work on.
+    pos0 = pos2 + 1;
+	s = s.substr(pos0, s.length());
+
+    nb_args++;
+  }
+
+  assert(nb_args==3); // Check we have only email, uid and role.
+
+  return profile;
+}
+
+map<string, string> parse2(string s) {
+  map<string, string> profile;
   int pos0 = 0;
   int pos1 = 0;
   int pos2 = 0;
@@ -50,13 +103,27 @@ map<string, string> parse(string s) {
     string key = s.substr(pos0, pos1 - pos0);
     string val = s.substr(pos1 + 1, pos2 - (pos1 + 1));
 
-    json[key] = val;
+    profile[key] = val;
 
     // Set next position and redefine the substring we work on.
     pos0 = pos2 + 1;
     s = s.substr(pos0, s.length());
   }
-  return json;
+  return profile;
+}
+
+string profile_for(string email){
+	string role = "user";
+	int uid = rand() % 1000;
+
+//	Profile profile = { .email = email , .uid = uid , .role = role};
+
+	string encoded_profile = "email=" + email + "&uid=" + to_string(uid) + "&role=" + role;
+	return encoded_profile;
+}
+
+string encode_as_k_eq_v (string email) {
+
 }
 
 void challenge_13() {
@@ -65,9 +132,9 @@ void challenge_13() {
   cout << "13. ECB cut-and-paste" << endl;
   cout << "------------------------------------\n" << endl;
 
-  map<string, string> m;
-  string s = "foo=bar&baz=qux&zap=zazzle";
-  m = parse(s);
+  srand(time(NULL));
 
-  printJsonStyle(m);
+  string s = profile_for("sebastien@usa.com");
+
+  cout << s<< endl;
 }

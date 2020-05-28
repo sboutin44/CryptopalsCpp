@@ -110,7 +110,13 @@ int detectBlockSize(Oracle& oracle);
 int detectOffsetLength(Oracle oracle, int blocksize);
 
 // Challenge 13
-map<string, string> parse(string s);
+typedef struct Profile{
+	string email;
+	int uid;
+	string role;
+}Profile;
+Profile parse(string s) ;
+map<string, string> parse2(string s);
 void printJsonStyle(map<string, string> m);
 
 // The challenges

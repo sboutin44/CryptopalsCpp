@@ -54,3 +54,17 @@ void testDetectOffsetLength() {
   }
   cout << "testDetectOffsetLength \tpassed" << endl;
 }
+
+void testParse(){
+	  string s = "email=sebastien@usa.com&uid=56&role=user";
+	  Profile p2 = { .email = "sebastien@usa.com" , .uid = 56 , .role = "user"};
+	  Profile p;
+
+	  p = parse(s);
+
+	  assert( p.email == p2.email );
+	  assert( p.role == p2.role );
+	  assert( p.uid == p2.uid);
+
+	  cout << "testParse \tpassed" << endl;
+}

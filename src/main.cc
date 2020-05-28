@@ -91,6 +91,7 @@ void runTests() {
   testDetectBlockSize();
   testGuessEncryptionMode();
   testDetectOffsetLength();
+  testParse();
 }
 
 void displayProgramUsage() {
