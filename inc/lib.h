@@ -45,7 +45,7 @@
 // Project headers.
 #include "aes.h"
 #include "block_ciphers.h"
-#include "oracle.h"
+#include "Oracle.h"
 
 using namespace std;
 /*--------------------------------- Functions ---------------------------*/
