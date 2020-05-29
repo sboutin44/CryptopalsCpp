@@ -139,113 +139,113 @@ int detectBlockSize(Oracle& oracle) {
   return blocksize;
 }
 
-void attack(string unknown_string_cpp_s){
-	  /**************************************************************************
-	   * In the following section with break with the oracle the encrypted input,
-	   * and recover the unknown_string
-	   *************************************************************************/
+void attack(string unknown_string_cpp_s) {
+  /**************************************************************************
+   * In the following section with break with the oracle the encrypted input,
+   * and recover the unknown_string
+   *************************************************************************/
 
-	  // 0. Set the oracle type.
-	  Oracle oracle;
-	  oracle.setOffsetType(FIXED);
-	  oracle.setOffset("XXXX");
+  // 0. Set the oracle type.
+  Oracle oracle;
+  oracle.setOffsetType(FIXED);
+  oracle.setOffset("XXXX");
 
-	  // 1. Detect the block size: when we feed the oracle with bigger strings
-	  int blocksize = detectBlockSize(oracle);
-	  cout << "Detected blocksize: " << blocksize << endl;
+  // 1. Detect the block size: when we feed the oracle with bigger strings
+  int blocksize = detectBlockSize(oracle);
+  cout << "Detected blocksize: " << blocksize << endl;
 
-	  // 2. Detect the encryption mode:
-	  bool char_found = false;
-	  string decrypted = "";
+  // 2. Detect the encryption mode:
+  bool char_found = false;
+  string decrypted = "";
 
-	  // 3. Create plaintexts like AAAAAAAAAAAAAAAX, AAAAAAAAAAAAAAAX'...
-	  // where X, X', etc are letters.
-	  string block0 = "AAAAAAAAAAAA";     // Compensate the offset with 'A's.
-	  string block1 = "";                 // Additional blocks to detect ECB.
-	  string block2 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
+  // 3. Create plaintexts like AAAAAAAAAAAAAAAX, AAAAAAAAAAAAAAAX'...
+  // where X, X', etc are letters.
+  string block0 = "AAAAAAAAAAAA";     // Compensate the offset with 'A's.
+  string block1 = "";                 // Additional blocks to detect ECB.
+  string block2 = "AAAAAAAAAAAAAAA";  // Contain the secret byte at the end.
 
-	  int offset_len = detectOffsetLength(oracle, blocksize);
-	  cout << "Offset: ";
-	  cout << offset_len << endl;
+  int offset_len = detectOffsetLength(oracle, blocksize);
+  cout << "Offset: ";
+  cout << offset_len << endl;
 
-	  // Check our values are correct:
-	  assert(block0.length() == blocksize - offset_len);
-	  assert(block2.length() == 15);
+  // Check our values are correct:
+  assert(block0.length() == blocksize - offset_len);
+  assert(block2.length() == 15);
 
-	  int unknown_string_len = unknown_string_cpp_s.length();
-	  int remainging_len = unknown_string_len;
-	  bytearray_t target;
+  int unknown_string_len = unknown_string_cpp_s.length();
+  int remainging_len = unknown_string_len;
+  bytearray_t target;
 
-	  while (remainging_len > 0) {
-	    // Create a 16*coef bytes long string, long enough to detect ECB mode:
-	    block1 = "";
-	    int target_nb_blocks = 100;
-	    for (int i = 0; i < (target_nb_blocks * 16 + 15); i++) {
-	      string c(1, 'A');
-	      block1 += c;
-	    }
+  while (remainging_len > 0) {
+    // Create a 16*coef bytes long string, long enough to detect ECB mode:
+    block1 = "";
+    int target_nb_blocks = 100;
+    for (int i = 0; i < (target_nb_blocks * 16 + 15); i++) {
+      string c(1, 'A');
+      block1 += c;
+    }
 
-	    // The first char of unknown_string must be the last byte of a block.
-	    string plaintext =
-	        block0 + block1 +
-	        unknown_string_cpp_s.substr(unknown_string_len - remainging_len,
-	                                    unknown_string_len);
+    // The first char of unknown_string must be the last byte of a block.
+    string plaintext =
+        block0 + block1 +
+        unknown_string_cpp_s.substr(unknown_string_len - remainging_len,
+                                    unknown_string_len);
 
-	    // Encrypt, first attempt to get ECB.
-	    oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
+    // Encrypt, first attempt to get ECB.
+    oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
 
-	    // Retry while not ECB
-	    while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
-	                         oracle.getCiphertext()->l)) {
-	      oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
-	    }
+    // Retry while not ECB
+    while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
+                         oracle.getCiphertext()->l)) {
+      oracle.encryption_oracle((byte*)plaintext.c_str(), plaintext.length());
+    }
 
-	    // Save the encrypted text, this is our target for the matching attempts.
-	    target.l = oracle.getCiphertext()->l;
-	    target.data_ptr = new byte[target.l];
-	    memcpy(target.data_ptr, oracle.getCiphertext()->data_ptr, target.l);
+    // Save the encrypted text, this is our target for the matching attempts.
+    target.l = oracle.getCiphertext()->l;
+    target.data_ptr = new byte[target.l];
+    memcpy(target.data_ptr, oracle.getCiphertext()->data_ptr, target.l);
 
-	    int unknown_char_pos =
-	        blocksize + target_nb_blocks * 16;  // Pos of x in AAAAAAAAAAAAAAAx
+    int unknown_char_pos =
+        blocksize + target_nb_blocks * 16;  // Pos of x in AAAAAAAAAAAAAAAx
 
-	    // Encrypt all possible AAAAAAAAAAAAAAAx
-	    for (int X = 0; X <= 0xFF; X++) {
-	      string BBs = "";
-	      int to_match_nb_blocks = 10;
-	      for (int i = 0; i < to_match_nb_blocks; i++) BBs += "BBBBBBBBBBBBBBBB";
-	      string last(1, (char)X);
-	      string to_encrypt = block0 + BBs + block2 + last;
-	      assert(to_encrypt.length() == 12 + 10 * 16 + 16);
+    // Encrypt all possible AAAAAAAAAAAAAAAx
+    for (int X = 0; X <= 0xFF; X++) {
+      string BBs = "";
+      int to_match_nb_blocks = 10;
+      for (int i = 0; i < to_match_nb_blocks; i++) BBs += "BBBBBBBBBBBBBBBB";
+      string last(1, (char)X);
+      string to_encrypt = block0 + BBs + block2 + last;
+      assert(to_encrypt.length() == 12 + 10 * 16 + 16);
 
-	      // Encrypt, ensuring we encrypt with ECB.
-	      oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
+      // Encrypt, ensuring we encrypt with ECB.
+      oracle.encryption_oracle((byte*)to_encrypt.c_str(), to_encrypt.length());
 
-	      while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
-	                           oracle.getCiphertext()->l)) {
-	        oracle.encryption_oracle((byte*)to_encrypt.c_str(),
-	                                 to_encrypt.length());
-	      }
+      while (!isAES128_ECB(oracle.getCiphertext()->data_ptr,
+                           oracle.getCiphertext()->l)) {
+        oracle.encryption_oracle((byte*)to_encrypt.c_str(),
+                                 to_encrypt.length());
+      }
 
-	      // Save the encrypted text, this is our target for matches.
-	      bytearray_t to_match;
-	      to_match.l = oracle.getCiphertext()->l;
-	      to_match.data_ptr = new byte[to_match.l];
-	      memcpy(to_match.data_ptr, oracle.getCiphertext()->data_ptr, to_match.l);
+      // Save the encrypted text, this is our target for matches.
+      bytearray_t to_match;
+      to_match.l = oracle.getCiphertext()->l;
+      to_match.data_ptr = new byte[to_match.l];
+      memcpy(to_match.data_ptr, oracle.getCiphertext()->data_ptr, to_match.l);
 
-	      const byte* unknown_block = &target.data_ptr[unknown_char_pos];
-	      const byte* block_to_match =
-	          &to_match.data_ptr[(to_match_nb_blocks + 1) * 16];
+      const byte* unknown_block = &target.data_ptr[unknown_char_pos];
+      const byte* block_to_match =
+          &to_match.data_ptr[(to_match_nb_blocks + 1) * 16];
 
-	      if (memcmp(unknown_block, block_to_match, 16) == 0) {
-	        char_found = true;
-	        string x(1, (char)X);
-	        cout << x << endl;
-	        decrypted += x;
-	        remainging_len--;
-	      }
-	    }
-	  }
-	  cout << decrypted << endl;
+      if (memcmp(unknown_block, block_to_match, 16) == 0) {
+        char_found = true;
+        string x(1, (char)X);
+        cout << x << endl;
+        decrypted += x;
+        remainging_len--;
+      }
+    }
+  }
+  cout << decrypted << endl;
 }
 
 void challenge_12() {

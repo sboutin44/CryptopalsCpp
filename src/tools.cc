@@ -34,6 +34,13 @@ void printByteArray(byte* a, int l) {
   printf("\n");
 }
 
+void printCharArray(byte* a, int l) {
+  for (int i = 0; i < l; i++) {
+    printf("%c", a[i]);
+  }
+  printf("\n");
+}
+
 int countLines(const char* filename) {
   ifstream file;
   int nb_lines = 0;

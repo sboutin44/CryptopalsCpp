@@ -134,6 +134,7 @@ void challenge_13();
 // tools.cc
 int countLines(const char* filename);
 void printByteArray(byte* a, int l);
+void printCharArray(byte* a, int l);
 
 template <typename T>
 T max(T* array, int len) {

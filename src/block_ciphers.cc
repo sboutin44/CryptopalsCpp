@@ -35,13 +35,13 @@ int PKCS7_getSize(byte* input, int len) {
 }
 
 int PKCS7_getPaddingSize(byte* padded_input, int len) {
-	int len_pad = padded_input[len-1];
+  int len_pad = padded_input[len - 1];
 
-	// Make sure the last #len_pad bytes of the string equal this value.
-	for (int i=1; i<= len_pad ; i++) {
-		if (padded_input[len - i] != len_pad) return -1;
-	}
-	return len_pad;
+  // Make sure the last #len_pad bytes of the string equal this value.
+  for (int i = 1; i <= len_pad; i++) {
+    if (padded_input[len - i] != len_pad) return -1;
+  }
+  return len_pad;
 }
 
 int AES128_ECB_getCiphertextSize(byte* input, int len) {
