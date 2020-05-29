@@ -35,25 +35,10 @@ int len_ciphertext_ECB;
 byte* ciphertext_ECB;
 
 void printProfile(Profile m) {
-  cout << "{" << endl;
-
-  cout << "  "
-       << "email"
-       << ": "
-       << "'" << m.email << "'"
-       << "," << endl;
-  cout << "  "
-       << "uid"
-       << ": "
-       << "'" << m.uid << "'"
-       << "," << endl;
-  cout << "  "
-       << "role"
-       << ": "
-       << "'" << m.role << "'"
-       << endl;
-  cout << "}" << endl;
-  cout << endl;
+  cout << "{\n  "
+       << "email: '" << m.email << "',\n";
+  cout << "  uid:'" << m.uid << "',\n";
+  cout << "  role: '" << m.role << "'\n}\n";
 }
 
 void printJsonStyle(map<string, string> m) {
@@ -73,7 +58,6 @@ Profile parse(string s) {
   int pos1 = 0;
   int pos2 = 0;
   int nb_args = 0;
-  int len = s.length();
 
   while (pos2 != -1) {
     // Find the first '='
@@ -98,28 +82,6 @@ Profile parse(string s) {
 
   assert(nb_args == 3);  // Check we have only email, uid and role.
 
-  return profile;
-}
-
-map<string, string> parse2(string s) {
-  map<string, string> profile;
-  int pos0 = 0;
-  int pos1 = 0;
-  int pos2 = 0;
-
-  while (pos2 < s.length()) {
-    // Find the first =
-    pos1 = s.find('=');
-    pos2 = s.find('&');
-    string key = s.substr(pos0, pos1 - pos0);
-    string val = s.substr(pos1 + 1, pos2 - (pos1 + 1));
-
-    profile[key] = val;
-
-    // Set next position and redefine the substring we work on.
-    pos0 = pos2 + 1;
-    s = s.substr(pos0, s.length());
-  }
   return profile;
 }
 
@@ -162,6 +124,9 @@ void functionA(string in) {
 }
 
 void functionB() {
+  /* Decrypt a profile after replacing the last encrypted block by a custom
+   * encrypted block. */
+
   // ------------------------------------------------------------------
   // attack: insert the encrypted text with admin role:
   for (int i = 0; i < 16; i++) ciphertext_ECB[2 * 16 + i] = to_inject[i];
@@ -169,14 +134,12 @@ void functionB() {
 
   byte* padded_plaintext = new byte[len_ciphertext_ECB];
   AES128_ECB_decrypt(ciphertext_ECB, key, len_ciphertext_ECB, padded_plaintext);
-  int len_plaintext = len_ciphertext_ECB -
-                      PKCS7_getPaddingSize(padded_plaintext, len_ciphertext_ECB);
+  int len_plaintext =
+      len_ciphertext_ECB -
+      PKCS7_getPaddingSize(padded_plaintext, len_ciphertext_ECB);
 
   byte* plaintext = new byte[len_plaintext];
   memcpy(plaintext, padded_plaintext, len_plaintext);
-
-  //  cout << "Plaintext:" << endl;
-  //  printCharArray(plaintext, len_plaintext);
 
   // Convert to a C++ string
   string encoded_admin_profile = "";
@@ -190,6 +153,10 @@ void functionB() {
 }
 
 void challenge_13() {
+  /** The goal here is to create an admin profile by modifying the last
+   * encrypted block with a custom block containing "admin" and the padding.
+   */
+
   cout << "\n------------------------------------" << endl;
   cout << "Challenges Set 2" << endl;
   cout << "13. ECB cut-and-paste" << endl;
@@ -197,40 +164,30 @@ void challenge_13() {
 
   srand(time(NULL));
 
-  // New AES128 key
-  //  randomAES128key(key);  // Global variable
-
-  // Function B: Decrypt the encoded user profile and parse it.
-  // TODO: to finish
-  //  int len = PKCS7_getPaddingSize
-
-  /* Now the attacker can:
-   * 	- call profile_for()
-   * 	- check the encrypted profile_for() calls
-   *
-   * The goal is to call
-   */
-
-  string block0 =
-      "aaaaaaaaaa";  // expanded to the 16-bytes string 'email=aaaaaaaaaa'
-  string block1 = "admin";  // designed to be 'admin\0xb\0xb...\xb'
-  int pad_value = 16 - block1.length();
-  for (int i = 0; i < pad_value; i++) {
-    block1 += (byte)pad_value;
-  }
-
+  // Uncomment to create the last encrypted block
+  //  string block0 =
+  //      "aaaaaaaaaa";  // expanded to the 16-bytes string 'email=aaaaaaaaaa'
+  //  string block1 = "admin";  // designed to be 'admin\0xb\0xb...\xb'
+  //  int pad_value = 16 - block1.length();
+  //  for (int i = 0; i < pad_value; i++) {
+  //    block1 += (byte)pad_value;
+  //  }
   //  functionA(block0+block1);
 
+  // After the creation of the 'admin' encrypted block (filled with padding):
+  //'admin\0xb\0xb...\xb' encrypted:  {0x2b,0xc4 ,0xb6 ,0x77 ,0x0f ,0x35 ,0x2f
+  //,0x42 ,0xc6 ,0x3f ,0x59 ,0x28 ,0xec ,0x83 ,0x21 ,0x1f};
+
+  // We can then give profile_for() an email long enough to fill 2 blocks of
+  // AES128, so that when we intercept the encrypted profile we'll just have to
+  // replace the end by our previous finding:
+  //  aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa
+  //  email=foooo@bar. com&uid=10&role= ______to_replace
+
+  // Here is the email long enough, the issue lies when the uid length varies.
   string email = "foooo@bar.com";
   cout << "foooo@bar.com" << endl;
 
   functionA(email);
   functionB();
-
-  //'admin\0xb\0xb...\xb' encrypted:  {0x2b,0xc4 ,0xb6 ,0x77 ,0x0f ,0x35 ,0x2f
-  //,0x42 ,0xc6 ,0x3f ,0x59 ,0x28 ,0xec ,0x83 ,0x21 ,0x1f};
-  //  aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaa
-  //  email=foooo@bar. com&uid=10&role=
-
-  //  functionB();
 }
