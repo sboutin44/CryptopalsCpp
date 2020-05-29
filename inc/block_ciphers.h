@@ -29,6 +29,7 @@
 #include "types.h"
 
 int PKCS7_getSize(byte* input, int len);
+int PKCS7_getPaddingSize(byte* padded_input, int len);
 int AES128_ECB_getCiphertextSize(byte* input, int len);
 int AES128_CBC_getCiphertextSize(byte* input, int len);
 byte* AES128_ECB_allocate(byte* input, int len);

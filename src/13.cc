@@ -140,7 +140,17 @@ void challenge_13() {
 
   srand(time(NULL));
 
-  string s = profile_for("sebastien@usa.com");
+  string my_profile_encoded = profile_for("sebastien@usa.com");
 
-  cout << s << endl;
+  // New AES128 key
+  byte* key = new byte[AES128_BLOCKSIZE];
+  randomAES128key(key);
+
+  // Encrypt user profile
+  int len = PKCS7_getSize((byte*) my_profile_encoded.c_str(),my_profile_encoded.length());
+  byte* ciphertext_ECB = new byte[len];
+  byte* buffer = new byte[len];
+  AES128_ECB_encrypt((byte*)buffer, (byte*)key, len, ciphertext_ECB);
+
+
 }

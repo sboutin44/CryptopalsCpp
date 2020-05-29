@@ -148,9 +148,6 @@ void challenge_12() {
   cout << std::boolalpha;  // Display booleans as true/false strings.
   srand(time(NULL));
 
-  const char* my_string =
-      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-
   const char* unknown_string_b64 =
       "Um9sbGluJyBpbiBteSA1LjAKV2l0aCBteSByYWctdG9wIGRvd24gc28gbXkg"
       "aGFpciBjYW4gYmxvdwpUaGUgZ2lybGllcyBvbiBzdGFuZGJ5IHdhdmluZyBq"
@@ -198,6 +195,7 @@ void challenge_12() {
   assert(block0.length() == blocksize - offset_len);
   assert(block2.length() == 15);
 
+  unknown_string_len = unknown_string_cpp_s.length();
   int remainging_len = unknown_string_len;
   bytearray_t target;
 
