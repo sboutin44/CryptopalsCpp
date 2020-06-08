@@ -140,7 +140,8 @@ int detectBlockSize(Oracle& oracle) {
 }
 
 void attack(string unknown_string_cpp_s) {
-  /**************************************************************************
+  /** Attack on fixed size offset.
+   *
    * In the following section with break with the oracle the encrypted input,
    * and recover the unknown_string
    *************************************************************************/

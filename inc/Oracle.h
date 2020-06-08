@@ -25,8 +25,8 @@
 #ifndef CRYPTOPALS_INC_ORACLE_H_
 #define CRYPTOPALS_INC_ORACLE_H_
 
-#include "types.h"
 #include "lib.h"
+#include "types.h"
 
 /*-------------------------- Oracle ----------------------*/
 
