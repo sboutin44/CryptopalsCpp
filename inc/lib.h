@@ -43,9 +43,9 @@
 #include <ctype.h>
 
 // Project headers.
+#include "Oracle.h"
 #include "aes.h"
 #include "block_ciphers.h"
-#include "Oracle.h"
 
 using namespace std;
 /*--------------------------------- Functions ---------------------------*/

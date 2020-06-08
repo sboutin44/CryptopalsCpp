@@ -25,6 +25,7 @@
 #ifndef CRYPTOPALS_INC_ORACLE_H_
 #define CRYPTOPALS_INC_ORACLE_H_
 
+#include "types.h"
 #include "lib.h"
 
 /*-------------------------- Oracle ----------------------*/
@@ -65,7 +66,7 @@ class Oracle {
   // For debug purpose
   const byte* getKey();
   void addEntry(bytearray_t input);
-  void removeEntry(int pos);
+  void debug_removeEntry(int pos);
   void insertAtBegin(byte* arr, int l);
   void clear();
   std::vector<ENCRYPTION_MODE> debug_enc_mode;

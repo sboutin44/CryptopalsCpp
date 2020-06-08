@@ -42,13 +42,12 @@ void Oracle::addEntry(bytearray_t entry) {
   entries.push_back(entry);
 
   // Copy ciphertext for the Oracle external functions.
-  //  delete[] ciphertext.data_ptr;
   ciphertext.l = entry.l;
   ciphertext.data_ptr = new byte[ciphertext.l];
   memcpy(ciphertext.data_ptr, entry.data_ptr, ciphertext.l);
 }
 
-void Oracle::removeEntry(int pos) {
+void Oracle::debug_removeEntry(int pos) {
   entries.pop_back();
   debug_enc_mode.pop_back();
 }
