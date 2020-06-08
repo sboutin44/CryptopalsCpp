@@ -23,6 +23,7 @@
 // use or other dealings in this Software without prior written authorization.
 
 #include "lib.h"
+#include "tests.h"
 
 using namespace std;
 
@@ -33,5 +34,5 @@ void challenge_15() {
 	  cout << "15. PKCS#7 padding validation" << endl;
 	  cout << "------------------------------------\n" << endl;
 
-
+	  testIsPKCS7();
 }
