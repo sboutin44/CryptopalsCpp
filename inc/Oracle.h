@@ -53,9 +53,6 @@ class Oracle {
   // Oracle interface
   void encryption_oracle(byte* input, int l_input);
   void encryption_oracle(byte* input, int l_input, byte* key);
-  int getEntryDataLen(int pos);
-  const byte* getEntryData(int pos);
-  void getEntryData(int pos, byte* dst);
   const bytearray_t* getCiphertext();
 
   // Oracle customization

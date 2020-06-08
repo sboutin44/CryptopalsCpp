@@ -64,14 +64,6 @@ void Oracle::debug_printEntries() {
 
 int Oracle::debug_size() { return entries.size(); }
 
-int Oracle::getEntryDataLen(int pos) { return entries[pos].l; }
-
-void Oracle::getEntryData(int pos, byte* dst) {
-  memcpy(dst, entries[pos].data_ptr, entries[pos].l);
-}
-
-const byte* Oracle::getEntryData(int pos) { return entries[pos].data_ptr; }
-
 void Oracle::debug_printEntry(int pos) {
   if (pos < entries.size()) {
     cout << "len: " << entries[pos].l << endl;

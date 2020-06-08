@@ -122,7 +122,7 @@ int detectBlockSize(Oracle& oracle) {
   string test_string = "A";
   oracle.encryption_oracle((byte*)test_string.c_str(), test_string.length());
   int last_entry_pos = oracle.debug_size();
-  int previous_len = oracle.getCiphertext()->l; //oracle.getEntryDataLen(last_entry_pos - 1);
+  int previous_len = oracle.getCiphertext()->l;
   int new_len = previous_len;
 
   while (previous_len == new_len) {
