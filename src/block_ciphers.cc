@@ -77,6 +77,13 @@ void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize) {
   for (int i = 0; i < pad_len; i++) out[lenIn + i] = pad_byte;
 }
 
+bool isPKCS7(byte* in, int l){
+	byte byte_val = in[l-1];
+	for ( int i= l - byte_val ; i < l ; i++)
+		if (in[i] != byte_val) return false;
+	return true;
+}
+
 void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext) {
   /** Decrypt an AES encrypted bytes string with ECB mode. */
 

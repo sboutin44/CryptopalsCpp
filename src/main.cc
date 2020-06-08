@@ -73,6 +73,9 @@ void runChallenge(int challenge) {
     case 14:
       challenge_14();
       break;
+    case 15:
+      challenge_15();
+      break;
 
     default:
       std::cerr << "Challenge " << unsigned(challenge) << " not solved yet!"
@@ -98,6 +101,8 @@ void runTests() {
   testProfile_for();
   testPKCS7_padding();
   testAES128_ECB_encrypt();
+testIsPKCS7();
+
 }
 
 void displayProgramUsage() {

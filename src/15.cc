@@ -22,40 +22,16 @@
 // holders shall not be used in advertising or otherwise to promote the sale,
 // use or other dealings in this Software without prior written authorization.
 
-#ifndef CRYPTOPALS_INC_TESTS_H_
-#define CRYPTOPALS_INC_TESTS_H_
-
 #include "lib.h"
 
-// tests set 1
-void testCountLines();
-void testHammingDistance();
-void testInsertionSort();
-void testIndexOfCoincidence();
-void testHistogram();
-void testFindKeyLength();
-void testBase64Encode();
-void testBase64Decode();
+using namespace std;
 
-// AES128
-void testAES128();
-void testMult();
-void testKeyExpansion();
-void testXtime();
-void testRcon();
-void testSubWord();
-void testRotWord();
 
-// Block Ciphers
-void testPKCS7_padding();
-void testAES128_ECB_encrypt();
-void testIsPKCS7();
+void challenge_15() {
+	  cout << "\n------------------------------------" << endl;
+	  cout << "Challenges Set 2" << endl;
+	  cout << "15. PKCS#7 padding validation" << endl;
+	  cout << "------------------------------------\n" << endl;
 
-// tests set 2
-void testGuessEncryptionMode();
-void testDetectBlockSize();
-void testDetectOffsetLength();
-void testParse();
-void testProfile_for();
 
-#endif
+}

@@ -96,3 +96,16 @@ void testAES128_ECB_encrypt() {
 
   cout << "testAES128_ECB_encrypt \tpassed" << endl;
 }
+
+void testIsPKCS7(){
+
+	const char* s1 = "ICE ICE BABY\x04\x04\x04\x04";
+	const char* s2 = "ICE ICE BABY\x05\x05\x05\x05";
+	const char* s3 = "ICE ICE BABY\x01\x02\x03\x04";
+
+	assert (isPKCS7( (byte*) s1, strlen(s1)) == true);
+	assert (isPKCS7( (byte*) s2, strlen(s1)) == false);
+	assert (isPKCS7( (byte*) s3, strlen(s1)) == false);
+
+	  cout << "testIsPKCS7 \t\tpassed" << endl;
+}

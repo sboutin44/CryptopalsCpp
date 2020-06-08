@@ -41,5 +41,6 @@ void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
                         byte* ciphertext, int len);
 void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
                         byte* plaintext, int len);
+bool isPKCS7(byte* in, int l);
 
 #endif  // CRYPTOPALS_INC_BLOCK_CIPHERS_H_

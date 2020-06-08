@@ -67,8 +67,9 @@ void attackRandomPrefix(string unknown_string_cpp_s) {
   cout << offset_len << endl;
 
   // Create offset's complement:
-  int start = offset_len % blocksize;
   string block0 = "";
+
+  int start = offset_len % blocksize;
   for (int i = start; i < blocksize; i++) {
     string b(1, 'A');
     block0 += b;
