@@ -38,6 +38,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 // C libraries
 #include <ctype.h>
