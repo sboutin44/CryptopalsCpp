@@ -1,0 +1,116 @@
+CC=gcc
+CPP=g++
+ 
+ 
+# Les différents répertoires contenant respectivement les fichiers : Sources *.c, Headers *.h, Objets *.o, l'exécutable
+SRCDIR=Src
+HEADDIR=Include
+LIBDIR=Objet
+BINDIR=Bin
+ 
+ 
+# Les différentes options de compilations, soyons strictes !
+CFLAGS= -I$(HEADDIR) -g -Wall -pedantic -Os
+# Les différents FrameWorks et bibliothèques pour le linkage
+GLLIBS = -ltiff -framework OPENGL -framework GLUT -framework GLUI -lobjc -lstdc++ -lm
+ 
+# L'exécutable
+BIN=MonExecutable
+ 
+# Où trouver les différents sources *.c qu'il faudra compiler pour créer les objets correspondants
+SRC= $(wildcard $(SRCDIR)/*.c)
+OBJ= $(SRC:$(SRCDIR)/%.c=$(LIBDIR)/%.o)
+ 
+# Où trouver les différents sources *.cpp qu'il faudra compiler pour créer les objets correspondants
+SRCPP= $(wildcard $(SRCDIR)/*.cpp)
+OBJCPP= $(SRCPP:$(SRCDIR)/%.cpp=$(LIBDIR)/%.o)
+ 
+all: $(BIN)
+ 
+#Création de l'exécutable
+MonExecutable: $(OBJ) $(OBJCPP)
+	$(CC) -o $(BINDIR)/$@ $^ $(CFLAGS) $(GLLIBS)
+ 
+# Création des différents *.o à partir des *.c
+$(LIBDIR)/%.o: $(SRCDIR)/%.c $(HEADDIR)/%.h 
+	$(CC) -o $@ -c $< $(CFLAGS)
+ 
+# Création des différents *.o à partir des *.cpp
+$(LIBDIR)/%.o: $(SRCDIR)/%.cpp $(HEADDIR)/%.h
+	$(CPP) -o $@ -c $< $(CFLAGS)
+ 
+# Nettoyage des objets => Tout sera recompiler !
+clean:
+	rm $(LIBDIR)/*.o
+ 
+# Nettoyage complet => clean + effacement du l'exécutable
+Clean: clean
+	rm $(BINDIR)/*
+
+
+
+
+
+
+
+
+
+
+
+
+	
+void string_to_hex(const string& input, uint8_t* output)
+{
+    /** Convert a string of hexadecimal to its memory hexadecimal representation
+    * @param input sting of hexadecimal number
+    * @param output array of hexadecimal representation of input
+    */
+    size_t lenInput = input.size();
+    assert(lenInput%2 == 0); // The length of hex should be pair.
+    output = new uint8_t[lenInput/2];
+
+    // Letter used in the hex representation of numbers
+    string hexChars = "AaBbCcDdEeFf";
+
+    // Used to check that two char are convert in one input (one octet) in the output array.
+    int is_pair = 0;
+    // Index of output's array.
+    int i = 0;
+
+    for(char c : input)
+    {
+        if(!is_pair)
+        {
+            output[i] = (hexChars.find_first_of(c) != string::npos) ? (((c - 'a') + 10) << 4) : ((c - '0') << 4);
+            is_pair = 1;
+        }
+        else
+        {
+            output[i] ^= (hexChars.find_first_of(c)!= string::npos) ? ((c - 'a') + 10) : (c - '0');
+            is_pair = 0;
+            i++;
+        }
+    }
+
+    for(int i = 0; i < lenInput/2; i++)
+        printf("%x", output[i]);
+    printf("\n");
+}
+
+void hex_to_string(const uint8_t* input, string output)
+{
+    size_t lenInput = sizeof(input)/sizeof(*input);
+
+    stringstream ss;
+
+    cout << "longueur input = " << lenInput << endl;
+    cout << "input[0] = " << input[0] << endl;
+
+    for (int i = 0; i < lenInput; i++)
+    {
+        ss << input[i];
+    }
+    cout << "output =" << output << endl;
+    output = ss.str();
+    ss.clear();    
+}
