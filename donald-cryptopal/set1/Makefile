@@ -18,11 +18,11 @@ OBJXX=$(SRCXX:$(SRCDIR)/%.cxx=$(LIBDIR)/%.o)
 all: $(BIN)
 
 $(BIN): $(OBJXX)
-	$(CXX) -o $@ $^ $(LDFLAGS)
+	@$(CXX) -o $@ $^ $(LDFLAGS)
 
 $(LIBDIR)/%.o: $(SRCDIR)/%.cxx $(wildcard $(HEADDIR)/*.hxx)
 	@mkdir -p $(@D)
-	$(CXX) -o $@ -c $<  $(CXXFLAGS)
+	@$(CXX) -o $@ -c $<  $(CXXFLAGS)
 
 .PHONY: clean mrpropre
 

@@ -1,6 +1,7 @@
 #ifndef __LIB_HXX__
 #define __LIB_HXX__
 
+#include <iostream>
 #include <cstdint>
 #include <cstring>
 #include <cassert>
