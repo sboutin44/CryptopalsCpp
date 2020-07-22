@@ -30,21 +30,21 @@ void test_encode_to_base64()
     expectedOutput.push_back("YXN1cmUu");
     expectedOutput.push_back("c3VyZS4=");
 
-    bool isTestPassed = true;
+    bool isTestSuccess = true;
     for (unsigned int i = 0; i < input.size(); i++)
     {
         base64 output;
         string_to_base64(input[i], output);
-        isTestPassed = isTestPassed && (output == expectedOutput[i]);
+        isTestSuccess = isTestSuccess && (output == expectedOutput[i]);
     }
     
     printf("-----------------------------------------------------\n");
     printf("Test base64 encoding.\n");
-    printf("Test result is: %s.\n", (isTestPassed ? "OK" : "KO"));
+    printf("Test result is: %s.\n", (isTestSuccess ? "OK" : "KO"));
     printf("-----------------------------------------------------\n\n");
 
-    /*challeng commes from : https://cryptopals.com/sets/1/challenges/1 */
-    if (isTestPassed)
+    /*challenge commes from : https://cryptopals.com/sets/1/challenges/1 */
+    if (isTestSuccess)
     {
 
         std::string challenge = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
@@ -88,20 +88,20 @@ void test_decode_from_base64()
     expectedOutput.push_back("asure.");
     expectedOutput.push_back("sure.");
 
-    bool isTestPassed = true;
+    bool isTestSuccess = true;
     for (unsigned int i = 0; i < input.size(); i++)
     {
         std::string output;
         base64_to_string(input[i], output);
-        isTestPassed = isTestPassed && (output == expectedOutput[i]);
+        isTestSuccess = isTestSuccess && (output == expectedOutput[i]);
     }
     
     printf("-----------------------------------------------------\n");
     printf("Test base64 decoding.\n");
-    printf("Test result is: %s.\n", (isTestPassed ? "OK" : "KO"));
+    printf("Test result is: %s.\n", (isTestSuccess ? "OK" : "KO"));
     printf("-----------------------------------------------------\n\n");
     
-    if (isTestPassed)
+    if (isTestSuccess)
     {
         base64 challenge = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
         std::string outputChallenge;

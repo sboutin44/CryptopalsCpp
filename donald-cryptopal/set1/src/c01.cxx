@@ -1,5 +1,33 @@
 #include "c01.hxx"
 
+
+void string_to_bytes(const std::string inputStr, int &lenOuput, uint8_t* &output)
+{
+    /** Convert a string into array of byte
+     * @param   inputStr       input string
+     * @param   lenOuput    length of output array of byte
+     * @param   output      array of byte
+     */
+    lenOuput = inputStr.size();
+    output = new uint8_t[lenOuput];
+    int i = 0;
+    for (char c : inputStr)
+    {
+        output[i] = c;
+        i++;
+    }
+}
+
+void bytes_to_string(const uint8_t* input, const int lenInput, std::string &outputStr)
+{
+/** @brief  Convert a array of byte to its string representation.
+ *  @param  input       input bytes array
+ *  @param  lenInput    length of input array
+ *  @param  outputStr   string which representes input array.
+ */
+    outputStr.assign(input, input + lenInput);
+}
+
 void hex_string_to_hex_array(const std::string &input, int& lenOutput, uint8_t* &output)
 {
     /** Encode string with hexa chars to array of bytes that corresponds to that hexa values.
@@ -219,23 +247,6 @@ void base64_to_hex_array(const base64 &input, int& lenOutput, uint8_t* &output)
     }
 
     base64_unpadding(input, posInOuput, output);        
-}
-
-void string_to_bytes(const std::string &input, int &lenOuput, uint8_t* &output)
-{
-    /** Convert a string into array of byte
-     * @param   input       input string
-     * @param   lenOuput    length of output array of byte
-     * @param   output      array of byte
-     */
-    lenOuput = input.size();
-    output = new uint8_t[lenOuput];
-    int i = 0;
-    for (char c : input)
-    {
-        output[i] = c;
-        i++;
-    }
 }
 
 void string_to_base64(const std::string &input, base64 &output)

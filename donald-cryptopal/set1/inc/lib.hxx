@@ -8,6 +8,12 @@
 #include <sstream>
 #include <iomanip>
 #include <vector>
+#include <map>
+#include <cmath>
+
+#include "test_c01.hxx"
+#include "test_c02.hxx"
+#include "test_c03.hxx"
 
 typedef std::string base64;
 

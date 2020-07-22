@@ -2,7 +2,7 @@
 BASE=$(CURDIR)
 SRCDIR=$(BASE)/src
 SRCDIRTEST=$(BASE)/test
-HEADDIR=$(BASE)/include
+HEADDIR=$(BASE)/inc
 BUILD=$(BASE)/build
 LIBDIR=$(BUILD)/obj
 
