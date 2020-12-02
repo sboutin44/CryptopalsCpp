@@ -7,4 +7,4 @@ https://cryptopals.com/
 ```$ make```
 
 ## Launch
-<!-- ```$ make``` -->
+<!-- ```$ cryptopals --challenge #challenge``` -->

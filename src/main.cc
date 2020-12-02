@@ -121,7 +121,9 @@ int main(int argc, char* argv[]) {
    */
 
   if (argc == 2) {
-    if (std::string(argv[1]) == "--run_tests") {
+    if (std::string(argv[1]) == "--help") {
+      displayProgramUsage();
+    } else if (std::string(argv[1]) == "--run_tests") {
       runTests();
     } else if (std::string(argv[1]) == "--quick_test") {
       testFunction();
