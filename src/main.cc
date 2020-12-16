@@ -108,7 +108,7 @@ void displayProgramUsage() {
 
 void testFunction() {}
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   /** The program can be run in two modes.
    *
    * Normal:
