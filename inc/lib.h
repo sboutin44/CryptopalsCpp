@@ -89,7 +89,7 @@ class Oracle {
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn);
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size);
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding);
-void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* out);
+void base64Encode(uint8_t* input, int sizeIn, uint8_t* out);
 void base64Decode(uint8_t* input, uint64_t size, uint8_t* output);
 uint8_t* myXOR(uint8_t* a, uint8_t* b, int size);
 

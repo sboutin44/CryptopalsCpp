@@ -54,7 +54,7 @@ uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn) {
   return output_length;
 }
 
-void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* output) {
+void base64Encode(uint8_t* input, int sizeIn, uint8_t* output) {
   /** Encode an input made of raw bytes in base64.
    *
    * @param input   Clear byte string.
