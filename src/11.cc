@@ -27,6 +27,14 @@
 
 using namespace std;
 
+float absolute (float f){
+  // Workaround to use the abs function on macOS with the error:
+  // error: call to 'abs' is ambiguous”
+  if (f < .0)
+    f = -f;
+  return f;
+}
+
 Oracle::Oracle() {
   key = new byte[16];  // Allocate a default AES128 key.
   randomAES128key(key);
@@ -103,7 +111,7 @@ ENCRYPTION_MODE guessEncryptionMode(const byte* input, int l) {
   float r = similarBlocksDistanceRatio(input, l);
   float thresold = 0.2;
 
-  if (abs(r - 0.50) < thresold)
+  if (absolute(r - 0.50) < thresold)
     return CBC;
   else
     return ECB;
