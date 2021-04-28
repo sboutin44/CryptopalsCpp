@@ -34,7 +34,7 @@ void hexDecode(const char* input, uint8_t* out) {
   std::string myString(input);
 
   for (int i = 0; i < ((int)myString.size()) / 2; i++) {
-    std::string subStr = myString.substr(i * 2, 2);
+    std::string subStr = myString.substr((size_t)i * 2, 2);
     out[i] = (uint8_t) strtoul(subStr.c_str(), 0, 16);
   }
 }

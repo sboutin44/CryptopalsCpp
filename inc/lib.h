@@ -50,6 +50,7 @@ typedef struct bytearray_t {
   byte* data_ptr;
 } bytearray_t;
 
+#define AES_128_BLOCKSIZE 16
 enum ENCRYPTION_MODE { ECB, CBC };
 enum OFFSET_TYPE { NO_OFFSET, RANDOM, FIXED };
 
@@ -130,6 +131,7 @@ void testAES();
 void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
 void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext);
 void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
+byte* PKCS7_padding2(byte* in, int l, int blocksize);
 void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
                         byte* ciphertext, int len);
 void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
@@ -159,6 +161,9 @@ void challenge_9();
 void challenge_10();
 void challenge_11();
 void challenge_12();
+
+void challenge_18();
+
 
 // tools.cc
 int countLines(const char* filename);

@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryptopals++", "cryptopals++.vcxproj", "{0920445D-F29A-4462-8076-162AE81EE008}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Playground", "..\Playground\Playground.vcxproj", "{D80DCC55-186C-4EF8-8884-4DA5270458A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{0920445D-F29A-4462-8076-162AE81EE008}.Release|x64.Build.0 = Release|x64
 		{0920445D-F29A-4462-8076-162AE81EE008}.Release|x86.ActiveCfg = Release|Win32
 		{0920445D-F29A-4462-8076-162AE81EE008}.Release|x86.Build.0 = Release|Win32
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Debug|x64.ActiveCfg = Debug|x64
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Debug|x64.Build.0 = Debug|x64
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Debug|x86.ActiveCfg = Debug|Win32
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Debug|x86.Build.0 = Debug|Win32
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Release|x64.ActiveCfg = Release|x64
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Release|x64.Build.0 = Release|x64
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Release|x86.ActiveCfg = Release|Win32
+		{D80DCC55-186C-4EF8-8884-4DA5270458A8}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
