@@ -1,3 +1,8 @@
 nbproject/
 /build/
 a.out
+Debug/
+Release/
+.vs/
+.settings/
+

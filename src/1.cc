@@ -34,8 +34,8 @@ void hexDecode(const char* input, uint8_t* out) {
   std::string myString(input);
 
   for (int i = 0; i < ((int)myString.size()) / 2; i++) {
-    std::string subStr = myString.substr(i * 2, 2);
-    out[i] = strtoul(subStr.c_str(), 0, 16);
+    std::string subStr = myString.substr((size_t)i * 2, 2);
+    out[i] = (uint8_t) strtoul(subStr.c_str(), 0, 16);
   }
 }
 
@@ -54,7 +54,7 @@ uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn) {
   return output_length;
 }
 
-void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* output) {
+void base64Encode(uint8_t* input, int sizeIn, uint8_t* output) {
   /** Encode an input made of raw bytes in base64.
    *
    * @param input   Clear byte string.

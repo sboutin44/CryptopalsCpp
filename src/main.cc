@@ -68,6 +68,12 @@ void runChallenge(int challenge) {
       challenge_12();
       break;
 
+    // see cryptopalsPython for challenges in between 12 and 18.
+
+    case 18:
+        challenge_18();
+    break;
+
     default:
       std::cerr << "Challenge " << unsigned(challenge) << " not solved yet!"
                 << std::endl;
@@ -108,7 +114,7 @@ void displayProgramUsage() {
 
 void testFunction() {}
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   /** The program can be run in two modes.
    *
    * Normal:

@@ -51,6 +51,7 @@ typedef struct bytearray_t {
   byte* data_ptr;
 } bytearray_t;
 
+#define AES_128_BLOCKSIZE 16
 enum ENCRYPTION_MODE { ECB, CBC };
 enum OFFSET_TYPE { NO_OFFSET, RANDOM, FIXED };
 
@@ -90,7 +91,7 @@ class Oracle {
 uint64_t getEncodedSize(uint8_t* input, uint64_t sizeIn);
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size);
 uint64_t getDecodedTextSize(uint8_t* input, uint64_t size, int* padding);
-void base64Encode(uint8_t* input, uint64_t sizeIn, uint8_t* out);
+void base64Encode(uint8_t* input, int sizeIn, uint8_t* out);
 void base64Decode(uint8_t* input, uint64_t size, uint8_t* output);
 uint8_t* myXOR(uint8_t* a, uint8_t* b, int size);
 
@@ -131,6 +132,7 @@ void testAES();
 void AES128_ECB_decrypt(byte* ciphertext, byte* key, int len, byte* plaintext);
 void AES128_ECB_encrypt(byte* plaintext, byte* key, int len, byte* ciphertext);
 void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize);
+byte* PKCS7_padding2(byte* in, int l, int blocksize);
 void AES128_CBC_encrypt(byte* plaintext, byte* key, const byte* IV,
                         byte* ciphertext, int len);
 void AES128_CBC_decrypt(byte* ciphertext, byte* key, const byte* IV,
@@ -160,6 +162,9 @@ void challenge_9();
 void challenge_10();
 void challenge_11();
 void challenge_12();
+
+void challenge_18();
+
 
 // tools.cc
 int countLines(const char* filename);
