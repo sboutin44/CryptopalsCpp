@@ -69,7 +69,7 @@
     <ClCompile Include="test\tests_set2.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\18.cpp">
+    <ClCompile Include="src\18.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

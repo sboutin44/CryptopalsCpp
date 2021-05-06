@@ -165,7 +165,6 @@ void challenge_12();
 
 void challenge_18();
 
-
 // tools.cc
 int countLines(const char* filename);
 void printByteArray(byte* a, int l);

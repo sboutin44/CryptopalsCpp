@@ -27,11 +27,10 @@
 
 using namespace std;
 
-float absolute (float f){
+float absolute(float f) {
   // Workaround to use the abs function on macOS with the error:
   // error: call to 'abs' is ambiguous”
-  if (f < .0)
-    f = -f;
+  if (f < .0) f = -f;
   return f;
 }
 
@@ -151,14 +150,14 @@ void Oracle::printOffset() {
   printf("\n");
 }
 
-void Oracle::printRealMode(int pos){
-	assert(pos < this->size());
-	if (enc_mode[pos] == ECB )
-		cout  << "Real Mode: ECB" << endl;
-	else if (enc_mode[pos] == CBC )
-		cout  << "Real Mode: CBC" << endl;
-	else
-		cout << "Mode error" << endl;
+void Oracle::printRealMode(int pos) {
+  assert(pos < this->size());
+  if (enc_mode[pos] == ECB)
+    cout << "Real Mode: ECB" << endl;
+  else if (enc_mode[pos] == CBC)
+    cout << "Real Mode: CBC" << endl;
+  else
+    cout << "Mode error" << endl;
 }
 
 // void Oracle::encryption_oracle(byte* input, int l_input, byte* key) {
@@ -261,11 +260,15 @@ void testGuessEncryptionMode() {
     assert(real_mode == guessed_mode);
 
     if (real_mode == ECB) {
-    	assert( isAES128_CBC(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == false);
-    	assert( isAES128_ECB(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == true);
+      assert(isAES128_CBC(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
+             false);
+      assert(isAES128_ECB(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
+             true);
     } else if (real_mode == CBC) {
-    	assert( isAES128_CBC(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == true);
-    	assert( isAES128_ECB(oracle.getEntryData(i),oracle.getEntryDataLen(i)) == false);
+      assert(isAES128_CBC(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
+             true);
+      assert(isAES128_ECB(oracle.getEntryData(i), oracle.getEntryDataLen(i)) ==
+             false);
     }
   }
   cout << "testGuessEncryptionMode passed" << endl;

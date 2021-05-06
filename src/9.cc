@@ -14,17 +14,16 @@ void PKCS7_padding(byte* in, int lenIn, byte* out, int blocksize) {
 }
 
 byte* PKCS7_padding2(byte* in, int l, int blocksize) {
-	/** Add padding to a pre-allocated array. */
+  /** Add padding to a pre-allocated array. */
 
-	int pad_len = blocksize - l % blocksize;
-	byte pad_byte = pad_len;
+  int pad_len = blocksize - l % blocksize;
+  byte pad_byte = pad_len;
 
-	byte* out = new byte[l + pad_len];
-	memcpy(out, in, l);
-	for (int i = 0; i < pad_len; i++) out[l + i] = pad_byte;
-	return out;
+  byte* out = new byte[l + pad_len];
+  memcpy(out, in, l);
+  for (int i = 0; i < pad_len; i++) out[l + i] = pad_byte;
+  return out;
 }
-
 
 void challenge_9() {
   cout << "\n------------------------------------" << endl;

@@ -68,11 +68,11 @@ void runChallenge(int challenge) {
       challenge_12();
       break;
 
-    // see cryptopalsPython for challenges in between 12 and 18.
+      // see cryptopalsPython for challenges in between 13 to 18.
 
     case 18:
-        challenge_18();
-    break;
+      challenge_18();
+      break;
 
     default:
       std::cerr << "Challenge " << unsigned(challenge) << " not solved yet!"
