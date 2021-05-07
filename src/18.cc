@@ -38,6 +38,8 @@ bytearray_t* AES_CTR_enc(bytearray_t* plain, byte* key) {
 }
 
 bytearray_t* AES_CTR_dec(bytearray_t* ciphertext, byte* key) {
+  assert(ciphertext->l != 0);
+
   bytearray_t* keystream = new bytearray_t;
   bytearray_t* plain = new bytearray_t;
   plain->data_ptr = new byte[ciphertext->l];
@@ -53,12 +55,11 @@ bytearray_t* AES_CTR_dec(bytearray_t* ciphertext, byte* key) {
 }
 
 bytearray_t* getKeystream(bytearray_t* plain, byte* key) {
-  bytearray_t* output = new bytearray_t;
-  output->data_ptr = new byte[plain->l];
-
-  byte* nc = new byte[16];  // nounce and counter
-  memset(nc, 0, 16);
-  unsigned long long max_counter = (unsigned long long)plain->l / 16;
+  // nc := nounce || counter (= a block of 16 bytes in the keystream)
+  byte* nc = new byte[AES_128_BLOCKSIZE];
+  memset(nc, 0, AES_128_BLOCKSIZE);
+  unsigned long long max_counter =
+      (unsigned long long)plain->l / AES_128_BLOCKSIZE + 1;
   int l_keystream = max_counter * AES_128_BLOCKSIZE;
   byte* keystream = new byte[l_keystream];
   memset(keystream, 0, l_keystream);
@@ -90,29 +91,26 @@ void challenge_18() {
   // Implement AES CTR mode.
   cout << "Challenge 18" << endl;
 
-  string plainBased64Encoded =
+  const char* plainBased64Encoded =
       "L77na/nrFsKvynd6HzOoG7GHTLXsTVu9qvY/2syLXzhPweyyMTJULu/6/"
       "kXX0KSvoOLSFQ==";
   const char* key = "YELLOW SUBMARINE";
 
   // Base64 decode (to get the ciphertext)
   bytearray_t* c = new bytearray_t();
-  c->l = getDecodedTextSize((uint8_t*)plainBased64Encoded.c_str(),
-                            plainBased64Encoded.size());
-  c->data_ptr = new byte(c->l);
-  base64Decode((uint8_t*)plainBased64Encoded.c_str(), c->l, c->data_ptr);
+  c->l = getDecodedTextSize((uint8_t*)plainBased64Encoded,
+                            strlen(plainBased64Encoded));
+  assert(c->l != 0);
+  c->data_ptr = new byte[c->l];
+  base64Decode((uint8_t*)plainBased64Encoded, c->l, c->data_ptr);
 
   // D
   bytearray_t* plain;
   plain = AES_CTR_dec(c, (byte*)key);
 
   cout << plain->data_ptr << endl;
-  printf("%s", plain->data_ptr);
 
-  for (int i = 0; i < plain->l; i++) cout << plain->data_ptr[i];
-  for (int i = 0; i < plain->l; i++) printf("%c", plain->data_ptr[i]);
-  // test encryption
+  // test the encryption function
   bytearray_t* expected_ciphertext = AES_CTR_enc(plain, (byte*)key);
-
   assert(memcmp(c->data_ptr, expected_ciphertext->data_ptr, c->l) == 0);
 }
