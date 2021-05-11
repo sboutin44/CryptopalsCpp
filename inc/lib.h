@@ -149,6 +149,12 @@ bool isAES128_ECB(const byte* input, int l);
 float similarBlocksDistanceRatio(byte* input, int l, int block_size);
 int detectBlockSize(Oracle& oracle);
 
+// Challenge 18
+bytearray_t* getKeystream(bytearray_t* plain, byte* key);
+bytearray_t* AES_CTR_dec(bytearray_t* ciphertext, byte* key);
+bytearray_t* AES_CTR_enc(bytearray_t* plain, byte* key);
+
+
 // The challenges
 void challenge_1();
 void challenge_2();
@@ -164,6 +170,7 @@ void challenge_11();
 void challenge_12();
 
 void challenge_18();
+void challenge_19();
 
 // tools.cc
 int countLines(const char* filename);

@@ -125,6 +125,7 @@
     <ClCompile Include="src\aes.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\18.cc" />
+    <ClCompile Include="src\19.cc" />
     <ClCompile Include="src\tools.cc" />
     <ClCompile Include="test\tests.cc" />
     <ClCompile Include="test\tests_aes.cc" />

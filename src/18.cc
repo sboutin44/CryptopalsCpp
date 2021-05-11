@@ -25,10 +25,6 @@
 #include "lib.h"
 using namespace std;
 
-bytearray_t* getKeystream(bytearray_t* plain, byte* key);
-bytearray_t* AES_CTR_dec(bytearray_t* ciphertext, byte* key);
-bytearray_t* AES_CTR_enc(bytearray_t* plain, byte* key);
-
 bytearray_t* AES_CTR_enc(bytearray_t* plain, byte* key) {
   bytearray_t* ciphertext = new bytearray_t;
 
