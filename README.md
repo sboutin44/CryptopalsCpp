@@ -1,6 +1,6 @@
 # Cryptopals
 
-This is my solution of the Matasan Crypto Challenges:
+This is my solution of the Matasano Crypto Challenges:
 https://cryptopals.com/
 
 ## Build
